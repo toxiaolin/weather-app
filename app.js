@@ -1,61 +1,74 @@
+/* ===== 三个问题随机 ===== */
+
 const questions = [
-"如果妈妈变成大恐龙，你想她带你做什么？",
-"跳舞时你像什么动物？",
-"如果给妈妈画画，她有几条腿？",
-"你最想演什么角色？",
-"如果星星能吃是什么味道？"
+"如果妈妈有魔法，第一件事想带你做什么?",
+"给妈妈画一张像，你会给她画几条腿?",
+"如果星星可以吃，你觉得是什么味道?"
 ];
 
-let index = 0;
-const questionText = document.getElementById("questionText");
+const question =
+questions[Math.floor(Math.random()*questions.length)];
 
-questionText.innerText = questions[index];
+document.getElementById("questionBox").innerText = question;
 
-document.getElementById("nextBtn").onclick = ()=>{
-  index = (index + 1) % questions.length;
-  questionText.innerText = questions[index];
-};
 
-/* ===== 打开摄像头 ===== */
+/* ===== 摄像头 ===== */
 
 async function initCamera(){
-  try{
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:"environment"},
-      audio:false
-    });
-
-    document.getElementById("camera").srcObject = stream;
-  }catch(e){
-    alert("摄像头打开失败，请允许权限");
-  }
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video:{ facingMode:"environment" }
+  });
+  camera.srcObject = stream;
 }
-
 initCamera();
+
 
 /* ===== 拍照 ===== */
 
-document.getElementById("photoBtn").onclick = ()=>{
+photoBtn.onclick = ()=>{
 
-  const video = document.getElementById("camera");
+  const video = camera;
+  const c = document.createElement("canvas");
+  c.width = video.videoWidth;
+  c.height = video.videoHeight;
 
-  const canvas = document.createElement("canvas");
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+  c.getContext("2d").drawImage(video,0,0);
 
-  canvas.getContext("2d")
-        .drawImage(video,0,0);
-
-  const photo = canvas.toDataURL("image/jpeg");
+  const photo = c.toDataURL("image/jpeg");
 
   drawPoster("posterCanvas",{
-      avatar:photo,
-      title:questionText.innerText,
-      logo:"logo.png",
-      qr:"qr.png"
-  },(poster)=>{
-      const img=document.getElementById("posterImage");
-      img.src=poster;
-      img.style.display="block";
+    avatar:photo,
+    title:question
+  },(img)=>{
+
+    posterImage.src = img;
+
+    cameraPage.classList.add("hidden");
+    posterPage.classList.remove("hidden");
+
   });
+};
+
+
+/* ===== 已转发 ===== */
+
+sharedBtn.onclick = ()=>{
+  posterPage.classList.add("hidden");
+  formPage.classList.remove("hidden");
+};
+
+
+/* ===== 提交判断年龄 ===== */
+
+submitBtn.onclick = ()=>{
+
+  const age = parseInt(ageInput.value);
+
+  if(age>=3 && age<=7){
+    result.innerHTML =
+    "感谢参与 ❤️<br>为您升级礼包：<b>Labubu挂机一个</b>";
+  }else{
+    result.innerHTML =
+    "感谢参与 ❤️<br>为您升级礼包：<b>免费作文诊断一次</b>";
+  }
 };

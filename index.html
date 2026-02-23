@@ -2,36 +2,52 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
-<title>萌娃金句生成器</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>萌娃金句挑战</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- 摄像头 -->
-<video id="camera" autoplay playsinline></video>
+<!-- 拍摄页 -->
+<div id="cameraPage">
 
-<!-- 题目提示 -->
-<div id="questionBox">
-  <span id="questionText"></span>
+  <video id="camera" autoplay playsinline></video>
+
+  <div id="questionBox"></div>
+
+  <div class="controls">
+    <button id="photoBtn">📸 拍照生成海报</button>
+  </div>
+
 </div>
 
-<!-- 控制按钮 -->
-<div class="controls">
-  <button id="photoBtn">📸 拍照</button>
-  <button id="nextBtn">下一题</button>
+<!-- 海报页 -->
+<div id="posterPage" class="hidden">
+  <img id="posterImage"/>
+  <button id="sharedBtn">我已转发朋友圈</button>
 </div>
 
-<!-- 海报 -->
-<canvas id="posterCanvas" width="600" height="800"></canvas>
-<img id="posterImage"/>
+<!-- 信息登记 -->
+<div id="formPage" class="hidden">
+
+<h2>恭喜您转发成功 🎉</h2>
+<p>您将获得文具套盒一件，请留下联系方式：</p>
+
+<input id="name" placeholder="小朋友名字">
+<input id="age" placeholder="小朋友几岁">
+<input id="phone" placeholder="您的电话">
+<input id="course" placeholder="感兴趣的科目">
+
+<button id="submitBtn">提交</button>
+
+<div id="result"></div>
+
+</div>
+
+<canvas id="posterCanvas" width="800" height="1000"></canvas>
 
 <script src="poster.js"></script>
 <script src="app.js"></script>
-
 </body>
 </html>

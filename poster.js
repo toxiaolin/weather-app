@@ -1,91 +1,49 @@
-(function(global){
+function drawPoster(id,opt,cb){
 
-function drawPoster(canvasId,opt,callback){
-
-const canvas=document.getElementById(canvasId);
+const canvas=document.getElementById(id);
 const ctx=canvas.getContext("2d");
 
-ctx.fillStyle="#ffffff";
-ctx.fillRect(0,0,600,800);
+/* 背景 */
+ctx.fillStyle="#FFE7C2";
+ctx.fillRect(0,0,800,1000);
 
-loadImages(opt).then(imgs=>{
-
-// ===== 头像圆形 =====
-ctx.save();
-ctx.beginPath();
-ctx.arc(300,220,100,0,Math.PI*2);
-ctx.clip();
-ctx.drawImage(imgs.avatar,200,120,200,200);
-ctx.restore();
-
-// ===== 标题 =====
+/* 标题 */
 ctx.fillStyle="#ff7f00";
-ctx.font="bold 32px sans-serif";
-wrapText(ctx,opt.title,60,420,480,40);
+ctx.font="bold 42px sans-serif";
+ctx.fillText("萌娃灵魂提问",220,80);
 
-// ===== 底部背景 =====
-ctx.fillStyle="#fff3e6";
-ctx.fillRect(0,600,600,200);
+/* 相片 */
+let img=new Image();
+img.onload=function(){
 
-// ===== logo =====
-if(imgs.logo)
-ctx.drawImage(imgs.logo,40,650,120,70);
+ctx.drawImage(img,100,150,600,600);
 
-// ===== 二维码 =====
-if(imgs.qr)
-ctx.drawImage(imgs.qr,420,640,140,140);
+/* 对话气泡 */
+ctx.fillStyle="#fff";
+ctx.fillRect(80,780,640,120);
 
-const url=canvas.toDataURL("image/png");
-callback && callback(url);
+ctx.fillStyle="#333";
+ctx.font="28px sans-serif";
+wrapText(ctx,opt.title,110,830,580,34);
 
-});
+/* 引导 */
+ctx.font="24px sans-serif";
+ctx.fillText("橘子艺术 · 成长记录",230,940);
 
+cb(canvas.toDataURL("image/jpeg",0.9));
 }
-
-function loadImages(opt){
-const tasks={};
-
-["avatar","logo","qr"].forEach(k=>{
- if(opt[k]){
-   tasks[k]=load(opt[k]);
- }
-});
-
-return Promise.all(
-Object.entries(tasks).map(([k,p])=>
-p.then(img=>[k,img])
-)).then(arr=>{
- const obj={};
- arr.forEach(([k,v])=>obj[k]=v);
- return obj;
-});
-}
-
-function load(src){
-return new Promise((res,rej)=>{
- const img=new Image();
- img.crossOrigin="anonymous";
- img.onload=()=>res(img);
- img.onerror=rej;
- img.src=src;
-});
+img.src=opt.avatar;
 }
 
 function wrapText(ctx,text,x,y,maxWidth,lineHeight){
 let line="";
-for(let i=0;i<text.length;i++){
- const test=line+text[i];
- if(ctx.measureText(test).width>maxWidth){
-   ctx.fillText(line,x,y);
-   line=text[i];
-   y+=lineHeight;
- }else{
-   line=test;
- }
+for(let n=0;n<text.length;n++){
+let test=line+text[n];
+if(ctx.measureText(test).width>maxWidth){
+ctx.fillText(line,x,y);
+line=text[n];
+y+=lineHeight;
+}else line=test;
 }
 ctx.fillText(line,x,y);
 }
-
-global.drawPoster=drawPoster;
-
-})(window);

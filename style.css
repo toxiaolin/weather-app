@@ -1,21 +1,18 @@
 body{
   margin:0;
-  background:#000;
   font-family:sans-serif;
-  overflow:hidden;
+  background:#fff;
 }
 
-/* 摄像头全屏 */
+.hidden{ display:none; }
+
 #camera{
   position:fixed;
-  top:0;
-  left:0;
   width:100vw;
   height:100vh;
   object-fit:cover;
 }
 
-/* 题目浮层 */
 #questionBox{
   position:fixed;
   top:8%;
@@ -24,10 +21,9 @@ body{
   color:#fff;
   font-size:22px;
   background:rgba(0,0,0,0.45);
-  padding:12px;
+  padding:14px;
 }
 
-/* 按钮区 */
 .controls{
   position:fixed;
   bottom:40px;
@@ -36,18 +32,25 @@ body{
 }
 
 button{
+  padding:14px 26px;
   font-size:18px;
-  padding:12px 22px;
-  margin:8px;
-  border-radius:30px;
   border:none;
-  background:#ff7f00;
+  border-radius:30px;
+  background:#ff8a00;
   color:#fff;
 }
 
-/* 海报显示 */
 #posterImage{
   width:100%;
-  display:none;
-  background:#fff;
+}
+
+#formPage{
+  padding:20px;
+}
+
+input{
+  width:100%;
+  margin:10px 0;
+  padding:12px;
+  font-size:16px;
 }
