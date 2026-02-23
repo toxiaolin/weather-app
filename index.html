@@ -1,191 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
-
-<title>萌娃气质大赏</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>橘子艺术 · 萌娃金句挑战</title>
 <style>
-html,body{
-  margin:0;
-  padding:0;
-  height:100%;
-  overflow:hidden;
-  background:#fff5ec;
-  font-family:sans-serif;
-}
+  :root {
+    --primary: #ff7a00;
+    --bg: #fff5ec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: #333;
+    overflow-x: hidden;
+  }
+  
+  /* 页面切换控制 */
+  .page { display: none; min-height: 100vh; padding: 20px; flex-direction: column; align-items: center; }
+  .page.active { display: flex; }
 
-/* 整页容器 */
-.page{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  align-items:center;
-}
+  /* 首页 / 拍照页 */
+  .header { text-align: center; margin-top: 4vh; width: 100%; }
+  .title { font-size: 26px; color: var(--primary); font-weight: bold; margin-bottom: 20px; }
+  .question-card {
+    background: #fff; border-radius: 16px; padding: 30px 20px;
+    font-size: 22px; font-weight: bold; color: #333;
+    box-shadow: 0 8px 24px rgba(255, 122, 0, 0.15);
+    border: 3px solid #ffd0a6; text-align: center; margin-bottom: 40px;
+  }
+  .tips { color: #888; font-size: 14px; margin-bottom: 20px; text-align: center; }
+  
+  /* 按钮样式 */
+  .btn {
+    background: var(--primary); color: #fff; font-size: 18px; font-weight: bold;
+    padding: 16px 32px; border-radius: 50px; border: none; width: 85%;
+    text-align: center; display: inline-block; box-shadow: 0 6px 16px rgba(255,122,0,0.3);
+    cursor: pointer; margin-top: auto; margin-bottom: 5vh; text-decoration: none;
+  }
+  .btn:active { transform: scale(0.98); }
 
-/* 顶部区域 */
-.header{
-  padding-top:6vh;
-  text-align:center;
-}
+  /* 海报展示页 */
+  #posterImage { width: 100%; max-width: 350px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: block; margin: 0 auto; }
+  .share-tip { background: #ffe6d0; color: var(--primary); padding: 10px 20px; border-radius: 30px; margin: 20px 0; font-size: 15px; font-weight: bold; animation: pulse 1.5s infinite; }
 
-.title{
-  font-size:24px;
-  color:#ff6a00;
-  font-weight:bold;
-}
-
-/* 问题卡片 */
-.question{
-  margin-top:3vh;
-  width:88%;
-  background:#fff;
-  border-radius:18px;
-  padding:18px;
-  font-size:20px;
-  box-shadow:0 6px 18px rgba(0,0,0,.1);
-}
-
-/* 中间海报区 */
-.content{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  width:100%;
-}
-
-#posterImage{
-  width:90%;
-  max-height:55vh;
-  object-fit:contain;
-  display:none;
-  border-radius:16px;
-}
-
-/* 底部操作区 */
-.footer{
-  padding-bottom:env(safe-area-inset-bottom);
-  padding-bottom:20px;
-}
-
-#cameraInput{
-  font-size:18px;
-  background:#ff7a00;
-  color:#fff;
-  padding:14px 24px;
-  border-radius:30px;
-  border:none;
-}
-
-#tip{
-  margin-top:12px;
-  color:#ff6a00;
-  display:none;
-}
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 </style>
 </head>
-
 <body>
 
-<h2>橘子艺术 · 萌娃金句挑战</h2>
-
-<div id="question"></div>
-
-<input
-id="cameraInput"
-type="file"
-accept="image/*"
-capture="environment">
-
-<canvas id="posterCanvas"
-width="800"
-height="1200"
-style="display:none;"></canvas>
-
-<img id="posterImage">
-
-<div class="page">
-
-  <div class="header">
-    <div class="title">橘子艺术 · 萌娃金句挑战</div>
-    <div id="question" class="question"></div>
+  <!-- 页面 1：提问与拍照 -->
+  <div id="page-home" class="page active">
+    <div class="header">
+      <div class="title">✨ 萌娃金句挑战 ✨</div>
+      <div class="tips">请根据下方问题，拍一张宝贝的照片</div>
+      <div id="questionBox" class="question-card">正在加载问题...</div>
+    </div>
+    
+    <label for="cameraInput" class="btn">📷 点击拍照生成专属海报</label>
+    <input id="cameraInput" type="file" accept="image/*" capture="environment" style="display:none;">
   </div>
 
-  <div class="content">
-    <img id="posterImage">
-    <div id="tip">👇 长按保存海报发朋友圈</div>
+  <!-- 页面 2：海报预览与引导转发 -->
+  <div id="page-poster" class="page">
+    <div class="title" style="font-size:20px; margin-bottom:10px;">您的专属海报已生成</div>
+    <img id="posterImage" src="" alt="海报">
+    <div class="share-tip">👇 请长按上方海报保存，并发到朋友圈</div>
+    
+    <!-- 跳转到腾讯文档收集表的按钮 -->
+    <button id="btn-shared" class="btn" style="margin-top:20px; margin-bottom:20px;">我已发朋友圈，去领奖 🎁</button>
   </div>
 
-  <div class="footer">
-    <input
-      id="cameraInput"
-      type="file"
-      accept="image/*"
-      capture="environment">
-  </div>
-
-</div>
-<canvas id="posterCanvas" width="800" height="1200" style="display:none;"></canvas>
-<script src="poster.js"></script>
+  <!-- 隐藏的画布，用于生成海报 -->
+  <canvas id="posterCanvas" width="800" height="1200" style="display:none;"></canvas>
 
 <script>
-
-/* ===== 随机问题 ===== */
-const questions=[
-"如果妈妈有魔法，第一件事想带你做什么？",
-"给妈妈画一张像，你会给她画几条腿？",
-"如果星星可以吃，你觉得是什么味道？"
+/* ==================== 1. 初始化随机问题 ==================== */
+const questions = [
+  "如果妈妈有魔法，第一件事想带你做什么？",
+  "给妈妈画一张像，你会给她画几条腿？",
+  "如果星星可以吃，你觉得是什么味道？"
 ];
+const currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+document.getElementById("questionBox").innerText = currentQuestion;
 
-const currentQuestion =
-questions[Math.floor(Math.random()*questions.length)];
+/* ==================== 2. 页面路由控制 ==================== */
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  window.scrollTo(0, 0);
+}
 
-document.getElementById("question").innerText=currentQuestion;
+/* ==================== 3. 拍照与生成海报逻辑 ==================== */
+document.getElementById("cameraInput").addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if(!file) return;
 
-
-/* ===== 拍照后生成海报 ===== */
-document.getElementById("cameraInput")
-.addEventListener("change",function(e){
-
-const file=e.target.files[0];
-if(!file) return;
-
-const reader=new FileReader();
-
-reader.onload=function(evt){
-
-drawPoster("posterCanvas",{
- avatar:evt.target.result,
- title:currentQuestion,
- logo:"logo.png",
- qr:"qr.png"
-},(url)=>{
-
- const img=document.getElementById("posterImage");
- img.src=url;
- img.style.display="block";
-
- document.getElementById("tip").style.display="block";
-
- window.scrollTo({
-   top:document.body.scrollHeight,
-   behavior:"smooth"
- });
-
+  // 显示加载提示
+  document.getElementById("questionBox").innerText = "海报生成中，请稍候...";
+  
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const photoBase64 = evt.target.result;
+    
+    // 调用海报绘制功能
+    drawPoster("posterCanvas", {
+      photo: photoBase64,
+      title: currentQuestion
+    }, function(posterUrl) {
+      // 显示海报页
+      document.getElementById("posterImage").src = posterUrl;
+      showPage("page-poster");
+      // 恢复问题文字
+      document.getElementById("questionBox").innerText = currentQuestion;
+    });
+  };
+  reader.readAsDataURL(file);
 });
 
-};
-
-reader.readAsDataURL(file);
-
+/* ==================== 4. “去领奖”按钮直接跳转腾讯文档 ==================== */
+document.getElementById("btn-shared").addEventListener("click", function() {
+  
+  // ⚠️ 把下面的链接替换成你做好的腾讯文档收集表链接 ⚠️
+  const formUrl = "https://docs.qq.com/form/page/【这里换成你的腾讯文档收集表ID】"; 
+  
+  window.location.href = formUrl;
 });
 
+/* ==================== 5. 海报绘制引擎 (Canvas) ==================== */
+function drawPoster(canvasId, opt, callback) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width;
+  const H = canvas.height;
+
+  // 1. 绘制底色 (卡通边框背景底色)
+  ctx.fillStyle = "#fff5ec";
+  ctx.fillRect(0, 0, W, H);
+
+  // 加载用户照片
+  const userImg = new Image();
+  userImg.src = opt.photo;
+  userImg.onload = function() {
+    
+    // 2. 绘制用户照片 (居中裁剪 Cover 模式，防止拉伸变形)
+    const imgX = 50; 
+    const imgY = 220;
+    const imgW = W - 100; 
+    const imgH = 680;
+    
+    // 画一个白色边框模拟相框
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = "rgba(0,0,0,0.1)";
+    ctx.shadowBlur = 20;
+    roundRect(ctx, imgX - 15, imgY - 15, imgW + 30, imgH + 30, 20, true);
+    ctx.shadowBlur = 0; // 恢复阴影
+
+    // 裁剪与绘制图片
+    ctx.save();
+    roundRect(ctx, imgX, imgY, imgW, imgH, 10, false);
+    ctx.clip();
+    
+    let scale = Math.max(imgW / userImg.width, imgH / userImg.height);
+    let sw = imgW / scale;
+    let sh = imgH / scale;
+    let sx = (userImg.width - sw) / 2;
+    let sy = (userImg.height - sh) / 2;
+    ctx.drawImage(userImg, sx, sy, sw, sh, imgX, imgY, imgW, imgH);
+    ctx.restore();
+
+    // 3. 绘制顶部问题框
+    ctx.fillStyle = "#ff7a00";
+    roundRect(ctx, 40, 60, W - 80, 120, 20, true);
+    
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 38px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    wrapText(ctx, "Q: " + opt.title, W/2, 120, W - 120, 50);
+
+    // 4. 绘制底部模板区域 (如果你设计部做好了底部透明PNG海报框，可以直接贴图覆盖)
+    ctx.fillStyle = "#ffffff";
+    roundRect(ctx, 40, 940, W - 80, 220, 20, true);
+    
+    ctx.fillStyle = "#ff7a00";
+    ctx.font = "bold 32px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("橘子艺术 · 寻找小小创意家", 80, 1010);
+    
+    ctx.fillStyle = "#666";
+    ctx.font = "24px sans-serif";
+    ctx.fillText("发掘孩子的无限潜能", 80, 1060);
+    ctx.fillText("扫码免费领取试听课 ➔", 80, 1110);
+
+    // 模拟二维码区域（可以替换为你的机构二维码图片）
+    ctx.fillStyle = "#ddd";
+    ctx.fillRect(W - 220, 960, 140, 140);
+    ctx.fillStyle = "#666";
+    ctx.font = "16px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("替换为您的QR", W - 150, 1035);
+
+    // 导出并回调
+    const url = canvas.toDataURL("image/jpeg", 0.9);
+    if(callback) callback(url);
+  };
+}
+
+/* 辅助：圆角矩形 */
+function roundRect(ctx, x, y, w, h, r, fill) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+  if (fill) ctx.fill();
+}
+
+/* 辅助：自动换行文本居中处理 */
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split('');
+  let line = '';
+  let lines = [];
+  
+  for (let n = 0; n < words.length; n++) {
+    let testLine = line + words[n];
+    let metrics = ctx.measureText(testLine);
+    let testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      lines.push(line);
+      line = words[n];
+    } else {
+      line = testLine;
+    }
+  }
+  lines.push(line);
+  
+  let startY = y - ((lines.length - 1) * lineHeight) / 2;
+  for (let i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x, startY + (i * lineHeight));
+  }
+}
 </script>
-
 </body>
 </html>
