@@ -2,7 +2,7 @@
 html,body{
   margin:0;
   padding:0;
-  height:var(--vh);
+  height:100vh;
   overflow:hidden;
   background:#fff5ec;
   font-family:sans-serif;
