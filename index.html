@@ -3,376 +3,365 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>橘子艺术 · 萌娃气质大赏</title>
+<title>星沙萌娃 · 气质大赏</title>
 <style>
-  /* ================= 全局现代 UI 变量 ================= */
+  /* ================= 核心暗黑主题变量 ================= */
   :root {
-    --primary-gradient: linear-gradient(135deg, #FF7A00 0%, #FFB75E 100%);
-    --bg-gradient: linear-gradient(135deg, #FFF0E6 0%, #FFE3D8 100%);
-    --card-bg: rgba(255, 255, 255, 0.85);
-    --text-main: #333333;
-    --text-sub: #888888;
-    --shadow-soft: 0 12px 40px rgba(255, 122, 0, 0.12);
-    --shadow-btn: 0 8px 24px rgba(255, 122, 0, 0.35);
+    --bg-dark: #13142B;
+    --bg-card: rgba(255, 255, 255, 0.06);
+    --border-glass: rgba(255, 255, 255, 0.12);
+    --neon-purple: #B258FF;
+    --text-main: #FFFFFF;
+    --text-sub: #8E93A8;
+    
+    --icon-purple: linear-gradient(135deg, #A855F7 0%, #7E22CE 100%);
+    --icon-pink: linear-gradient(135deg, #F43F5E 0%, #BE123C 100%);
+    --icon-blue: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, sans-serif; -webkit-tap-highlight-color: transparent; }
   
   body {
-    background: var(--bg-gradient);
+    background: var(--bg-dark);
     color: var(--text-main);
-    padding-bottom: 80px; 
+    padding-bottom: 20px; 
     overflow-x: hidden;
-    /* 如果墨刀里有好看的背景图，把下面的注释打开并替换链接 */
-    /* background-image: url('你的墨刀背景图链接.png'); background-size: cover; background-position: center; */
+    /* 模拟星空/深邃背景过渡 */
+    background-image: radial-gradient(circle at 50% -20%, #2A2155 0%, var(--bg-dark) 60%);
+    min-height: 100vh;
   }
 
-  /* ================= 页面过渡动画 ================= */
-  .page { display: none; min-height: 100vh; padding: 30px 20px; flex-direction: column; align-items: center; }
-  .page.active { display: flex; animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  
-  @keyframes slideUpFade {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* ================= 顶部导航条 ================= */
+  .top-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px; width: 100%;
+  }
+  .brand { display: flex; align-items: center; font-weight: 900; font-size: 16px; letter-spacing: 1px;}
+  .brand-icon { 
+    width: 32px; height: 32px; background: linear-gradient(135deg, #f472b6, #d946ef); 
+    border-radius: 10px; margin-right: 10px; display: flex; justify-content: center; align-items: center; font-size:18px;
+  }
+  .share-btn {
+    width: 36px; height: 36px; background: rgba(255,255,255,0.1); border-radius: 50%;
+    display: flex; justify-content: center; align-items: center; font-size: 16px; cursor: pointer;
   }
 
-  /* ================= 玻璃拟态卡片 (Glassmorphism) ================= */
-  .card { 
-    background: var(--card-bg); 
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border-radius: 24px; padding: 25px; width: 100%; 
-    box-shadow: var(--shadow-soft); margin-bottom: 25px; 
-    border: 1px solid rgba(255,255,255,0.6);
-    position: relative; overflow: hidden;
-  }
-  
-  /* ================= 排版与文字 ================= */
-  .title { 
-    font-size: 28px; font-weight: 800; margin-bottom: 10px; text-align: center;
-    background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    line-height: 1.4;
-  }
-  .subtitle { font-size: 15px; color: var(--text-sub); margin-bottom: 30px; text-align: center; font-weight: 500;}
-  
-  /* ================= 果冻质感按钮 ================= */
-  .btn { 
-    background: var(--primary-gradient); color: #fff; border: none; padding: 16px; 
-    border-radius: 50px; font-size: 18px; font-weight: bold; width: 100%; 
-    text-align: center; display: block; cursor: pointer; 
-    box-shadow: var(--shadow-btn); transition: all 0.3s ease;
-  }
-  .btn:active { transform: scale(0.95); box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2); }
-  
-  .btn-outline { 
-    background: rgba(255, 122, 0, 0.05); color: #FF7A00; border: 2px solid #FF7A00; 
-    box-shadow: none; margin-top: 15px;
-  }
+  /* ================= 页面切换动画 ================= */
+  .page { display: none; padding: 0 20px; flex-direction: column; align-items: center; width: 100%; }
+  .page.active { display: flex; animation: fadeIn 0.4s ease forwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ================= 测试选项样式 ================= */
-  .quiz-option { 
-    background: #ffffff; border: 2px solid #f0f0f0; padding: 18px; border-radius: 16px;
-    margin-bottom: 15px; font-size: 16px; text-align: center; font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; color: #555;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  /* ================= 霓虹文字特效 ================= */
+  .neon-title { 
+    font-size: 44px; font-weight: 900; text-align: center; margin-top: 2vh; margin-bottom: 15px; line-height: 1.2;
+    color: #FFFFFF;
+    text-shadow: 0 0 10px rgba(178, 88, 255, 0.8), 
+                 0 0 20px rgba(178, 88, 255, 0.5), 
+                 0 0 40px rgba(178, 88, 255, 0.3);
   }
-  .quiz-option:active { transform: scale(0.98); }
-  .quiz-option.selected { 
-    border-color: #FF7A00; background: #FFF4EB; font-weight: bold; color: #FF7A00;
-    box-shadow: 0 4px 15px rgba(255, 122, 0, 0.15);
+  .subtitle { font-size: 14px; color: var(--text-sub); margin-bottom: 40px; text-align: center; letter-spacing: 2px;}
+
+  /* ================= 玻璃质感菜单卡片 ================= */
+  .menu-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px; padding: 20px; width: 100%;
+    display: flex; align-items: center; margin-bottom: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    transition: all 0.2s ease; cursor: pointer;
   }
+  .menu-card:active { transform: scale(0.96); background: rgba(255, 255, 255, 0.09); }
   
-  /* ================= 表单输入框 ================= */
+  .menu-icon {
+    width: 65px; height: 65px; border-radius: 18px; display: flex; justify-content: center; align-items: center;
+    font-size: 30px; margin-right: 18px; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  .menu-text { flex: 1; }
+  .menu-text h3 { font-size: 20px; font-weight: bold; margin-bottom: 5px; color: #fff; }
+  .menu-text p { font-size: 12px; color: var(--text-sub); line-height: 1.4; }
+  .menu-arrow { width: 24px; height: 24px; color: #5B607A; display: flex; justify-content: center; align-items: center; }
+
+  /* ================= 底部标签 ================= */
+  .footer-info { margin-top: 4vh; text-align: center; width: 100%; padding-bottom: 30px;}
+  .footer-time { font-size: 12px; color: #5B607A; margin-bottom: 12px; }
+  .tags { display: flex; justify-content: center; gap: 10px; }
+  .tag { border: 1px solid #32364B; color: #5B607A; padding: 4px 12px; border-radius: 6px; font-size: 12px; }
+
+  /* ================= 通用内页 UI ================= */
+  .inner-card {
+    background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 20px;
+    padding: 25px 20px; width: 100%; margin-bottom: 20px; backdrop-filter: blur(10px);
+  }
+  .btn {
+    background: var(--icon-purple); color: #fff; border: none; padding: 16px; 
+    border-radius: 30px; font-size: 18px; font-weight: bold; width: 100%; 
+    text-align: center; cursor: pointer; margin-top: 10px;
+  }
+  .btn:active { transform: scale(0.95); }
+  .btn-outline { background: transparent; border: 1px solid var(--neon-purple); color: #D8B4FE; }
+  
+  /* 表单输入框 (暗黑版) */
   input[type="text"], input[type="tel"], input[type="file"] {
-    width: 100%; padding: 16px; border: 2px solid #f0f0f0; border-radius: 16px; 
-    margin-bottom: 20px; background: #fdfdfd; font-size: 16px; color: #333;
-    transition: all 0.3s; outline: none;
+    width: 100%; padding: 16px; border: 1px solid var(--border-glass); border-radius: 12px; 
+    margin-bottom: 15px; background: rgba(0,0,0,0.2); font-size: 16px; color: #fff; outline: none;
   }
-  input:focus { border-color: #FFB75E; background: #fff; box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.1); }
+  input::placeholder { color: #5B607A; }
+
+  /* 测试答题选项 */
+  .quiz-option { 
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 16px; border-radius: 12px;
+    margin-bottom: 12px; font-size: 16px; text-align: center; cursor: pointer; color: #ccc; transition: 0.2s;
+  }
+  .quiz-option.selected { border-color: var(--neon-purple); background: rgba(178, 88, 255, 0.15); font-weight: bold; color: #fff; }
   
-  /* ================= 图片与二维码 ================= */
-  #posterPreview { width: 100%; max-width: 320px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: block; margin: 0 auto; }
-  .qr-box { 
-    width: 200px; height: 200px; background: #fff; margin: 25px auto; border-radius: 20px; 
-    display:flex; align-items:center; justify-content:center; color:#999;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08); padding: 10px;
-  }
-  .qr-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
-
-  /* ================= 悬浮底部导航 ================= */
-  .nav-bar {
-    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; height: 65px;
-    background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-    display: flex; border-radius: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100; padding: 0 10px;
-  }
-  .nav-item { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 11px; color: #aaa; cursor: pointer; transition: all 0.3s;}
-  .nav-item.active { color: #FF7A00; transform: translateY(-3px);}
-  .nav-icon { font-size: 22px; margin-bottom: 4px; transition: all 0.3s;}
-  .nav-item.active .nav-icon { transform: scale(1.15); }
-
-  /* 提示文字微动画 */
-  .pulse-text { color: #FF7A00; font-size: 14px; margin-top: 20px; font-weight: bold; text-align: center; animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+  /* 海报展示 */
+  #posterPreview { width: 100%; max-width: 300px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block; margin: 0 auto; border: 1px solid var(--border-glass);}
+  
+  /* 返回按钮 */
+  .back-btn { font-size: 14px; color: var(--text-sub); text-align: center; margin-top: 20px; text-decoration: underline; cursor:pointer;}
 </style>
 </head>
 <body>
 
-  <!-- ================= 页面 01：首页落地页 ================= -->
-  <div id="page-01" class="page active">
-    <div style="margin-top: 6vh; text-align: center; width: 100%;">
-      <!-- 如果你有漂亮的主视觉图，可以取消下方注释 -->
-      <!-- <img src="你的墨刀主图链接.png" style="width: 80%; margin-bottom: 20px;"> -->
-      <h1 class="title" style="font-size: 36px; letter-spacing: 2px;">萌娃气质大赏</h1>
-      <p class="subtitle" style="font-size: 16px; margin-top:8px;">发掘孩子独一无二的闪光点 ✨</p>
+  <!-- ================= 页面 01：主菜单页 (完美复刻设计稿) ================= -->
+  <div id="page-main" class="page active">
+    <!-- 顶部状态栏 -->
+    <div class="top-bar">
+      <div class="brand">
+        <div class="brand-icon">🧸</div>
+        XINGSHA 2026
+      </div>
+      <div class="share-btn">🔗</div>
     </div>
-    
-    <div class="card" style="margin-top: 10px; text-align:center;">
-      <div style="font-size: 40px; margin-bottom: 10px;">🎁</div>
-      <p style="font-size: 20px; font-weight:bold; margin-bottom:8px; color: #FF7A00;">参与即得神秘大礼</p>
-      <p style="color:#666; font-size:15px; line-height:1.6;">完成挑战并分享至朋友圈<br>即可领取专属定制礼包 + 试听课</p>
-      <div style="margin-top: 20px; padding: 6px 15px; background: rgba(255,122,0,0.1); border-radius: 20px; display: inline-block; font-size:12px; color:#FF7A00; font-weight:bold;">
-        活动时间：即日起 - 招满即止
+
+    <!-- 标题区 -->
+    <h1 class="neon-title">星沙萌娃<br>气质大赏</h1>
+    <p class="subtitle">寻觅全星沙最有范儿的开学锦鲤</p>
+
+    <!-- 玩法卡片 1 -->
+    <div class="menu-card" onclick="navTo('page-game1')">
+      <div class="menu-icon" style="background: var(--icon-purple);">🤍</div>
+      <div class="menu-text">
+        <h3>亲子默契挑战</h3>
+        <p>AI合成专属气质写真与视频</p>
+      </div>
+      <div class="menu-arrow">▶</div>
+    </div>
+
+    <!-- 玩法卡片 2 -->
+    <div class="menu-card" onclick="navTo('page-game2')">
+      <div class="menu-icon" style="background: var(--icon-pink);">📸</div>
+      <div class="menu-text">
+        <h3>萌娃表情大赏</h3>
+        <p>解锁星沙开学季社交显眼包</p>
+      </div>
+      <div class="menu-arrow">▶</div>
+    </div>
+
+    <!-- 玩法卡片 3 -->
+    <div class="menu-card" onclick="navTo('page-game3')">
+      <div class="menu-icon" style="background: var(--icon-blue);">🎖️</div>
+      <div class="menu-text">
+        <h3>家长气质评测</h3>
+        <p>看看你是哪种类型的星沙硬核老爸/妈</p>
+      </div>
+      <div class="menu-arrow">▶</div>
+    </div>
+
+    <!-- 底部标识 -->
+    <div class="footer-info">
+      <div class="footer-time">活动时间：2026.02.23 - 2026.03.10</div>
+      <div class="tags">
+        <div class="tag">星沙街道授权</div>
+        <div class="tag">品牌联动支持</div>
       </div>
     </div>
-    
-    <button class="btn" onclick="navTo('page-02')" style="margin-top: auto;">立刻开启挑战 ➔</button>
   </div>
 
-  <!-- ================= 页面 02：玩法选择页 ================= -->
-  <div id="page-02" class="page">
-    <h2 class="title">选择你的挑战</h2>
-    <p class="subtitle">趣味双擎玩法，测出宝贝隐藏天赋</p>
-    
-    <div class="card" onclick="startPlay(1)" style="cursor: pointer;">
-      <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <div style="font-size: 30px; margin-right: 15px;">📸</div>
-        <div>
-          <h3 style="color:#FF7A00; font-size: 18px;">玩法一：萌照金句合伙人</h3>
-          <p style="font-size:13px; color:#888; margin-top:4px;">回答趣味问题，生成专属海报</p>
-        </div>
-      </div>
-      <div class="btn btn-outline" style="padding: 10px; font-size:15px; border-radius: 12px;">进入挑战</div>
-    </div>
-    
-    <div class="card" onclick="startPlay(3)" style="cursor: pointer; border-color: #cce5ff;">
-      <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <div style="font-size: 30px; margin-right: 15px;">🌟</div>
-        <div>
-          <h3 style="color:#4facfe; font-size: 18px;">玩法二：气质潜力测试</h3>
-          <p style="font-size:13px; color:#888; margin-top:4px;">5道情景题，测出宝贝是哪种小天才</p>
-        </div>
-      </div>
-      <div class="btn btn-outline" style="padding: 10px; font-size:15px; border-radius: 12px; border-color:#4facfe; color:#4facfe; background: rgba(79, 172, 254, 0.05);">开始测试</div>
-    </div>
-  </div>
-
-  <!-- ================= 页面 03：玩法一 (萌照金句) ================= -->
-  <div id="page-03" class="page">
-    <h2 class="title">萌照金句合伙人</h2>
-    <div class="card">
-      <div style="background: rgba(255,122,0,0.05); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-        <p style="font-weight:bold; color: #FF7A00; font-size: 18px; line-height: 1.5;" id="random-question">Q: 加载中...</p>
-      </div>
-      <button class="btn btn-outline" style="font-size:14px; padding:8px 20px; width:auto; border-radius: 50px; margin: -10px auto 20px auto; display: block;" onclick="changeQuestion()">🔄 换一个问题</button>
+  <!-- ================= 玩法一：亲子默契挑战 (传照片+写话) ================= -->
+  <div id="page-game1" class="page">
+    <h2 style="margin: 30px 0 20px; font-size: 24px; text-align:center;">亲子默契挑战</h2>
+    <div class="inner-card">
+      <p style="color:var(--text-sub); margin-bottom:10px; font-size: 14px;">Q: 如果妈妈有魔法，你想让她做什么？</p>
+      <input type="text" id="quote-input" placeholder="输入宝贝的神回复...">
       
-      <p style="font-size:14px; color:#555; font-weight:bold; margin-bottom:10px;">✍️ 记录宝贝的奇思妙想：</p>
-      <input type="text" id="quote-input" placeholder="例如：我想变出吃不完的冰激凌！">
-      
-      <p style="font-size:14px; color:#555; font-weight:bold; margin-bottom:10px;">📷 上传宝贝高清萌照：</p>
-      <input type="file" id="photo-input" accept="image/*" capture="environment">
+      <p style="color:var(--text-sub); margin-bottom:10px; font-size: 14px; margin-top: 10px;">上传宝贝靓照：</p>
+      <input type="file" id="photo-input1" accept="image/*" capture="environment">
     </div>
-    <button class="btn" onclick="generateQuotePoster()" style="margin-top: auto;">✨ 生成高光海报</button>
+    <button class="btn" onclick="generatePoster('game1')">生成写真海报</button>
+    <div class="back-btn" onclick="navTo('page-main')">返回主页</div>
   </div>
 
-  <!-- ================= 页面 09：玩法二 (答题页) ================= -->
-  <div id="page-09" class="page">
-    <div style="width:100%; display: flex; justify-content: space-between; align-items: center; margin-bottom:20px;">
-      <h2 class="title" style="margin: 0; font-size: 22px;">潜力测试</h2>
-      <div style="background: #FFF0E6; color: #FF7A00; font-weight: bold; padding: 5px 15px; border-radius: 20px; font-size: 14px;">
-        <span id="quiz-progress">1/5</span>
-      </div>
+  <!-- ================= 玩法二：萌娃表情大赏 (传搞怪照片) ================= -->
+  <div id="page-game2" class="page">
+    <h2 style="margin: 30px 0 20px; font-size: 24px; text-align:center;">萌娃表情大赏</h2>
+    <div class="inner-card" style="text-align: center;">
+      <div style="font-size: 50px; margin-bottom: 10px;">🤪</div>
+      <p style="color:#fff; font-weight:bold; margin-bottom: 5px;">寻找社交显眼包</p>
+      <p style="color:var(--text-sub); font-size: 14px; margin-bottom:20px;">抓拍一张宝贝最搞怪、最可爱的表情</p>
+      
+      <input type="file" id="photo-input2" accept="image/*" capture="environment">
     </div>
-    
-    <div class="card" style="padding: 30px 20px;">
-      <h3 id="quiz-q" style="margin-bottom:30px; font-size:20px; line-height:1.5; color: #333; text-align: center;">题目加载中...</h3>
+    <button class="btn" style="background: var(--icon-pink);" onclick="generatePoster('game2')">生成表情包海报</button>
+    <div class="back-btn" onclick="navTo('page-main')">返回主页</div>
+  </div>
+
+  <!-- ================= 玩法三：家长气质评测 (答题测试) ================= -->
+  <div id="page-game3" class="page">
+    <h2 style="margin: 30px 0; font-size: 24px; text-align:center;">硬核家长评测</h2>
+    <div style="width:100%; text-align:right; color:var(--neon-purple); font-size:14px; margin-bottom:10px; font-weight:bold;">
+      <span id="quiz-progress">1/3</span>
+    </div>
+    <div class="inner-card">
+      <h3 id="quiz-q" style="margin-bottom:25px; font-size:18px; line-height:1.5; color: #fff;">题目加载中...</h3>
       <div id="quiz-options">
         <!-- 选项动态生成 -->
       </div>
     </div>
+    <div class="back-btn" onclick="navTo('page-main')">放弃答题，返回主页</div>
   </div>
 
-  <!-- ================= 页面 04/10：海报结果展示页 ================= -->
+  <!-- ================= 结果海报页 (共用) ================= -->
   <div id="page-poster" class="page">
-    <h2 class="title">专属海报已生成</h2>
+    <h2 style="margin: 30px 0 20px; font-size: 24px;">生成成功</h2>
     <img id="posterPreview" src="" alt="长按保存海报">
-    <p class="pulse-text">👇 请长按上方海报保存，分享至朋友圈</p>
+    <p style="color:var(--neon-purple); font-size: 14px; margin-top: 20px; font-weight: bold; text-align: center;">👇 请长按海报保存，分享至朋友圈</p>
     
-    <div class="card" style="margin-top: 25px; padding: 20px;">
-      <button class="btn" onclick="navTo('page-11')">我已分享朋友圈，去领奖 🎁</button>
-      <button class="btn btn-outline" style="border:none; background: #f5f5f5; color:#666;" onclick="navTo('page-02')">玩玩其他测试</button>
+    <div style="width: 100%; margin-top: 30px;">
+      <button class="btn" onclick="navTo('page-form')">我已分享朋友圈，去领奖 🎁</button>
+      <button class="btn btn-outline" onclick="navTo('page-main')">返回首页</button>
     </div>
   </div>
 
-  <!-- ================= 页面 11：领奖信息表 ================= -->
-  <div id="page-11" class="page">
-    <h2 class="title">🎁 领取神秘大礼包</h2>
-    <p class="subtitle">请完善信息，方便老师为您核销奖品</p>
+  <!-- ================= 防薅羊毛：信息提交页 ================= -->
+  <div id="page-form" class="page">
+    <h2 style="margin: 30px 0 20px; font-size: 24px;">锦鲤礼包登记</h2>
+    <p style="color:var(--text-sub); font-size:14px; margin-bottom:20px; text-align:center;">请完善信息，方便老师为您核销奖品</p>
     
-    <div class="card">
-      <input type="text" id="form-name" placeholder="👤 小朋友姓名">
-      <input type="tel" id="form-age" placeholder="🎂 小朋友年龄">
-      <input type="tel" id="form-phone" placeholder="📱 家长联系电话">
+    <div class="inner-card">
+      <input type="text" id="form-name" placeholder="👤 宝贝姓名">
+      <input type="tel" id="form-age" placeholder="🎂 宝贝年龄">
+      <input type="tel" id="form-phone" placeholder="📱 家长手机号">
       
-      <button class="btn" onclick="submitForm()" style="margin-top: 10px;">确认提交</button>
+      <button class="btn" onclick="submitForm()">提交核销信息</button>
       
-      <div style="background: #FFF4EB; padding: 12px; border-radius: 12px; margin-top: 20px; display: flex; align-items: center;">
-        <span style="font-size: 20px; margin-right: 10px;">⚠️</span>
-        <span style="font-size: 12px; color: #FF7A00; line-height: 1.4;">重要提示：提交后请务必保留朋友圈记录，核销时需向老师出示截图哦！</span>
-      </div>
+      <p style="color: #F87171; font-size: 12px; margin-top: 15px; text-align: center; line-height: 1.5;">
+        ⚠️ 提交后请务必保留朋友圈记录，<br>现场核销需出示手机截图哦！
+      </p>
     </div>
   </div>
 
-  <!-- ================= 页面 12：加微/核销页 ================= -->
-  <div id="page-12" class="page">
-    <div style="text-align: center; margin-top: 20px;">
-      <div style="font-size: 60px; margin-bottom: 10px;">🎉</div>
-      <h2 class="title">恭喜登记成功</h2>
+  <!-- ================= 最终页：导流至企微 ================= -->
+  <div id="page-finish" class="page">
+    <div style="text-align: center; margin-top: 6vh;">
+      <div style="font-size: 60px; margin-bottom: 20px;">🎉</div>
+      <h2 style="font-size: 28px; margin-bottom: 10px;">登记成功</h2>
     </div>
     
-    <div class="card" style="text-align:center; margin-top: 10px;">
-      <p style="font-size:18px; font-weight:bold; color:#333; margin-bottom:10px;">只差最后一步啦！</p>
+    <div class="inner-card" style="text-align:center; margin-top: 20px;">
+      <p style="font-size:16px; font-weight:bold; color:#fff; margin-bottom:20px;">最后一步：添加老师微信发截图</p>
       
-      <!-- ⬇️⚠️ 替换这里为你们机构客服的企业微信二维码链接 ⚠️⬇️ -->
-      <div class="qr-box">
-        <img src="https://via.placeholder.com/200?text=这里放微信二维码" alt="客服二维码">
+      <!-- ⚠️ 替换为你们机构的微信二维码 ⚠️ -->
+      <div style="width:180px; height:180px; background:#fff; margin:0 auto; border-radius:16px; padding:10px;">
+        <img src="https://via.placeholder.com/160?text=二维码" style="width:100%; height:100%;">
       </div>
       
-      <p style="color:#FF7A00; font-size: 18px; font-weight:bold;">长按识别二维码添加专属老师</p>
-      <div style="background: #f9f9f9; border-radius: 12px; padding: 15px; margin-top: 20px;">
-        <p style="color:#555; font-size:14px; line-height:1.8;">
-          发送暗号：<span style="color:#FF7A00; font-weight:bold;">【朋友圈截图】</span><br>
-          即可在线挑选大礼包 / 预约免费试听课！
-        </p>
-      </div>
+      <p style="color:var(--neon-purple); font-size: 16px; font-weight:bold; margin-top: 20px;">长按识别二维码添加老师</p>
+      <p style="color:var(--text-sub); font-size:14px; margin-top:10px; line-height:1.6;">
+        发送暗号 <span style="color:#fff;">【朋友圈截图】</span><br>
+        即刻为您锁定大礼包！
+      </p>
     </div>
   </div>
 
-  <!-- ================= 底部高颜值悬浮导航 ================= -->
-  <div class="nav-bar">
-    <div class="nav-item active" onclick="navTo('page-01', this)"><div class="nav-icon">🏠</div>首页</div>
-    <div class="nav-item" onclick="navTo('page-02', this)"><div class="nav-icon">🎮</div>玩法</div>
-    <div class="nav-item" onclick="navTo('page-11', this)"><div class="nav-icon">🎁</div>领奖</div>
-    <div class="nav-item" onclick="navTo('page-12', this)"><div class="nav-icon">💬</div>客服</div>
-  </div>
-
-  <!-- 隐藏的 Canvas 用于画海报 -->
+  <!-- 隐藏 Canvas -->
   <canvas id="posterCanvas" width="800" height="1200" style="display:none;"></canvas>
 
 <script>
-  // ================= 1. 基础导航控制 =================
-  function navTo(pageId, navElement = null) {
+  /* ================= 页面路由 ================= */
+  function navTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
     window.scrollTo(0,0);
-    
-    if(navElement) {
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      navElement.classList.add('active');
+    if(pageId === 'page-game3') startQuiz();
+  }
+
+  /* ================= 生成海报引擎 ================= */
+  function generatePoster(gameType) {
+    let fileInput, quoteText = "";
+    if(gameType === 'game1') {
+      fileInput = document.getElementById('photo-input1').files[0];
+      quoteText = document.getElementById('quote-input').value || "这宝贝太酷了，什么都没说~";
+    } else {
+      fileInput = document.getElementById('photo-input2').files[0];
+      quoteText = "星沙头号社交显眼包出炉！🤪";
     }
-  }
 
-  function startPlay(type) {
-    if(type === 1) navTo('page-03', document.querySelectorAll('.nav-item')[1]);
-    if(type === 3) startQuiz();
-  }
+    if(!fileInput) { alert("请先上传一张照片哦！"); return; }
 
-  // ================= 2. 玩法一：默契问答逻辑 =================
-  const qList = ["如果妈妈有魔法，你想让她做什么？", "如果星星可以吃，是什么味道？", "给你一支神笔，你第一笔画什么？"];
-  let currentQIdx = 0;
-  function changeQuestion() {
-    currentQIdx = (currentQIdx + 1) % qList.length;
-    document.getElementById('random-question').innerText = "Q: " + qList[currentQIdx];
-  }
-  // 初始化问题
-  changeQuestion();
-
-  function generateQuotePoster() {
-    const file = document.getElementById('photo-input').files[0];
-    const quote = document.getElementById('quote-input').value || "这孩子太酷了，什么都没说~";
-    
-    if(!file) { alert("请先上传一张宝贝的萌照哦！"); return; }
-    
-    // 显示加载提示
-    document.querySelector('#page-03 .btn').innerText = "努力生成中...";
-    
     const reader = new FileReader();
     reader.onload = function(e) {
       const canvas = document.getElementById('posterCanvas');
       const ctx = canvas.getContext('2d');
-      // 绘制渐变背景
-      const grad = ctx.createLinearGradient(0,0,0,1200);
-      grad.addColorStop(0, '#FFF0E6'); grad.addColorStop(1, '#FFE3D8');
-      ctx.fillStyle = grad; ctx.fillRect(0,0,800,1200);
       
+      // 画海报暗黑背景
+      const grad = ctx.createLinearGradient(0,0,0,1200);
+      grad.addColorStop(0, '#1A1C35'); grad.addColorStop(1, '#0C0E1F');
+      ctx.fillStyle = grad; ctx.fillRect(0,0,800,1200);
+
       const img = new Image();
       img.src = e.target.result;
       img.onload = () => {
-        // 画相框阴影和白底
-        ctx.shadowColor = 'rgba(255,122,0,0.2)'; ctx.shadowBlur = 40;
+        // 画相框 (带紫色发光)
+        ctx.shadowColor = '#B258FF'; ctx.shadowBlur = 30;
         ctx.fillStyle = '#fff'; 
-        ctx.beginPath(); ctx.roundRect(80, 200, 640, 640, 30); ctx.fill();
-        ctx.shadowBlur = 0; // 恢复阴影
+        ctx.beginPath(); ctx.roundRect(80, 200, 640, 640, 40); ctx.fill();
+        ctx.shadowBlur = 0;
 
-        // 图片裁剪填充
+        // 画照片 (Cover裁剪)
         ctx.save();
-        ctx.beginPath(); ctx.roundRect(80, 200, 640, 640, 30); ctx.clip();
+        ctx.beginPath(); ctx.roundRect(80, 200, 640, 640, 40); ctx.clip();
         let scale = Math.max(640 / img.width, 640 / img.height);
-        let sw = 640 / scale; let sh = 640 / scale;
-        let sx = (img.width - sw) / 2; let sy = (img.height - sh) / 2;
+        let sw = 640 / scale, sh = 640 / scale;
+        let sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
         ctx.drawImage(img, sx, sy, sw, sh, 80, 200, 640, 640);
         ctx.restore();
 
-        // 绘制顶部标题
-        ctx.fillStyle = "#FF7A00"; ctx.font = "bold 50px sans-serif"; ctx.textAlign = "center";
-        ctx.fillText("✨ 萌娃大赏 ✨", 400, 120);
+        // 文字排版
+        ctx.fillStyle = "#fff"; ctx.font = "bold 56px sans-serif"; ctx.textAlign = "center";
+        ctx.fillText(gameType === 'game1' ? "星沙萌娃写真" : "星沙显眼包大赏", 400, 130);
         
-        // 绘制气泡金句
-        ctx.fillStyle = "#fff";
-        ctx.beginPath(); ctx.roundRect(80, 900, 640, 150, 20); ctx.fill();
-        ctx.fillStyle = "#FF7A00"; ctx.font = "bold 60px sans-serif"; ctx.fillText("“", 120, 960);
-        ctx.fillStyle = "#333"; ctx.font = "bold 32px sans-serif"; ctx.textAlign = "left";
-        ctx.fillText(quote.length > 15 ? quote.substring(0,15)+"..." : quote, 160, 980);
-        
-        ctx.fillStyle = "#888"; ctx.font = "24px sans-serif"; ctx.textAlign = "center";
-        ctx.fillText("——橘子艺术·小小创意家", 400, 1120);
+        ctx.fillStyle = "rgba(255,255,255,0.1)";
+        ctx.beginPath(); ctx.roundRect(80, 900, 640, 160, 20); ctx.fill();
+        ctx.fillStyle = "#D8B4FE"; ctx.font = "bold 32px sans-serif";
+        ctx.fillText(quoteText, 400, 980);
+        ctx.fillStyle = "#8E93A8"; ctx.font = "24px sans-serif";
+        ctx.fillText("—— 星沙 2026 官方认证", 400, 1030);
         
         document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg');
-        document.querySelector('#page-03 .btn').innerText = "✨ 生成高光海报";
         navTo('page-poster');
       }
     }
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(fileInput);
   }
 
-  // ================= 3. 玩法二：萌娃气质测试 =================
+  /* ================= 玩法三：家长气质评测 ================= */
   const quizData = [
-    { q: "小朋友到了游乐园，第一反应是？", options: [{t:"马上冲向过山车", s:"A"}, {t:"拉着小伙伴一起玩", s:"B"}, {t:"先看看周围有什么", s:"C"}] },
-    { q: "如果收到不喜欢的礼物，他会？", options: [{t:"直接说不喜欢", s:"A"}, {t:"开心地假装很喜欢", s:"B"}, {t:"勉强收下放一边", s:"C"}] },
-    { q: "遇到不认识的小朋友，他会？", options: [{t:"躲在大人身后", s:"C"}, {t:"主动上去打招呼", s:"B"}, {t:"默默观察一会再决定", s:"A"}] },
-    { q: "画画的时候，他最喜欢？", options: [{t:"涂满各种鲜艳颜色", s:"A"}, {t:"画认识的人或动物", s:"B"}, {t:"画得很慢很细致", s:"C"}] },
-    { q: "搭积木倒了，他会怎么做？", options: [{t:"大哭发脾气", s:"A"}, {t:"叫妈妈帮忙", s:"B"}, {t:"一声不吭重新搭", s:"C"}] }
+    { q: "周末带孩子出去玩，你通常会？", options: [{t:"做详细攻略，按计划走", s:"A"}, {t:"随叫随走，主打一个随性", s:"B"}, {t:"给娃报个体验课，我在旁边喝咖啡", s:"C"}] },
+    { q: "孩子弄脏了刚买的新衣服，你的反应？", options: [{t:"崩溃！马上脱下来洗", s:"A"}, {t:"赶紧拍照发朋友圈", s:"B"}, {t:"脏就脏吧，玩得开心最重要", s:"C"}] },
+    { q: "给孩子辅导作业时，你的状态是？", options: [{t:"母慈子孝，耐心讲解", s:"A"}, {t:"鸡飞狗跳，随时爆发", s:"B"}, {t:"直接交给爸爸/辅导班", s:"C"}] }
   ];
   let currentQuiz = 0; let scores = { A:0, B:0, C:0 };
 
   function startQuiz() {
     currentQuiz = 0; scores = {A:0, B:0, C:0};
-    navTo('page-09', document.querySelectorAll('.nav-item')[1]);
     renderQuiz();
   }
 
   function renderQuiz() {
-    document.getElementById('quiz-progress').innerText = `${currentQuiz + 1} / 5`;
+    document.getElementById('quiz-progress').innerText = `${currentQuiz + 1} / 3`;
     document.getElementById('quiz-q').innerText = quizData[currentQuiz].q;
-    
     let optsHtml = "";
     quizData[currentQuiz].options.forEach((opt) => {
       optsHtml += `<div class="quiz-option" onclick="selectOption('${opt.s}')">${opt.t}</div>`;
@@ -382,60 +371,39 @@
 
   function selectOption(scoreType) {
     scores[scoreType]++;
-    // 给选项加个点击动画延迟
     setTimeout(() => {
-      if(currentQuiz < 4) { currentQuiz++; renderQuiz(); } 
-      else { generateQuizPoster(); }
+      if(currentQuiz < 2) { currentQuiz++; renderQuiz(); } 
+      else { generateQuizResult(); }
     }, 200);
   }
 
-  function generateQuizPoster() {
+  function generateQuizResult() {
     let max = 'A';
     if(scores.B > scores[max]) max = 'B';
     if(scores.C > scores[max]) max = 'C';
-    
-    let resultTitle = "", emoji = "", desc = "";
-    if(max === 'A') { resultTitle = "元气小火山"; emoji = "🌋"; desc = "天生行动派，能量满满！";}
-    if(max === 'B') { resultTitle = "人气社交王"; emoji = "👑"; desc = "高情商宝宝，在哪都是焦点！";}
-    if(max === 'C') { resultTitle = "高冷小画家"; emoji = "🎨"; desc = "细节控，拥有艺术家的独特视角！";}
+    let res = max === 'A' ? "全能操心型老妈" : max === 'B' ? "快乐放养型硬核爸妈" : "佛系躺平型家长";
 
     const canvas = document.getElementById('posterCanvas');
     const ctx = canvas.getContext('2d');
-    const grad = ctx.createLinearGradient(0,0,0,1200);
-    grad.addColorStop(0, '#FFEAC7'); grad.addColorStop(1, '#FFD1AA');
-    ctx.fillStyle = grad; ctx.fillRect(0,0,800,1200);
+    ctx.fillStyle = '#1A1C35'; ctx.fillRect(0,0,800,1200);
     
-    // 绘制白框
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.roundRect(60, 100, 680, 1000, 40); ctx.fill();
-
-    ctx.fillStyle = "#FF7A00"; ctx.font = "bold 50px sans-serif"; ctx.textAlign = "center";
-    ctx.fillText("✨ 潜能天赋鉴定 ✨", 400, 220);
+    ctx.fillStyle = '#fff'; ctx.font = "bold 60px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("硬核家长鉴定报告", 400, 300);
+    ctx.fillStyle = "#B258FF"; ctx.font = "bold 70px sans-serif";
+    ctx.fillText(res, 400, 600);
     
-    ctx.font = "150px sans-serif"; ctx.fillText(emoji, 400, 450);
-    
-    ctx.fillStyle = "#333"; ctx.font = "bold 65px sans-serif";
-    ctx.fillText(resultTitle, 400, 600);
-    
-    ctx.fillStyle = "#888"; ctx.font = "30px sans-serif";
-    ctx.fillText(desc, 400, 700);
-
-    ctx.fillStyle = "#FF7A00"; ctx.font = "bold 28px sans-serif";
-    ctx.fillText("👉 橘子艺术官方认证", 400, 950);
-
     document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg');
     navTo('page-poster');
   }
 
-  // ================= 4. 提交数据跳转企微 =================
+  /* ================= 提交表单 ================= */
   function submitForm() {
     const name = document.getElementById('form-name').value;
     const phone = document.getElementById('form-phone').value;
-    if(!name || !phone) { alert("请完善宝宝姓名和电话哦~"); return; }
-    
-    // 跳转到加老师微信页 (完美的私域沉淀闭环)
-    navTo('page-12', document.querySelectorAll('.nav-item')[3]);
+    if(!name || !phone) { alert("请完善信息哦~"); return; }
+    // 提交成功，导流至最终企微页
+    navTo('page-finish');
   }
 </script>
-
 </body>
 </html>
