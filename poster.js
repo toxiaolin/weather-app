@@ -1,49 +1,88 @@
-function drawPoster(id,opt,cb){
+(function(global){
 
-const canvas=document.getElementById(id);
+function drawPoster(canvasId,opt,callback){
+
+const canvas=document.getElementById(canvasId);
 const ctx=canvas.getContext("2d");
 
-/* 背景 */
-ctx.fillStyle="#FFE7C2";
-ctx.fillRect(0,0,800,1000);
+const W=canvas.width;
+const H=canvas.height;
 
-/* 标题 */
-ctx.fillStyle="#ff7f00";
-ctx.font="bold 42px sans-serif";
-ctx.fillText("萌娃灵魂提问",220,80);
+const bg=new Image();
+bg.src=opt.avatar;
 
-/* 相片 */
-let img=new Image();
-img.onload=function(){
+bg.onload=function(){
 
-ctx.drawImage(img,100,150,600,600);
+/* 背景照片 */
+ctx.drawImage(bg,0,0,W,H);
 
-/* 对话气泡 */
+/* 半透明遮罩 */
+ctx.fillStyle="rgba(0,0,0,0.35)";
+ctx.fillRect(0,0,W,H);
+
+/* 标题卡片 */
+ctx.fillStyle="#ffffff";
+roundRect(ctx,60,80,W-120,200,30,true);
+
+/* 标题文字 */
+ctx.fillStyle="#ff7a00";
+ctx.font="bold 36px sans-serif";
+wrapText(ctx,opt.title,100,150,W-200,46);
+
+/* 底部品牌 */
 ctx.fillStyle="#fff";
-ctx.fillRect(80,780,640,120);
-
-ctx.fillStyle="#333";
 ctx.font="28px sans-serif";
-wrapText(ctx,opt.title,110,830,580,34);
+ctx.fillText("橘子艺术认证 · 小小创意家",120,H-160);
 
-/* 引导 */
-ctx.font="24px sans-serif";
-ctx.fillText("橘子艺术 · 成长记录",230,940);
-
-cb(canvas.toDataURL("image/jpeg",0.9));
+/* 二维码 */
+if(opt.qr){
+ const qr=new Image();
+ qr.src=opt.qr;
+ qr.onload=()=>{
+   ctx.drawImage(qr,W-220,H-220,160,160);
+   finish();
+ };
+}else{
+ finish();
 }
-img.src=opt.avatar;
+
+};
+
+function finish(){
+const url=canvas.toDataURL("image/png");
+callback && callback(url);
 }
 
+}
+
+/* 圆角矩形 */
+function roundRect(ctx,x,y,w,h,r,fill){
+ctx.beginPath();
+ctx.moveTo(x+r,y);
+ctx.arcTo(x+w,y,x+w,y+h,r);
+ctx.arcTo(x+w,y+h,x,y+h,r);
+ctx.arcTo(x,y+h,x,y,r);
+ctx.arcTo(x,y,x+w,y,r);
+ctx.closePath();
+if(fill) ctx.fill();
+}
+
+/* 自动换行 */
 function wrapText(ctx,text,x,y,maxWidth,lineHeight){
-let line="";
-for(let n=0;n<text.length;n++){
-let test=line+text[n];
+let line='';
+for(let i=0;i<text.length;i++){
+const test=line+text[i];
 if(ctx.measureText(test).width>maxWidth){
 ctx.fillText(line,x,y);
-line=text[n];
+line=text[i];
 y+=lineHeight;
-}else line=test;
+}else{
+line=test;
+}
 }
 ctx.fillText(line,x,y);
 }
+
+global.drawPoster=drawPoster;
+
+})(window);

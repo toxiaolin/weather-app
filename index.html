@@ -2,52 +2,131 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>萌娃金句挑战</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>萌娃气质大赏</title>
+
+<style>
+body{
+  margin:0;
+  background:#fff5ec;
+  font-family:sans-serif;
+  text-align:center;
+}
+
+/* 问题提示 */
+#question{
+  margin-top:40px;
+  font-size:22px;
+  padding:15px;
+  color:#ff6a00;
+  font-weight:bold;
+}
+
+/* 拍照按钮 */
+#cameraInput{
+  margin-top:30px;
+  font-size:18px;
+}
+
+/* 海报显示 */
+#posterImage{
+  width:92%;
+  margin-top:20px;
+  display:none;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+/* 保存提示 */
+#tip{
+  display:none;
+  margin:15px;
+  color:#ff6a00;
+  font-size:18px;
+}
+</style>
 </head>
 
 <body>
 
-<!-- 拍摄页 -->
-<div id="cameraPage">
+<h2>橘子艺术 · 萌娃金句挑战</h2>
 
-  <video id="camera" autoplay playsinline></video>
+<div id="question"></div>
 
-  <div id="questionBox"></div>
+<input
+id="cameraInput"
+type="file"
+accept="image/*"
+capture="environment">
 
-  <div class="controls">
-    <button id="photoBtn">📸 拍照生成海报</button>
-  </div>
+<canvas id="posterCanvas"
+width="800"
+height="1200"
+style="display:none;"></canvas>
 
+<img id="posterImage">
+
+<div id="tip">
+👇 长按海报保存 → 发朋友圈领取礼包
 </div>
-
-<!-- 海报页 -->
-<div id="posterPage" class="hidden">
-  <img id="posterImage"/>
-  <button id="sharedBtn">我已转发朋友圈</button>
-</div>
-
-<!-- 信息登记 -->
-<div id="formPage" class="hidden">
-
-<h2>恭喜您转发成功 🎉</h2>
-<p>您将获得文具套盒一件，请留下联系方式：</p>
-
-<input id="name" placeholder="小朋友名字">
-<input id="age" placeholder="小朋友几岁">
-<input id="phone" placeholder="您的电话">
-<input id="course" placeholder="感兴趣的科目">
-
-<button id="submitBtn">提交</button>
-
-<div id="result"></div>
-
-</div>
-
-<canvas id="posterCanvas" width="800" height="1000"></canvas>
 
 <script src="poster.js"></script>
-<script src="app.js"></script>
+
+<script>
+
+/* ===== 随机问题 ===== */
+const questions=[
+"如果妈妈有魔法，第一件事想带你做什么？",
+"给妈妈画一张像，你会给她画几条腿？",
+"如果星星可以吃，你觉得是什么味道？"
+];
+
+const currentQuestion =
+questions[Math.floor(Math.random()*questions.length)];
+
+document.getElementById("question").innerText=currentQuestion;
+
+
+/* ===== 拍照后生成海报 ===== */
+document.getElementById("cameraInput")
+.addEventListener("change",function(e){
+
+const file=e.target.files[0];
+if(!file) return;
+
+const reader=new FileReader();
+
+reader.onload=function(evt){
+
+drawPoster("posterCanvas",{
+ avatar:evt.target.result,
+ title:currentQuestion,
+ logo:"logo.png",
+ qr:"qr.png"
+},(url)=>{
+
+ const img=document.getElementById("posterImage");
+ img.src=url;
+ img.style.display="block";
+
+ document.getElementById("tip").style.display="block";
+
+ window.scrollTo({
+   top:document.body.scrollHeight,
+   behavior:"smooth"
+ });
+
+});
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+</script>
+
 </body>
 </html>
