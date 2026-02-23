@@ -8,48 +8,33 @@ content="width=device-width,initial-scale=1">
 <title>萌娃气质大赏</title>
 
 <style>
-body{
-  margin:0;
-  background:#fff5ec;
-  font-family:sans-serif;
-  text-align:center;
-}
-
-/* 问题提示 */
-#question{
-  margin-top:40px;
-  font-size:22px;
-  padding:15px;
-  color:#ff6a00;
-  font-weight:bold;
-}
-
-/* 拍照按钮 */
-#cameraInput{
-  margin-top:30px;
-  font-size:18px;
-}
-
-/* 海报显示 */
-#posterImage{
-  width:92%;
-  margin-top:20px;
-  display:none;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,.15);
-}
-
-/* 保存提示 */
-#tip{
-  display:none;
-  margin:15px;
-  color:#ff6a00;
-  font-size:18px;
-}
-</style>
-</head>
-
 <body>
+
+<div class="page">
+
+  <div class="header">
+    <div class="title">橘子艺术 · 萌娃金句挑战</div>
+    <div id="question" class="question"></div>
+  </div>
+
+  <div class="content">
+    <img id="posterImage">
+    <div id="tip">👇 长按保存海报发朋友圈</div>
+  </div>
+
+  <div class="footer">
+    <input
+      id="cameraInput"
+      type="file"
+      accept="image/*"
+      capture="environment">
+  </div>
+
+</div>
+
+<canvas id="posterCanvas" width="800" height="1200" style="display:none;"></canvas>
+
+</body>
 
 <h2>橘子艺术 · 萌娃金句挑战</h2>
 
