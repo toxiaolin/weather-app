@@ -8,43 +8,84 @@ content="width=device-width,initial-scale=1">
 <title>萌娃气质大赏</title>
 
 <style>
-body{
+html,body{
   margin:0;
+  padding:0;
+  height:100%;
+  overflow:hidden;
   background:#fff5ec;
   font-family:sans-serif;
+}
+
+/* 整页容器 */
+.page{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/* 顶部区域 */
+.header{
+  padding-top:6vh;
   text-align:center;
 }
 
-/* 问题提示 */
-#question{
-  margin-top:40px;
-  font-size:22px;
-  padding:15px;
+.title{
+  font-size:24px;
   color:#ff6a00;
   font-weight:bold;
 }
 
-/* 拍照按钮 */
-#cameraInput{
-  margin-top:30px;
-  font-size:18px;
+/* 问题卡片 */
+.question{
+  margin-top:3vh;
+  width:88%;
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  font-size:20px;
+  box-shadow:0 6px 18px rgba(0,0,0,.1);
 }
 
-/* 海报显示 */
+/* 中间海报区 */
+.content{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+}
+
 #posterImage{
-  width:92%;
-  margin-top:20px;
+  width:90%;
+  max-height:55vh;
+  object-fit:contain;
   display:none;
   border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,.15);
 }
 
-/* 保存提示 */
-#tip{
-  display:none;
-  margin:15px;
-  color:#ff6a00;
+/* 底部操作区 */
+.footer{
+  padding-bottom:env(safe-area-inset-bottom);
+  padding-bottom:20px;
+}
+
+#cameraInput{
   font-size:18px;
+  background:#ff7a00;
+  color:#fff;
+  padding:14px 24px;
+  border-radius:30px;
+  border:none;
+}
+
+#tip{
+  margin-top:12px;
+  color:#ff6a00;
+  display:none;
 }
 </style>
 </head>
@@ -68,10 +109,28 @@ style="display:none;"></canvas>
 
 <img id="posterImage">
 
-<div id="tip">
-👇 长按海报保存 → 发朋友圈领取礼包
-</div>
+<div class="page">
 
+  <div class="header">
+    <div class="title">橘子艺术 · 萌娃金句挑战</div>
+    <div id="question" class="question"></div>
+  </div>
+
+  <div class="content">
+    <img id="posterImage">
+    <div id="tip">👇 长按保存海报发朋友圈</div>
+  </div>
+
+  <div class="footer">
+    <input
+      id="cameraInput"
+      type="file"
+      accept="image/*"
+      capture="environment">
+  </div>
+
+</div>
+<canvas id="posterCanvas" width="800" height="1200" style="display:none;"></canvas>
 <script src="poster.js"></script>
 
 <script>
