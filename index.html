@@ -1,102 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>萌娃气质大赏</title>
-  <!-- 引入 vConsole 用于手机调试 -->
-  <script src="https://cdn.jsdelivr.net/npm/vconsole"></script>
-  <script src="poster.js"></script>
-  <style>
-    body { margin: 0; overflow: hidden; position: relative; }
-    #camera { width: 100vw; height: 100vh; object-fit: cover; }
-    #question { position: absolute; top: 20px; left: 20px; color: white; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px; }
-    #photoBtn { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 15px 30px; border: none; border-radius: 50px; background: #ff7f00; color: white; font-size: 18px; }
-    #posterImage { position: absolute; top: 0; left: 0; width: 100%; height: auto; display: none; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>萌娃气质大赏</title>
+
+<style>
+body{
+  margin:0;
+  background:#fff7ef;
+  font-family:sans-serif;
+  text-align:center;
+}
+
+video{
+  width:100%;
+  max-height:60vh;
+  object-fit:cover;
+  background:#000;
+}
+
+#question{
+  font-size:20px;
+  padding:15px;
+  color:#ff7f00;
+  font-weight:bold;
+}
+
+button{
+  background:#ff7f00;
+  color:white;
+  border:none;
+  padding:14px 24px;
+  font-size:18px;
+  border-radius:10px;
+  margin:10px;
+}
+
+#posterImage{
+  width:100%;
+  display:none;
+  margin-top:15px;
+}
+</style>
 </head>
+
 <body>
-  <video id="camera" autoplay playsinline></video>
-  <div id="question">当前题目：最萌的一句口头禅？</div>
-  <button id="photoBtn">拍照生成海报</button>
-  <canvas id="posterCanvas" width="600" height="800" style="display:none;"></canvas>
-  <img id="posterImage" style="width:100%; margin-top:20px; display:none;" />
 
-  <script>
-    // 初始化 vConsole（会在页面右下角出现一个绿色按钮）
-    var vConsole = new VConsole();
+<video id="camera" autoplay playsinline></video>
 
-    // 调用后置摄像头
-    async function initCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: 'environment' } },
-          audio: false
-        });
-        document.getElementById('camera').srcObject = stream;
-        console.log('后置摄像头已启用');
-      } catch (err) {
-        console.warn('强制后置失败，尝试环境优先', err);
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: 'environment' },
-            audio: false
-          });
-          document.getElementById('camera').srcObject = stream;
-          console.log('环境优先摄像头已启用');
-        } catch (e) {
-          alert('无法访问摄像头，请检查权限');
-          console.error('摄像头最终错误:', e);
-        }
-      }
-    }
-    initCamera();
+<div id="question">
+当前题目：最萌的一句口头禅？
+</div>
 
-    // 拍照并生成海报
-    document.getElementById('photoBtn').addEventListener('click', async () => {
-      console.log('拍照按钮点击');
-      try {
-        const video = document.getElementById('camera');
-        if (!video.videoWidth || !video.videoHeight) {
-          alert('摄像头尚未准备好，请稍后重试');
-          console.warn('视频尺寸为0，可能摄像头未初始化');
-          return;
-        }
+<button id="photoBtn">📸 拍照生成海报</button>
 
-        // 创建临时 canvas 截取视频帧
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0);
-        const photoDataURL = canvas.toDataURL('image/jpeg');
-        console.log('拍照成功，图片尺寸:', canvas.width, canvas.height);
+<canvas id="posterCanvas" width="600" height="800" style="display:none;"></canvas>
 
-        // 调用 drawPoster
-        if (typeof drawPoster !== 'function') {
-          alert('海报绘制函数未定义，请检查 poster.js 是否加载成功');
-          console.error('drawPoster 未定义');
-          return;
-        }
+<img id="posterImage"/>
 
-        drawPoster('posterCanvas', {
-          avatar: photoDataURL,
-          title: '萌娃金句',
-          logo: 'logo.png',
-          qr: 'qr.png'
-        }, (posterDataURL) => {
-          console.log('海报生成成功');
-          const img = document.getElementById('posterImage');
-          img.src = posterDataURL;
-          img.style.display = 'block';
-          // 可选：隐藏摄像头
-          // video.style.display = 'none';
-        });
-      } catch (err) {
-        alert('生成海报时出错：' + err.message);
-        console.error('拍照/生成海报错误:', err);
-      }
+<script src="poster.js"></script>
+
+<script>
+async function initCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:"environment" },
+      audio:false
     });
-  </script>
+    camera.srcObject = stream;
+  } catch(e){
+    alert("无法打开摄像头，请允许权限");
+  }
+}
+
+initCamera();
+
+photoBtn.onclick = () => {
+
+  const video = document.getElementById("camera");
+
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = video.videoWidth;
+  tempCanvas.height = video.videoHeight;
+
+  tempCanvas.getContext("2d")
+    .drawImage(video,0,0);
+
+  const photo = tempCanvas.toDataURL("image/jpeg");
+
+  drawPoster("posterCanvas",{
+      avatar:photo,
+      title:"萌娃金句",
+      logo:"logo.png",
+      qr:"qr.png"
+  },(url)=>{
+      posterImage.src = url;
+      posterImage.style.display="block";
+      window.scrollTo(0,document.body.scrollHeight);
+  });
+};
+</script>
+
 </body>
 </html>
