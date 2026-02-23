@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 content="width=device-width,initial-scale=1">
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1,
+maximum-scale=1,
+user-scalable=no,
+viewport-fit=cover">
 
 <title>萌娃气质大赏</title>
 
@@ -112,6 +118,15 @@ reader.readAsDataURL(file);
 });
 
 </script>
+<script id="fixvh">
+function setRealVH(){
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style
+    .setProperty('--vh', `${vh * 100}px`);
+}
 
+setRealVH();
+window.addEventListener('resize', setRealVH);
+</script>
 </body>
 </html>
