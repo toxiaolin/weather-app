@@ -1,108 +1,37 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
 content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>萌娃气质大赏</title>
+<title>萌娃金句生成器</title>
 
-<style>
-body{
-  margin:0;
-  background:#fff7ef;
-  font-family:sans-serif;
-  text-align:center;
-}
-
-video{
-  width:100%;
-  max-height:60vh;
-  object-fit:cover;
-  background:#000;
-}
-
-#question{
-  font-size:20px;
-  padding:15px;
-  color:#ff7f00;
-  font-weight:bold;
-}
-
-button{
-  background:#ff7f00;
-  color:white;
-  border:none;
-  padding:14px 24px;
-  font-size:18px;
-  border-radius:10px;
-  margin:10px;
-}
-
-#posterImage{
-  width:100%;
-  display:none;
-  margin-top:15px;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- 摄像头 -->
 <video id="camera" autoplay playsinline></video>
 
-<div id="question">
-当前题目：最萌的一句口头禅？
+<!-- 题目提示 -->
+<div id="questionBox">
+  <span id="questionText"></span>
 </div>
 
-<button id="photoBtn">📸 拍照生成海报</button>
+<!-- 控制按钮 -->
+<div class="controls">
+  <button id="photoBtn">📸 拍照</button>
+  <button id="nextBtn">下一题</button>
+</div>
 
-<canvas id="posterCanvas" width="600" height="800" style="display:none;"></canvas>
-
+<!-- 海报 -->
+<canvas id="posterCanvas" width="600" height="800"></canvas>
 <img id="posterImage"/>
 
 <script src="poster.js"></script>
-
-<script>
-async function initCamera() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video:{ facingMode:"environment" },
-      audio:false
-    });
-    camera.srcObject = stream;
-  } catch(e){
-    alert("无法打开摄像头，请允许权限");
-  }
-}
-
-initCamera();
-
-photoBtn.onclick = () => {
-
-  const video = document.getElementById("camera");
-
-  const tempCanvas = document.createElement("canvas");
-  tempCanvas.width = video.videoWidth;
-  tempCanvas.height = video.videoHeight;
-
-  tempCanvas.getContext("2d")
-    .drawImage(video,0,0);
-
-  const photo = tempCanvas.toDataURL("image/jpeg");
-
-  drawPoster("posterCanvas",{
-      avatar:photo,
-      title:"萌娃金句",
-      logo:"logo.png",
-      qr:"qr.png"
-  },(url)=>{
-      posterImage.src = url;
-      posterImage.style.display="block";
-      window.scrollTo(0,document.body.scrollHeight);
-  });
-};
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
