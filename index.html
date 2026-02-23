@@ -1,223 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <!-- 视口设置：禁止缩放，适配全面屏 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>萌娃气质大赏</title>
-  <style>
-    /* 基础重置 */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;           /* 由 JS 动态设置 --vh 来控制实际高度 */
-      overflow: hidden;
-      background: #fff5ec;
-      font-family: sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
 
-    /* 页面容器：flex 列布局，占满视口 */
-    .page {
-      display: flex;
-      flex-direction: column;
-      height: 100%;           /* 继承 body 高度 */
-      width: 100%;
-      position: relative;
-    }
+<title>萌娃气质大赏</title>
 
-    /* 顶部区域 (包含标题和问题卡片) */
-    .header {
-      flex-shrink: 0;
-      padding-top: max(env(safe-area-inset-top), 20px);
-      text-align: center;
-    }
+<style>
+body{
+  margin:0;
+  background:#fff5ec;
+  font-family:sans-serif;
+  text-align:center;
+}
 
-    .title {
-      font-size: 28px;
-      color: #ff6a00;
-      font-weight: bold;
-      margin: 0 16px;
-      line-height: 1.3;
-    }
+/* 问题提示 */
+#question{
+  margin-top:40px;
+  font-size:22px;
+  padding:15px;
+  color:#ff6a00;
+  font-weight:bold;
+}
 
-    .question {
-      width: 88%;
-      background: #fff;
-      border-radius: 18px;
-      padding: 18px;
-      font-size: 20px;
-      box-shadow: 0 6px 18px rgba(0,0,0,.1);
-      margin: 16px auto 0;
-      color: #333;
-      word-break: break-word;
-    }
+/* 拍照按钮 */
+#cameraInput{
+  margin-top:30px;
+  font-size:18px;
+}
 
-    /* 中间内容区：占据剩余空间，垂直居中内容 */
-    .content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      min-height: 0;          /* 防止 flex 子项溢出 */
-      padding: 10px 0;
-    }
+/* 海报显示 */
+#posterImage{
+  width:92%;
+  margin-top:20px;
+  display:none;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
 
-    /* 生成的海报图片 */
-    #posterImage {
-      width: 90%;
-      max-height: 60vh;
-      object-fit: contain;
-      display: none;
-      border-radius: 24px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.15);
-      margin-bottom: 16px;
-    }
-
-    /* 提示文字 */
-    #tip {
-      font-size: 16px;
-      color: #ff6a00;
-      background: rgba(255,255,255,0.9);
-      padding: 8px 20px;
-      border-radius: 40px;
-      display: none;
-      margin-top: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.05);
-    }
-
-    /* 底部操作区 */
-    .footer {
-      flex-shrink: 0;
-      padding-bottom: max(env(safe-area-inset-bottom), 20px);
-      text-align: center;
-    }
-
-    /* 自定义拍照按钮（隐藏原始 input，用 label 美化） */
-    .camera-label {
-      display: inline-block;
-      background: #ff7a00;
-      color: #fff;
-      font-size: 20px;
-      font-weight: 500;
-      padding: 16px 40px;
-      border-radius: 50px;
-      box-shadow: 0 4px 12px rgba(255,122,0,0.4);
-      cursor: pointer;
-      transition: transform 0.1s ease;
-    }
-
-    .camera-label:active {
-      transform: scale(0.97);
-    }
-
-    /* 隐藏原始文件输入 */
-    #cameraInput {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* 隐藏画布 */
-    #posterCanvas {
-      display: none;
-    }
-  </style>
+/* 保存提示 */
+#tip{
+  display:none;
+  margin:15px;
+  color:#ff6a00;
+  font-size:18px;
+}
+</style>
 </head>
+
 <body>
-  <div class="page">
-    <div class="header">
-      <div class="title">橘子艺术 · 萌娃金句挑战</div>
-      <div id="question" class="question"></div>
-    </div>
 
-    <div class="content">
-      <img id="posterImage" alt="你的专属海报">
-      <div id="tip">👇 长按保存海报 → 发朋友圈领取礼包</div>
-    </div>
+<h2>橘子艺术 · 萌娃金句挑战</h2>
 
-    <div class="footer">
-      <!-- 原始文件输入：capture="environment" 强制后置摄像头 -->
-      <input type="file" id="cameraInput" accept="image/*" capture="environment">
-      <!-- 美化后的按钮 -->
-      <label for="cameraInput" class="camera-label">📸 拍照生成海报</label>
-    </div>
-  </div>
+<div id="question"></div>
 
-  <!-- 隐藏的画布，用于绘制海报 -->
-  <canvas id="posterCanvas" width="800" height="1200" style="display:none;"></canvas>
+<input
+id="cameraInput"
+type="file"
+accept="image/*"
+capture="environment">
 
-  <script src="poster.js"></script>
-  <script>
-    (function() {
-      // ===== 动态计算视口高度（解决移动端地址栏问题） =====
-      function setRealVH() {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-        // 同时设置 body 高度为 100% 依赖 --vh？我们可以直接设置 body 高度为 innerHeight
-        // 但最简单：用 --vh 构建 height: calc(var(--vh, 1vh) * 100)
-        // 但上面 CSS 中 body 用的是 height: 100%，依赖于父元素 html。html 高度默认是视口，但可能受滚动条影响。
-        // 为了保证精确，可以在 body 上使用 height: calc(var(--vh, 1vh) * 100)
-        document.body.style.height = `calc(var(--vh, 1vh) * 100)`;
-      }
-      setRealVH();
-      window.addEventListener('resize', setRealVH);
-      window.addEventListener('orientationchange', setRealVH);
+<canvas id="posterCanvas"
+width="800"
+height="1200"
+style="display:none;"></canvas>
 
-      // ===== 随机问题 =====
-      const questions = [
-        "如果妈妈有魔法，第一件事想带你做什么？",
-        "给妈妈画一张像，你会给她画几条腿？",
-        "如果星星可以吃，你觉得是什么味道？",
-        "用三个词形容妈妈的笑",
-        "爸爸和超人谁更厉害？"
-      ];
-      const currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-      document.getElementById('question').innerText = currentQuestion;
+<img id="posterImage">
 
-      // ===== 拍照后生成海报 =====
-      const cameraInput = document.getElementById('cameraInput');
-      const posterImage = document.getElementById('posterImage');
-      const tip = document.getElementById('tip');
+<div id="tip">
+👇 长按海报保存 → 发朋友圈领取礼包
+</div>
 
-      cameraInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
+<script src="poster.js"></script>
 
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          // 调用 poster.js 中的 drawPoster
-          drawPoster('posterCanvas', {
-            avatar: evt.target.result,
-            title: currentQuestion,
-            logo: 'logo.png',   // 如果有 logo 图片，请放在同目录
-            qr: 'qr.png'         // 如果有二维码，请放在同目录
-          }, function(posterUrl) {
-            posterImage.src = posterUrl;
-            posterImage.style.display = 'block';
-            tip.style.display = 'block';
+<script>
 
-            // 可选：自动滚动到底部显示海报
-            setTimeout(() => {
-              window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: 'smooth'
-              });
-            }, 100);
-          });
-        };
-        reader.readAsDataURL(file);
+/* ===== 随机问题 ===== */
+const questions=[
+"如果妈妈有魔法，第一件事想带你做什么？",
+"给妈妈画一张像，你会给她画几条腿？",
+"如果星星可以吃，你觉得是什么味道？"
+];
 
-        // 清空 input 以便再次选择同一文件时能触发 change
-        cameraInput.value = '';
-      });
-    })();
-  </script>
-  <!-- 如果需要调试，可取消下一行的注释以启用 vConsole -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/vconsole"></script><script>new VConsole();</script> -->
+const currentQuestion =
+questions[Math.floor(Math.random()*questions.length)];
+
+document.getElementById("question").innerText=currentQuestion;
+
+
+/* ===== 拍照后生成海报 ===== */
+document.getElementById("cameraInput")
+.addEventListener("change",function(e){
+
+const file=e.target.files[0];
+if(!file) return;
+
+const reader=new FileReader();
+
+reader.onload=function(evt){
+
+drawPoster("posterCanvas",{
+ avatar:evt.target.result,
+ title:currentQuestion,
+ logo:"logo.png",
+ qr:"qr.png"
+},(url)=>{
+
+ const img=document.getElementById("posterImage");
+ img.src=url;
+ img.style.display="block";
+
+ document.getElementById("tip").style.display="block";
+
+ window.scrollTo({
+   top:document.body.scrollHeight,
+   behavior:"smooth"
+ });
+
+});
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+</script>
+
 </body>
 </html>
