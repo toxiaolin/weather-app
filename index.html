@@ -102,10 +102,16 @@
   .btn-outline { background: transparent; border: 1px solid var(--neon-purple); color: #D8B4FE; }
   
   /* 表单输入框 (暗黑版) */
-  input[type="text"], input[type="tel"], input[type="file"] {
+  input[type="text"], input[type="tel"], input[type="file"], select {
     width: 100%; padding: 16px; border: 1px solid var(--border-glass); border-radius: 12px; 
     margin-bottom: 15px; background: rgba(0,0,0,0.2); font-size: 16px; color: #fff; outline: none;
+    -webkit-appearance: none; appearance: none; /* 去除原生丑陋的箭头 */
   }
+  input::placeholder { color: #5B607A; }
+  select:invalid { color: #5B607A; } /* 未选择时的占位符颜色 */
+  select option { background: #13142B; color: #fff; } /* 展开后的下拉菜单颜色 */
+    width: 100%; padding: 16px; border: 1px solid var(--border-glass); border-radius: 12px; 
+    margin-bottom: 15px; background: rgba(0,0,0,0.2); font-size: 16px; color: #fff; outline: none;
   input::placeholder { color: #5B607A; }
 
   /* 测试答题选项 */
@@ -243,6 +249,20 @@
       <input type="text" id="form-name" placeholder="👤 宝贝姓名">
       <input type="tel" id="form-age" placeholder="🎂 宝贝年龄">
       <input type="tel" id="form-phone" placeholder="📱 家长手机号">
+      
+      <!-- 新增：感兴趣的科目 下拉框 -->
+      <div style="position: relative;">
+        <select id="form-subject" required>
+          <option value="" disabled selected hidden>🎨 请选择感兴趣的科目</option>
+          <option value="少儿美术">少儿美术</option>
+          <option value="少儿口才">少儿口才</option>
+          <option value="少儿舞蹈">少儿舞蹈</option>
+          <option value="书法">书法</option>
+          <option value="其他">其他</option>
+        </select>
+        <!-- 自定义下拉小箭头 -->
+        <div style="position: absolute; right: 15px; top: 18px; color: #5B607A; pointer-events: none;">▼</div>
+      </div>
       
       <button class="btn" onclick="submitForm()">提交核销信息</button>
       
@@ -399,10 +419,26 @@
 
   /* ================= 提交表单 ================= */
   function submitForm() {
-    const name = document.getElementById('form-name').value;
-    const phone = document.getElementById('form-phone').value;
-    if(!name || !phone) { alert("请完善信息哦~"); return; }
-    // 提交成功，导流至最终企微页
+    const name = document.getElementById('form-name').value.trim();
+    const age = document.getElementById('form-age').value.trim();
+    const phone = document.getElementById('form-phone').value.trim();
+    const subject = document.getElementById('form-subject').value;
+
+    // 严谨的表单校验
+    if(!name) { alert("请填写宝贝姓名哦~"); return; }
+    if(!age) { alert("请填写宝贝年龄哦~"); return; }
+    if(!phone || phone.length < 11) { alert("请填写正确的家长手机号哦~"); return; }
+    if(!subject) { alert("请选择感兴趣的科目~"); return; }
+
+    /* 
+       ================= ⚠️ 核心数据提示 ⚠️ =================
+       因为静态 H5 (Github Pages) 无法直接静默发送数据给腾讯文档，
+       目前最稳妥的【防薅羊毛大招】是：
+       这里校验完必填项后，直接跳转到“添加老师企业微信”的最终页（page-finish）。
+       让家长扫码加老师，老师直接在微信里手动在腾讯文档登记，这是转化率最高、防刷最安全的做法！
+    */
+    
+    // 提交成功，导流至最终企微扫码页
     navTo('page-finish');
   }
   /* ================= 跳转到腾讯文档收集表 ================= */
