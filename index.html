@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>星沙萌娃 · 气质大赏</title>
+<title>星沙萌娃 · 气质大赏 · 三可玩</title>
 <style>
   /* ================= 核心暗黑主题变量 ================= */
   :root {
@@ -26,7 +26,6 @@
     color: var(--text-main);
     padding-bottom: 20px; 
     overflow-x: hidden;
-    /* 模拟星空/深邃背景过渡 */
     background-image: radial-gradient(circle at 50% -20%, #2A2155 0%, var(--bg-dark) 60%);
     min-height: 100vh;
   }
@@ -105,14 +104,11 @@
   input[type="text"], input[type="tel"], input[type="file"], select {
     width: 100%; padding: 16px; border: 1px solid var(--border-glass); border-radius: 12px; 
     margin-bottom: 15px; background: rgba(0,0,0,0.2); font-size: 16px; color: #fff; outline: none;
-    -webkit-appearance: none; appearance: none; /* 去除原生丑陋的箭头 */
+    -webkit-appearance: none; appearance: none;
   }
   input::placeholder { color: #5B607A; }
-  select:invalid { color: #5B607A; } /* 未选择时的占位符颜色 */
-  select option { background: #13142B; color: #fff; } /* 展开后的下拉菜单颜色 */
-    width: 100%; padding: 16px; border: 1px solid var(--border-glass); border-radius: 12px; 
-    margin-bottom: 15px; background: rgba(0,0,0,0.2); font-size: 16px; color: #fff; outline: none;
-  input::placeholder { color: #5B607A; }
+  select:invalid { color: #5B607A; }
+  select option { background: #13142B; color: #fff; }
 
   /* 测试答题选项 */
   .quiz-option { 
@@ -120,6 +116,9 @@
     margin-bottom: 12px; font-size: 16px; text-align: center; cursor: pointer; color: #ccc; transition: 0.2s;
   }
   .quiz-option.selected { border-color: var(--neon-purple); background: rgba(178, 88, 255, 0.15); font-weight: bold; color: #fff; }
+  
+  /* 小chip选项 (用于腿的数量) */
+  .legs-option { padding: 12px; margin-bottom: 0; min-width: 70px; flex:1; }
   
   /* 海报展示 */
   #posterPreview { width: 100%; max-width: 300px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block; margin: 0 auto; border: 1px solid var(--border-glass);}
@@ -130,52 +129,48 @@
 </head>
 <body>
 
-  <!-- ================= 页面 01：主菜单页 (完美复刻设计稿) ================= -->
+  <!-- ================= 页面 01：主菜单页 ================= -->
   <div id="page-main" class="page active">
-    <!-- 顶部状态栏 -->
     <div class="top-bar">
       <div class="brand">
-        <!-- 这里把原来的 🧸 换成了你的 logo.png -->
         <img src="logo.png" style="height: 40px; width: 100px; border-radius: 8px; margin-right: 10px; object-fit: cover;">
       </div>
       <div class="share-btn">🔗</div>
     </div>
 
-    <!-- 标题区 -->
     <h1 class="neon-title">星沙萌娃<br>气质大赏</h1>
     <p class="subtitle">寻觅全星沙最有范儿的开学锦鲤</p>
 
-    <!-- 玩法卡片 1 -->
+    <!-- 玩法卡片 1 - 亲子默契挑战（已内置三个问题） -->
     <div class="menu-card" onclick="navTo('page-game1')">
       <div class="menu-icon" style="background: var(--icon-purple);">🤍</div>
       <div class="menu-text">
         <h3>亲子默契挑战</h3>
-        <p>AI合成专属气质写真与视频</p>
+        <p>三个脑洞问题 · 测测默契指数</p>
       </div>
       <div class="menu-arrow">▶</div>
     </div>
 
-    <!-- 玩法卡片 2 -->
+    <!-- 玩法卡片 2 - 萌娃表情大赏（抽签五连） -->
     <div class="menu-card" onclick="navTo('page-game2')">
       <div class="menu-icon" style="background: var(--icon-pink);">📸</div>
       <div class="menu-text">
         <h3>萌娃表情大赏</h3>
-        <p>解锁星沙开学季社交显眼包</p>
+        <p>抽签解锁显眼包挑战</p>
       </div>
       <div class="menu-arrow">▶</div>
     </div>
 
-    <!-- 玩法卡片 3 -->
+    <!-- 玩法卡片 3 - 家长气质评测（三问） -->
     <div class="menu-card" onclick="navTo('page-game3')">
       <div class="menu-icon" style="background: var(--icon-blue);">🎖️</div>
       <div class="menu-text">
         <h3>家长气质评测</h3>
-        <p>看看你是哪种类型的星沙硬核老爸/妈</p>
+        <p>三道题鉴定硬核爸妈</p>
       </div>
       <div class="menu-arrow">▶</div>
     </div>
 
-    <!-- 底部标识 -->
     <div class="footer-info">
       <div class="footer-time">活动时间：2026.02.23 - 2026.03.10</div>
       <div class="tags">
@@ -185,35 +180,57 @@
     </div>
   </div>
 
-  <!-- ================= 玩法一：亲子默契挑战 (传照片+写话) ================= -->
+  <!-- ================= 玩法一：亲子默契挑战 (三个可玩问题) ================= -->
   <div id="page-game1" class="page">
     <h2 style="margin: 30px 0 20px; font-size: 24px; text-align:center;">亲子默契挑战</h2>
     <div class="inner-card">
-      <p style="color:var(--text-sub); margin-bottom:10px; font-size: 14px;">Q: 如果妈妈有魔法，你想让她做什么？</p>
-      <input type="text" id="quote-input" placeholder="输入宝贝的神回复...">
-      
-      <p style="color:var(--text-sub); margin-bottom:10px; font-size: 14px; margin-top: 10px;">上传宝贝靓照：</p>
+      <!-- Q1 -->
+      <p style="color:var(--text-sub); margin-bottom:5px; font-size: 14px;">Q1: 如果妈妈有魔法，第一件事想带你做什么?</p>
+      <input type="text" id="g1a1" placeholder="比如：飞到云朵上" value="">
+
+      <!-- Q2 带选项 -->
+      <p style="color:var(--text-sub); margin: 20px 0 5px; font-size: 14px;">Q2: 给妈妈画一张像，你会给她画几条腿?</p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:5px;">
+        <div class="quiz-option legs-option" onclick="selectLegs(0, this)">0条</div>
+        <div class="quiz-option legs-option" onclick="selectLegs(2, this)">2条</div>
+        <div class="quiz-option legs-option" onclick="selectLegs(4, this)">4条</div>
+        <div class="quiz-option legs-option" onclick="selectLegs(8, this)">8条</div>
+      </div>
+      <input type="hidden" id="g1a2" value="">
+
+      <!-- Q3 -->
+      <p style="color:var(--text-sub); margin: 20px 0 5px; font-size: 14px;">Q3: 如果星星可以吃，你觉得是什么味道?</p>
+      <input type="text" id="g1a3" placeholder="比如：草莓味跳跳糖">
+
+      <!-- 上传照片 -->
+      <p style="color:var(--text-sub); margin: 20px 0 5px; font-size: 14px;">上传宝贝靓照：</p>
       <input type="file" id="photo-input1" accept="image/*" capture="environment">
     </div>
-    <button class="btn" onclick="generatePoster('game1')">生成写真海报</button>
+
+    <button class="btn" onclick="generatePoster('game1')">生成默契写真海报</button>
     <div class="back-btn" onclick="navTo('page-main')">返回主页</div>
   </div>
 
-  <!-- ================= 玩法二：萌娃表情大赏 (传搞怪照片) ================= -->
+  <!-- ================= 玩法二：萌娃表情大赏 (点击抽签 → 五选一) ================= -->
   <div id="page-game2" class="page">
     <h2 style="margin: 30px 0 20px; font-size: 24px; text-align:center;">萌娃表情大赏</h2>
     <div class="inner-card" style="text-align: center;">
-      <div style="font-size: 50px; margin-bottom: 10px;">🤪</div>
-      <p style="color:#fff; font-weight:bold; margin-bottom: 5px;">寻找社交显眼包</p>
-      <p style="color:var(--text-sub); font-size: 14px; margin-bottom:20px;">抓拍一张宝贝最搞怪、最可爱的表情</p>
+      <div style="font-size: 40px; margin-bottom: 5px;">🎭 抽签挑战</div>
+      <button class="btn" style="padding:12px; font-size:16px; margin-bottom:20px; background:var(--icon-pink);" onclick="drawChallenge()">🎲 点击抽签</button>
       
+      <!-- 抽签结果展示区 -->
+      <div id="challengeDisplay" style="background:rgba(255,255,255,0.05); border-radius:16px; padding:20px; margin-bottom:20px; min-height:120px;">
+        <p style="color:#ccc;">👆 抽一个试试手气～</p>
+      </div>
+
+      <p style="color:var(--text-sub); margin-bottom:10px;">抓拍宝贝挑战中的表情/动作</p>
       <input type="file" id="photo-input2" accept="image/*" capture="environment">
     </div>
     <button class="btn" style="background: var(--icon-pink);" onclick="generatePoster('game2')">生成表情包海报</button>
     <div class="back-btn" onclick="navTo('page-main')">返回主页</div>
   </div>
 
-  <!-- ================= 玩法三：家长气质评测 (答题测试) ================= -->
+  <!-- ================= 玩法三：家长气质评测 (三个选择题) ================= -->
   <div id="page-game3" class="page">
     <h2 style="margin: 30px 0; font-size: 24px; text-align:center;">硬核家长评测</h2>
     <div style="width:100%; text-align:right; color:var(--neon-purple); font-size:14px; margin-bottom:10px; font-weight:bold;">
@@ -228,7 +245,7 @@
     <div class="back-btn" onclick="navTo('page-main')">放弃答题，返回主页</div>
   </div>
 
-  <!-- ================= 结果海报页 (共用) ================= -->
+  <!-- ================= 结果海报页 ================= -->
   <div id="page-poster" class="page">
     <h2 style="margin: 30px 0 20px; font-size: 24px;">生成成功</h2>
     <img id="posterPreview" src="" alt="长按保存海报">
@@ -250,7 +267,6 @@
       <input type="tel" id="form-age" placeholder="🎂 宝贝年龄">
       <input type="tel" id="form-phone" placeholder="📱 家长手机号">
       
-      <!-- 新增：感兴趣的科目 下拉框 -->
       <div style="position: relative;">
         <select id="form-subject" required>
           <option value="" disabled selected hidden>🎨 请选择感兴趣的科目</option>
@@ -260,7 +276,6 @@
           <option value="书法">书法</option>
           <option value="其他">其他</option>
         </select>
-        <!-- 自定义下拉小箭头 -->
         <div style="position: absolute; right: 15px; top: 18px; color: #5B607A; pointer-events: none;">▼</div>
       </div>
       
@@ -282,9 +297,7 @@
     <div class="inner-card" style="text-align:center; margin-top: 20px;">
       <p style="font-size:16px; font-weight:bold; color:#fff; margin-bottom:20px;">最后一步：添加老师微信发截图</p>
       
-<!-- 替换为你们机构的微信二维码 -->
       <div style="width:180px; height:180px; background:#fff; margin:0 auto; border-radius:16px; padding:10px;">
-        <!-- 这里把占位图换成了你的 qr.png -->
         <img src="qr.png" style="width:100%; height:100%; object-fit: contain;">
       </div>
 
@@ -300,33 +313,70 @@
   <canvas id="posterCanvas" width="800" height="1200" style="display:none;"></canvas>
 
 <script>
-  /* ================= 页面路由 ================= */
+  // ================= 全局路由 =================
   function navTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
     window.scrollTo(0,0);
-    if(pageId === 'page-game3') startQuiz();
+    if(pageId === 'page-game3') startQuiz();  // 进入评测重置题目
   }
 
-  /* ================= 生成海报引擎 ================= */
+  // ================= 亲子默契挑战：Q2 选项 =================
+  function selectLegs(val, el) {
+    document.getElementById('g1a2').value = val;
+    // 移除所有腿选项的高亮
+    document.querySelectorAll('.legs-option').forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // ================= 萌娃表情大赏：抽签数据 =================
+  const challenges = [
+    { title: "大猩猩捶胸", desc: "一边捶胸一边发出'呜呜'声，越凶越好笑!" },
+    { title: "小天鹅飞飞", desc: "踮起脚尖，双手做翅膀，优雅中带点搞笑" },
+    { title: "企鹅摇摇晃晃", desc: "两手贴紧身体，左右摇摆走，最好撞到妈妈怀里" },
+    { title: "小螃蟹横着走", desc: "横着走，两只手做钳子" },
+    { title: "表情包五连拍", desc: "10秒内做5个表情：开心-生气-惊讶-委屈-发呆-得意-困了-吃饱了-看见冰淇淋" }
+  ];
+  let currentChallenge = null; // 存储当前抽中的挑战
+
+  function drawChallenge() {
+    const randomIndex = Math.floor(Math.random() * challenges.length);
+    currentChallenge = challenges[randomIndex];
+    const displayDiv = document.getElementById('challengeDisplay');
+    displayDiv.innerHTML = `
+      <p style="color: var(--neon-purple); font-size: 22px; font-weight:bold; margin-bottom:5px;">${currentChallenge.title}</p>
+      <p style="color: #fff; font-size: 15px; line-height:1.5;">${currentChallenge.desc}</p>
+    `;
+  }
+
+  // ================= 海报生成引擎 =================
   function generatePoster(gameType) {
     let fileInput, quoteText = "";
-    if(gameType === 'game1') {
+    if (gameType === 'game1') {
       fileInput = document.getElementById('photo-input1').files[0];
-      quoteText = document.getElementById('quote-input').value || "这宝贝太酷了，什么都没说~";
-    } else {
+      const q1 = document.getElementById('g1a1').value.trim() || "没想好";
+      const q2 = document.getElementById('g1a2').value;
+      const q3 = document.getElementById('g1a3').value.trim() || "秘密";
+      const legsText = q2 ? q2 + "条腿" : "未知几条腿";
+      if (!q2) { alert("请给妈妈选几条腿～"); return; }
+      quoteText = `✨魔法:${q1} | 画像:${legsText} | 星星味:${q3}`;
+    } else if (gameType === 'game2') {
       fileInput = document.getElementById('photo-input2').files[0];
-      quoteText = "星沙头号社交显眼包出炉！🤪";
+      if (!currentChallenge) { alert("请先点击抽签，抽取一个挑战吧！"); return; }
+      quoteText = `${currentChallenge.title} · ${currentChallenge.desc}`;
+    } else {
+      // game3 已在独立函数生成结果，不进这里
+      return;
     }
 
-    if(!fileInput) { alert("请先上传一张照片哦！"); return; }
+    if (!fileInput) { alert("请先上传一张照片哦！"); return; }
 
     const reader = new FileReader();
     reader.onload = function(e) {
       const canvas = document.getElementById('posterCanvas');
       const ctx = canvas.getContext('2d');
       
-      // 画海报暗黑背景
+      // 暗黑渐变背景
       const grad = ctx.createLinearGradient(0,0,0,1200);
       grad.addColorStop(0, '#1A1C35'); grad.addColorStop(1, '#0C0E1F');
       ctx.fillStyle = grad; ctx.fillRect(0,0,800,1200);
@@ -334,13 +384,13 @@
       const img = new Image();
       img.src = e.target.result;
       img.onload = () => {
-        // 画相框 (带紫色发光)
+        // 相框外发光
         ctx.shadowColor = '#B258FF'; ctx.shadowBlur = 30;
         ctx.fillStyle = '#fff'; 
         ctx.beginPath(); ctx.roundRect(80, 200, 640, 640, 40); ctx.fill();
         ctx.shadowBlur = 0;
 
-        // 画照片 (Cover裁剪)
+        // 绘制照片 (居中裁剪)
         ctx.save();
         ctx.beginPath(); ctx.roundRect(80, 200, 640, 640, 40); ctx.clip();
         let scale = Math.max(640 / img.width, 640 / img.height);
@@ -349,16 +399,48 @@
         ctx.drawImage(img, sx, sy, sw, sh, 80, 200, 640, 640);
         ctx.restore();
 
-        // 文字排版
-        ctx.fillStyle = "#fff"; ctx.font = "bold 56px sans-serif"; ctx.textAlign = "center";
+        // 标题
+        ctx.fillStyle = "#fff"; 
+        ctx.font = "bold 56px 'PingFang SC', sans-serif"; 
+        ctx.textAlign = "center";
         ctx.fillText(gameType === 'game1' ? "星沙萌娃写真" : "星沙显眼包大赏", 400, 130);
-        
+
+        // 底部文字卡片
         ctx.fillStyle = "rgba(255,255,255,0.1)";
-        ctx.beginPath(); ctx.roundRect(80, 900, 640, 160, 20); ctx.fill();
-        ctx.fillStyle = "#D8B4FE"; ctx.font = "bold 32px sans-serif";
-        ctx.fillText(quoteText, 400, 980);
-        ctx.fillStyle = "#8E93A8"; ctx.font = "24px sans-serif";
-        ctx.fillText("—— 星沙 2026 官方认证", 400, 1030);
+        ctx.beginPath(); ctx.roundRect(80, 900, 640, 180, 20); ctx.fill();
+
+        // 根据quoteText长度调整字体大小
+        ctx.fillStyle = "#D8B4FE";
+        let fontSize = 30;
+        if (quoteText.length > 30) fontSize = 26;
+        else if (quoteText.length > 20) fontSize = 28;
+        ctx.font = `bold ${fontSize}px 'PingFang SC', sans-serif`;
+
+        // 手动换行处理 (简单切分)
+        const maxWidth = 580;
+        let words = quoteText;
+        let lines = [];
+        let line = '';
+        for (let n = 0; n < words.length; n++) {
+            let testLine = line + words[n];
+            let metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && n > 0) {
+                lines.push(line);
+                line = words[n];
+            } else {
+                line = testLine;
+            }
+        }
+        lines.push(line);
+        // 最多显示两行
+        let startY = 950;
+        for (let i = 0; i < Math.min(lines.length, 2); i++) {
+            ctx.fillText(lines[i], 400, startY + i * 42);
+        }
+        
+        ctx.fillStyle = "#8E93A8"; 
+        ctx.font = "24px 'PingFang SC', sans-serif";
+        ctx.fillText("—— 星沙 2026 官方认证", 400, 1050);
         
         document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg');
         navTo('page-poster');
@@ -367,7 +449,7 @@
     reader.readAsDataURL(fileInput);
   }
 
-  /* ================= 玩法三：家长气质评测 ================= */
+  // ================= 玩法三：家长气质评测 =================
   const quizData = [
     { q: "周末带孩子出去玩，你通常会？", options: [{t:"做详细攻略，按计划走", s:"A"}, {t:"随叫随走，主打一个随性", s:"B"}, {t:"给娃报个体验课，我在旁边喝咖啡", s:"C"}] },
     { q: "孩子弄脏了刚买的新衣服，你的反应？", options: [{t:"崩溃！马上脱下来洗", s:"A"}, {t:"赶紧拍照发朋友圈", s:"B"}, {t:"脏就脏吧，玩得开心最重要", s:"C"}] },
@@ -417,36 +499,38 @@
     navTo('page-poster');
   }
 
-  /* ================= 提交表单 ================= */
+  // ================= 提交表单 =================
   function submitForm() {
     const name = document.getElementById('form-name').value.trim();
     const age = document.getElementById('form-age').value.trim();
     const phone = document.getElementById('form-phone').value.trim();
     const subject = document.getElementById('form-subject').value;
 
-    // 严谨的表单校验
     if(!name) { alert("请填写宝贝姓名哦~"); return; }
     if(!age) { alert("请填写宝贝年龄哦~"); return; }
     if(!phone || phone.length < 11) { alert("请填写正确的家长手机号哦~"); return; }
     if(!subject) { alert("请选择感兴趣的科目~"); return; }
 
-    /* 
-       ================= ⚠️ 核心数据提示 ⚠️ =================
-       因为静态 H5 (Github Pages) 无法直接静默发送数据给腾讯文档，
-       目前最稳妥的【防薅羊毛大招】是：
-       这里校验完必填项后，直接跳转到“添加老师企业微信”的最终页（page-finish）。
-       让家长扫码加老师，老师直接在微信里手动在腾讯文档登记，这是转化率最高、防刷最安全的做法！
-    */
-    
-    // 提交成功，导流至最终企微扫码页
+    // 直接跳转到企业微信引导页
     navTo('page-finish');
   }
-  /* ================= 跳转到腾讯文档收集表 ================= */
-  function jumpToForm() {
-    // ⚠️ 务必把这里的链接替换成你生成的 /form/page/... 链接 ⚠️
-    // 如果你坚持用 /sheet/ 链接，用户会看到一个 Excel 表格，而不是填空题。
-    window.location.href = "https://docs.qq.com/smartsheet/form/SWWcLGMLjhjB%2FtsU9vd%2FvYnb68?tab=tsU9vd";
-  }
+
+  // 画圆角矩形辅助
+  CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.moveTo(x + r, y);
+    this.lineTo(x + w - r, y);
+    this.quadraticCurveTo(x + w, y, x + w, y + r);
+    this.lineTo(x + w, y + h - r);
+    this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    this.lineTo(x + r, y + h);
+    this.quadraticCurveTo(x, y + h, x, y + h - r);
+    this.lineTo(x, y + r);
+    this.quadraticCurveTo(x, y, x + r, y);
+    this.closePath();
+    return this;
+  };
 </script>
 </body>
 </html>
