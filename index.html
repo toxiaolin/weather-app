@@ -129,7 +129,8 @@
     <!-- 顶部状态栏 -->
     <div class="top-bar">
       <div class="brand">
-        <div class="brand-icon">🧸</div>
+        <!-- 这里把原来的 🧸 换成了你的 logo.png -->
+        <img src="logo.png" style="height: 32px; width: 32px; border-radius: 8px; margin-right: 10px; object-fit: cover;">
         XINGSHA 2026
       </div>
       <div class="share-btn">🔗</div>
@@ -262,11 +263,12 @@
     <div class="inner-card" style="text-align:center; margin-top: 20px;">
       <p style="font-size:16px; font-weight:bold; color:#fff; margin-bottom:20px;">最后一步：添加老师微信发截图</p>
       
-      <!-- ⚠️ 替换为你们机构的微信二维码 ⚠️ -->
+<!-- 替换为你们机构的微信二维码 -->
       <div style="width:180px; height:180px; background:#fff; margin:0 auto; border-radius:16px; padding:10px;">
-        <img src="https://via.placeholder.com/160?text=二维码" style="width:100%; height:100%;">
+        <!-- 这里把占位图换成了你的 qr.png -->
+        <img src="qr.png" style="width:100%; height:100%; object-fit: contain;">
       </div>
-      
+            
       <p style="color:var(--neon-purple); font-size: 16px; font-weight:bold; margin-top: 20px;">长按识别二维码添加老师</p>
       <p style="color:var(--text-sub); font-size:14px; margin-top:10px; line-height:1.6;">
         发送暗号 <span style="color:#fff;">【朋友圈截图】</span><br>
@@ -403,6 +405,12 @@
     if(!name || !phone) { alert("请完善信息哦~"); return; }
     // 提交成功，导流至最终企微页
     navTo('page-finish');
+  }
+  /* ================= 跳转到腾讯文档收集表 ================= */
+  function jumpToForm() {
+    // ⚠️ 务必把这里的链接替换成你生成的 /form/page/... 链接 ⚠️
+    // 如果你坚持用 /sheet/ 链接，用户会看到一个 Excel 表格，而不是填空题。
+    window.location.href = "https://docs.qq.com/smartsheet/form/SWWcLGMLjhjB%2FtsU9vd%2FvYnb68?tab=tsU9vd";
   }
 </script>
 </body>
