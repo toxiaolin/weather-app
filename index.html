@@ -410,7 +410,7 @@
 
 		<!-- ================= 05 海报展示页 ================= -->
 		<div id="page-poster" class="page">
-			<h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2>
+<!-- 			<h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2> -->
 
 			<!-- 网页附言文字 (如果游戏一存在则显示) -->
 			<p id="result-bottom-highlight"
@@ -466,8 +466,9 @@
 					<option value="少儿美术">少儿美术</option>
 					<option value="少儿口才">少儿口才</option>
 					<option value="少儿舞蹈">少儿舞蹈</option>
-					<option value="书法">硬笔/毛笔书法</option>
-					<option value="其他">其他</option>
+					<option value="硬笔书法">硬笔书法</option>
+					<option value="阅读写作">阅读写作</option>
+					<option value="陪练猫AI英语">陪练猫AI英语</option>
 				</select>
 				<button class="btn" onclick="submitForm()">提交核销信息</button>
 				<p style="color: #F87171; font-size: 12px; margin-top: 15px; text-align: center;">⚠️
@@ -655,7 +656,7 @@
 					}
 					const answers = [`魔仙堡妈妈的打卡日常—${q1}`, `我的妈妈是宇宙最酷妈妈，因为她是${q2}`, `星星呀星星，原来你是${q3}味的`];
 					quoteText = answers[Math.floor(Math.random() * answers.length)];
-					bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
+				// 	bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
 				} else if (gameType === 'game2') {
 					fileInput = document.getElementById('photo-input2').files[0];
 					if (!currentChallenge) {
@@ -781,10 +782,10 @@
 				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1290);
 				ctx.fillStyle = "#fff";
 				ctx.font = "bold 28px sans-serif";
-				ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
+				ctx.fillText("点击加微信 领开学文具礼包 🎁", 400, 1390);
 				ctx.fillStyle = "#8E93A8";
 				ctx.font = "22px sans-serif";
-				ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
+				// ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
 
 				// 【3. 关闭 Loading 动画并展示】
 				document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
@@ -901,20 +902,20 @@
 				}
 
 				// 画底部的黑色半透明框与二维码底图
-				ctx.fillStyle = "rgba(255,255,255,0.05)";
-				ctx.beginPath();
-				ctx.roundRect(40, 1330, 720, 240, 24);
-				ctx.fill();
-				ctx.strokeStyle = "rgba(255,255,255,0.15)";
-				ctx.lineWidth = 2;
-				ctx.setLineDash([10, 10]);
-				ctx.stroke();
-				ctx.setLineDash([]);
-				ctx.fillStyle = "#fff";
-				ctx.beginPath();
-				ctx.roundRect(330, 1415, 140, 140, 16);
-				ctx.fill();
-				if (qrImg) ctx.drawImage(qrImg, 340, 1425, 120, 120);
+				// ctx.fillStyle = "rgba(255,255,255,0.05)";
+				// ctx.beginPath();
+				// ctx.roundRect(40, 1330, 720, 240, 24);
+				// ctx.fill();
+				// ctx.strokeStyle = "rgba(255,255,255,0.15)";
+				// ctx.lineWidth = 2;
+				// ctx.setLineDash([10, 10]);
+				// ctx.stroke();
+				// ctx.setLineDash([]);
+				// ctx.fillStyle = "#fff";
+				// ctx.beginPath();
+				// ctx.roundRect(330, 1415, 140, 140, 16);
+				// ctx.fill();
+				// if (qrImg) ctx.drawImage(qrImg, 340, 1425, 120, 120);
 
 				// 最后画文字
 				ctx.textAlign = "center";
@@ -940,15 +941,15 @@
 				ctx.fillStyle = "#8E93A8";
 				ctx.font = "bold 28px sans-serif";
 				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1290);
-				ctx.fillStyle = "#fff";
-				ctx.font = "bold 28px sans-serif";
-				ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
-				ctx.fillStyle = "#8E93A8";
-				ctx.font = "22px sans-serif";
-				ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
+				// ctx.fillStyle = "#fff";
+				// ctx.font = "bold 28px sans-serif";
+				// ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
+				// ctx.fillStyle = "#8E93A8";
+				// ctx.font = "22px sans-serif";
+				// ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
 
 				document.getElementById('result-bottom-highlight').style.display = "none";
-				document.getElementById('poster-page-title').innerText = "生成成功";
+				// document.getElementById('poster-page-title').innerText = "生成成功";
 				document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
 
 				// 关闭 Loading
