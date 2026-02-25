@@ -100,7 +100,9 @@
   <!-- ================= 页面 01：主菜单页 ================= -->
   <div id="page-main" class="page active">
     <div class="top-bar">
-      
+      <div class="brand">
+        <img src="logo.png" onerror="this.src='https://via.placeholder.com/32?text=Logo'" style="height: 50px; width: 150px; border-radius: 8px; margin-right: 10px; object-fit: cover;">
+      </div>
     </div>
 
     <h1 class="neon-title">星沙萌娃<br>气质大赏</h1>
@@ -212,11 +214,7 @@
     <style>@keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }</style>
     
     <!-- 引导发朋友圈和扫码的辅助区块 -->
-    <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; margin-top: 20px; width: 100%; text-align: center; border: 1px dashed var(--border-glass);">
-      <p style="color: #fff; font-size: 14px; margin-bottom: 10px; font-weight:bold;">我也要参与游戏，领开学文具礼包 🎁</p>
-      <img src="qr.png" onerror="this.src='https://via.placeholder.com/100'" style="width: 90px; height: 90px; border-radius: 8px;">
-      <p style="color: var(--text-sub); font-size: 12px; margin-top: 5px;">截屏发朋友圈，长按可识别上方二维码</p>
-    </div>
+ 
 
     <div style="width: 100%; margin-top: 20px;">
       <button class="btn" onclick="navTo('page-form')">我已分享朋友圈，去领奖 🎁</button>
