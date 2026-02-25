@@ -18,7 +18,7 @@
     --icon-blue: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'PingFang SC', sans-serif; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, sans-serif; -webkit-tap-highlight-color: transparent; }
   
   body {
     background: var(--bg-dark); color: var(--text-main); padding-bottom: 20px; overflow-x: hidden;
@@ -31,7 +31,7 @@
     position: fixed; top: 20px; right: 20px; width: 36px; height: 36px;
     background: rgba(255,255,255,0.1); border-radius: 50%; display: flex;
     justify-content: center; align-items: center; font-size: 18px; z-index: 999;
-    animation: spin 3s linear infinite; cursor: pointer;
+    animation: spin 3s linear infinite; cursor: pointer; border: 1px solid var(--border-glass);
   }
   .music-btn.paused { animation-play-state: paused; opacity: 0.5; }
   @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -41,15 +41,15 @@
   .page.active { display: flex; animation: fadeIn 0.4s ease forwards; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ================= UI 组件 ================= */
+  /* ================= 顶部导航与标题 ================= */
   .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; width: 100%; }
   .brand { display: flex; align-items: center; font-weight: 900; font-size: 16px; letter-spacing: 1px;}
   .neon-title { font-size: 44px; font-weight: 900; text-align: center; margin-top: 2vh; margin-bottom: 15px; line-height: 1.2; text-shadow: 0 0 10px rgba(178, 88, 255, 0.8), 0 0 20px rgba(178, 88, 255, 0.5); }
   .subtitle { font-size: 14px; color: var(--text-sub); margin-bottom: 10px; text-align: center; letter-spacing: 1px;}
-  .highlight-text { font-size: 13px; color: #D8B4FE; text-align: center; margin-bottom: 30px; font-weight: bold; background: rgba(178,88,255,0.1); padding: 5px 15px; border-radius: 20px; display: inline-block; }
+  .highlight-text { font-size: 13px; color: #D8B4FE; font-weight: bold; background: rgba(178,88,255,0.1); padding: 6px 16px; border-radius: 20px; display: inline-block; margin-bottom: 30px;}
 
-  /* 菜单卡片 */
-  .menu-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 24px; padding: 20px; width: 100%; display: flex; align-items: center; margin-bottom: 16px; backdrop-filter: blur(10px); cursor: pointer; }
+  /* ================= 菜单卡片 ================= */
+  .menu-card { background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 24px; padding: 20px; width: 100%; display: flex; align-items: center; margin-bottom: 16px; backdrop-filter: blur(10px); cursor: pointer; transition: 0.2s; }
   .menu-card:active { transform: scale(0.96); }
   .menu-icon { width: 65px; height: 65px; border-radius: 18px; display: flex; justify-content: center; align-items: center; font-size: 30px; margin-right: 18px; color: #fff; }
   .menu-text { flex: 1; }
@@ -63,51 +63,64 @@
   .btn:active { transform: scale(0.95); }
   .btn-outline { background: transparent; border: 1px solid var(--neon-purple); color: #D8B4FE; }
   
-  /* 表单与答题选项 */
-  input[type="text"], input[type="tel"], input[type="file"], select { width: 100%; padding: 16px; border: 1px solid var(--border-glass); border-radius: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.2); font-size: 16px; color: #fff; outline: none; -webkit-appearance: none; }
+  /* ================= 表单与选项 ================= */
+  input[type="text"], input[type="tel"], input[type="file"], select { width: 100%; padding: 16px; border: 1px solid var(--border-glass); border-radius: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.2); font-size: 16px; color: #fff; outline: none; -webkit-appearance: none; appearance: none;}
   input::placeholder { color: #5B607A; }
-  .quiz-option { background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 16px; border-radius: 12px; margin-bottom: 12px; font-size: 16px; text-align: center; cursor: pointer; color: #ccc; }
+  select:invalid { color: #5B607A; }
+  select option { background: #13142B; color: #fff; }
+  .quiz-option { background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 16px; border-radius: 12px; margin-bottom: 12px; font-size: 16px; text-align: center; cursor: pointer; color: #ccc; transition: 0.2s;}
   .quiz-option.selected { border-color: var(--neon-purple); background: rgba(178, 88, 255, 0.15); font-weight: bold; color: #fff; }
-  .legs-option { padding: 12px; margin-bottom: 0; min-width: 65px; flex:1; }
+  .legs-option { padding: 12px; margin-bottom: 0; min-width: 60px; flex:1; }
 
-  /* 头像与分享页 */
-  .cute-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D8B4FE; margin: 0 auto 10px; display: block; background: #fff; object-fit: cover; }
-  #posterPreview { width: 100%; max-width: 320px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block; margin: 0 auto; border: 1px solid var(--border-glass);}
+  /* 头像与海报展示 */
+  .cute-avatar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid #D8B4FE; margin: 0 auto 10px; display: block; background: #fff; object-fit: cover; }
+  #posterPreview { width: 100%; max-width: 300px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: block; margin: 0 auto; border: 1px solid var(--border-glass);}
   .back-btn { font-size: 14px; color: var(--text-sub); text-align: center; margin-top: 20px; text-decoration: underline; cursor:pointer;}
 </style>
 </head>
 <body>
 
-  <!-- 轻松愉快的儿童音乐 -->
-  <audio id="bgm" src="https://downsc.chinaz.net/Files/DownLoad/sound1/202003/12611.mp3" loop></audio>
+  <!-- ================= 欢快儿童音乐 ================= -->
+  <audio id="bgm" src="./xx.mp3" loop></audio>
   <div id="music-btn" class="music-btn paused" onclick="toggleMusic()">🎵</div>
 
   <!-- ================= 页面 01：主菜单页 ================= -->
   <div id="page-main" class="page active">
     <div class="top-bar">
       <div class="brand">
-        <img src="logo.png" onerror="this.src='https://via.placeholder.com/32?text=Logo'" style="height: 32px; width: 32px; border-radius: 8px; margin-right: 10px;">
-        XINGSHA 2026
+        <img src="logo.png" onerror="this.src='https://via.placeholder.com/32?text=Logo'" style="height: 50px; width: 150px; border-radius: 8px; margin-right: 10px; object-fit: cover;">
       </div>
     </div>
 
     <h1 class="neon-title">星沙萌娃<br>气质大赏</h1>
     <p class="subtitle">寻觅全星沙最有范儿的开学锦鲤</p>
-    <div style="text-align: center;"><span class="highlight-text">完成任意 1 项挑战 ➔ 开学文具盲袋免费领</span></div>
+    <div style="text-align: center;"><span class="highlight-text">（完成任意 1 项挑战 ➔ 开学文具盲袋免费领）</span></div>
 
+    <!-- 玩法卡片 1 -->
     <div class="menu-card" onclick="navTo('page-game1')">
       <div class="menu-icon" style="background: var(--icon-purple);">🤍</div>
-      <div class="menu-text"><h3>亲子默契挑战</h3><p>三个脑洞问题。测测和妈妈的默契指数</p></div>
+      <div class="menu-text">
+        <h3>亲子默契挑战</h3>
+        <p>三个脑洞问题。测测和妈妈的默契指数</p>
+      </div>
     </div>
 
+    <!-- 玩法卡片 2 -->
     <div class="menu-card" onclick="navTo('page-game2')">
       <div class="menu-icon" style="background: var(--icon-pink);">📸</div>
-      <div class="menu-text"><h3>萌娃表情大赏</h3><p>萌娃模仿秀。抽签解锁显眼包挑战</p></div>
+      <div class="menu-text">
+        <h3>萌娃表情大赏</h3>
+        <p>萌娃模仿秀。抽签解锁显眼包挑战</p>
+      </div>
     </div>
 
+    <!-- 玩法卡片 3 -->
     <div class="menu-card" onclick="navTo('page-game3')">
       <div class="menu-icon" style="background: var(--icon-blue);">🎖️</div>
-      <div class="menu-text"><h3>家长气质评测</h3><p>三道题鉴定硬核爸妈</p></div>
+      <div class="menu-text">
+        <h3>家长气质评测</h3>
+        <p>三道题鉴定硬核爸妈</p>
+      </div>
     </div>
 
     <div class="footer-info">
@@ -123,7 +136,7 @@
   <div id="page-game1" class="page">
     <h2 style="margin: 30px 0 10px; font-size: 24px; text-align:center;">亲子默契挑战</h2>
     <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Felix&backgroundColor=b6e3f4" class="cute-avatar" alt="儿童头像">
-    <p style="color:var(--text-sub); font-size: 12px; text-align:center; margin-bottom: 20px;">玩法：由妈妈提问记录下孩子的回答，拍照上传。</p>
+    <p style="color:var(--text-sub); font-size: 13px; text-align:center; margin-bottom: 20px;">玩法：由妈妈提问记录下孩子的回答，拍照上传。</p>
     
     <div class="inner-card">
       <p style="color:var(--text-main); font-size: 14px; margin-bottom:10px;">Q1: 如果妈妈有魔法，第一件事想带你做什么?</p>
@@ -181,16 +194,17 @@
 
   <!-- ================= 结果海报展示页 ================= -->
   <div id="page-poster" class="page">
-    <h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">恭喜！挑战成功！</h2>
+    <h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2>
     <img id="posterPreview" src="" alt="长按保存海报">
     
-    <p style="color:var(--neon-purple); font-size: 16px; margin-top: 20px; font-weight: bold; text-align: center; animation: spin 2s infinite alternate;">👆 请长按上方海报保存，分享至朋友圈</p>
+    <p style="color:var(--neon-purple); font-size: 16px; margin-top: 20px; font-weight: bold; text-align: center; animation: pulse 1.5s infinite;">👆 请长按上方海报保存，分享至朋友圈</p>
+    <style>@keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }</style>
     
-    <!-- 用于发朋友圈截屏的页面辅助信息 -->
+    <!-- 引导发朋友圈和扫码的辅助区块 -->
     <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; margin-top: 20px; width: 100%; text-align: center; border: 1px dashed var(--border-glass);">
-      <p style="color: #fff; font-size: 14px; margin-bottom: 10px;">我也要参与游戏，领开学文具礼包 🎁</p>
-      <img src="qr.png" onerror="this.src='https://via.placeholder.com/100'" style="width: 80px; height: 80px; border-radius: 8px;">
-      <p style="color: var(--text-sub); font-size: 12px; margin-top: 5px;">长按识别二维码参与</p>
+      <p style="color: #fff; font-size: 14px; margin-bottom: 10px; font-weight:bold;">我也要参与游戏，领开学文具礼包 🎁</p>
+      <img src="qr.png" onerror="this.src='https://via.placeholder.com/100'" style="width: 90px; height: 90px; border-radius: 8px;">
+      <p style="color: var(--text-sub); font-size: 12px; margin-top: 5px;">截屏发朋友圈，长按可识别上方二维码</p>
     </div>
 
     <div style="width: 100%; margin-top: 20px;">
@@ -208,14 +222,18 @@
       <input type="text" id="form-name" placeholder="👤 宝贝姓名">
       <input type="tel" id="form-age" placeholder="🎂 宝贝年龄">
       <input type="tel" id="form-phone" placeholder="📱 家长手机号">
-      <select id="form-subject" required>
-        <option value="" disabled selected hidden>🎨 请选择感兴趣的科目</option>
-        <option value="少儿美术">少儿美术</option>
-        <option value="少儿口才">少儿口才</option>
-        <option value="少儿舞蹈">少儿舞蹈</option>
-        <option value="书法">硬笔/毛笔书法</option>
-        <option value="其他">其他</option>
-      </select>
+      
+      <div style="position: relative;">
+        <select id="form-subject" required>
+          <option value="" disabled selected hidden>🎨 请选择感兴趣的科目</option>
+          <option value="少儿美术">少儿美术</option>
+          <option value="少儿口才">少儿口才</option>
+          <option value="少儿舞蹈">少儿舞蹈</option>
+          <option value="书法">硬笔/毛笔书法</option>
+          <option value="其他">其他</option>
+        </select>
+        <div style="position: absolute; right: 15px; top: 18px; color: #5B607A; pointer-events: none;">▼</div>
+      </div>
       
       <button class="btn" onclick="submitForm()">提交核销信息</button>
       <p style="color: #F87171; font-size: 12px; margin-top: 15px; text-align: center; line-height: 1.5;">⚠️ 提交后请务必保留朋友圈记录，<br>现场核销需出示手机截图哦！</p>
@@ -247,7 +265,7 @@
     if (bgm.paused) { bgm.play(); musicBtn.classList.remove('paused'); musicPlayed = true; } 
     else { bgm.pause(); musicBtn.classList.add('paused'); }
   }
-  // 微信浏览器自动播放 Hack
+  // 微信浏览器触摸自动播放 Hack
   document.addEventListener('touchstart', function() {
     if(!musicPlayed) { bgm.play(); musicBtn.classList.remove('paused'); musicPlayed = true; }
   }, {once:true});
@@ -273,7 +291,7 @@
     { title: "小天鹅飞飞", desc: "踮起脚尖，双手做翅膀，优雅中带点搞笑", icon: "🦢" },
     { title: "企鹅摇摇晃晃", desc: "两手贴紧身体，左右摇摆走，最好撞到妈妈怀里", icon: "🐧" },
     { title: "小螃蟹横着走", desc: "横着走，两只手做钳子", icon: "🦀" },
-    { title: "表情包五连拍", desc: "10 秒内根据提示快速转换 5 个表情：开心-生气-惊讶-委屈-发呆", icon: "🤪" }
+    { title: "表情包五连拍", desc: "10 秒内根据提示快速转换 5 个表情：开心-生气-惊讶-委屈-发呆-得意-困了-吃饱了-看见冰淇淋", icon: "🤪" }
   ];
   let currentChallenge = null;
 
@@ -294,6 +312,7 @@
   function generatePoster(gameType) {
     let fileInput, posterTitle = "", quoteText = "", bottomHighlight = "";
     
+    // ----------- 玩法一 逻辑 -----------
     if (gameType === 'game1') {
       fileInput = document.getElementById('photo-input1').files[0];
       const q1 = document.getElementById('g1a1').value.trim() || "没想好";
@@ -301,27 +320,30 @@
       const q3 = document.getElementById('g1a3').value.trim() || "秘密";
       if (!q2) { alert("请给妈妈选几条腿～"); return; }
       
-      // 随机海报标题
+      // 1. 随机海报标题
       const titles = ["星沙最有创意萌娃", "我是金句小达人", "脑洞清奇小超人", "我是创意小马达"];
       posterTitle = titles[Math.floor(Math.random() * titles.length)];
       
-      // 随机答案文案
+      // 2. 随机答案生成
       const answers = [
         `魔仙堡妈妈的打卡日常—${q1}`,
         `我的妈妈是超级无敌宇宙最酷妈妈，因为她有${q2}条腿`,
         `星星呀星星，原来你是${q3}味的`
       ];
       quoteText = answers[Math.floor(Math.random() * answers.length)];
+      
+      // 3. 底部小字
       bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
       document.getElementById('poster-page-title').innerText = "生成成功";
 
+    // ----------- 玩法二 逻辑 -----------
     } else if (gameType === 'game2') {
       fileInput = document.getElementById('photo-input2').files[0];
       if (!currentChallenge) { alert("请先点击抽签，抽取一个挑战吧！"); return; }
       
       posterTitle = "萌娃演技派";
       quoteText = `恭喜宝贝成功挑战“${currentChallenge.title}”演技炸裂，笑翻全场。`;
-      bottomHighlight = "星沙头号社交显眼包诞生！";
+      bottomHighlight = ""; // 玩法二不需要额外高光字
       document.getElementById('poster-page-title').innerText = "恭喜！挑战成功！";
     }
 
@@ -332,7 +354,7 @@
       const canvas = document.getElementById('posterCanvas');
       const ctx = canvas.getContext('2d');
       
-      // 渐变背景
+      // 暗黑渐变背景
       const grad = ctx.createLinearGradient(0,0,0,1200);
       grad.addColorStop(0, '#1A1C35'); grad.addColorStop(1, '#0C0E1F');
       ctx.fillStyle = grad; ctx.fillRect(0,0,800,1200);
@@ -340,44 +362,45 @@
       const img = new Image();
       img.src = e.target.result;
       img.onload = () => {
-        // 卡通花边相框 (带发光)
+        // 相框外发光
         ctx.shadowColor = gameType === 'game1' ? '#B258FF' : '#F43F5E'; ctx.shadowBlur = 30;
         ctx.fillStyle = '#fff'; 
-        ctx.beginPath(); ctx.roundRect(80, 200, 640, 640, 40); ctx.fill();
+        ctx.beginPath(); ctx.roundRect(80, 180, 640, 640, 40); ctx.fill();
         ctx.shadowBlur = 0;
 
-        // 裁剪绘制照片
+        // 居中裁剪绘制照片
         ctx.save();
-        ctx.beginPath(); ctx.roundRect(80, 200, 640, 640, 40); ctx.clip();
+        ctx.beginPath(); ctx.roundRect(80, 180, 640, 640, 40); ctx.clip();
         let scale = Math.max(640 / img.width, 640 / img.height);
         let sw = 640 / scale, sh = 640 / scale;
         let sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
-        ctx.drawImage(img, sx, sy, sw, sh, 80, 200, 640, 640);
+        ctx.drawImage(img, sx, sy, sw, sh, 80, 180, 640, 640);
         ctx.restore();
 
-        // 绘制标题
+        // 绘制顶部标题
         ctx.fillStyle = "#fff"; ctx.font = "bold 56px 'PingFang SC', sans-serif"; ctx.textAlign = "center";
-        ctx.fillText(posterTitle, 400, 130);
+        ctx.fillText(posterTitle, 400, 110);
         
-        // 绘制小标 / 奖杯
-        ctx.font = "50px sans-serif";
-        if(gameType === 'game1') ctx.fillText("👍", 400, 800); // 点赞大拇指
-        else ctx.fillText("🏆", 680, 800); // 侧边奖杯
+        // 绘制侧边 Emoji (点赞👍 / 奖杯🏆)
+        ctx.font = "60px sans-serif";
+        if(gameType === 'game1') ctx.fillText("👍", 400, 770); 
+        else ctx.fillText("🏆", 680, 780); 
 
-        // 底部文字区域
+        // 底部文字背板
         ctx.fillStyle = "rgba(255,255,255,0.1)";
-        ctx.beginPath(); ctx.roundRect(50, 880, 700, 180, 20); ctx.fill();
+        ctx.beginPath(); ctx.roundRect(50, 860, 700, 160, 20); ctx.fill();
         
-        // 自动换行绘制随机答案
+        // 绘制随机答案 (自动换行处理)
         ctx.fillStyle = gameType === 'game1' ? "#D8B4FE" : "#FDA4AF";
         ctx.font = "bold 28px 'PingFang SC', sans-serif";
-        wrapText(ctx, quoteText, 400, 940, 650, 40);
+        wrapText(ctx, quoteText, 400, 915, 650, 40);
 
-        // 绘制底部高光文字与官方认证
+        // 绘制额外小字 & 官方认证
         ctx.fillStyle = "#fff"; ctx.font = "20px 'PingFang SC'";
-        ctx.fillText(bottomHighlight, 400, 1110);
-        ctx.fillStyle = "#8E93A8"; ctx.font = "bold 28px 'PingFang SC'";
-        ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1160);
+        if(bottomHighlight) ctx.fillText(bottomHighlight, 400, 1070);
+        
+        ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px 'PingFang SC'";
+        ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1130);
 
         document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg');
         navTo('page-poster');
@@ -386,7 +409,7 @@
     reader.readAsDataURL(fileInput);
   }
 
-  // Canvas 自动换行辅助函数
+  // 辅助函数：Canvas 自动换行且垂直居中
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     let words = text.split(''), line = '', lines = [];
     for (let n = 0; n < words.length; n++) {
@@ -396,7 +419,9 @@
       else { line = testLine; }
     }
     lines.push(line);
-    for (let i = 0; i < lines.length; i++) { ctx.fillText(lines[i], x, y + (i * lineHeight)); }
+    // 调整 Y 轴使整体居中
+    let startY = y - ((lines.length - 1) * lineHeight) / 2;
+    for (let i = 0; i < lines.length; i++) { ctx.fillText(lines[i], x, startY + (i * lineHeight)); }
   }
 
   /* ================= 玩法三：家长气质评测 ================= */
@@ -441,7 +466,7 @@
     ctx.fillText("硬核家长鉴定报告", 400, 300);
     ctx.fillStyle = "#B258FF"; ctx.font = "bold 70px sans-serif";
     ctx.fillText(res, 400, 600);
-    ctx.fillStyle = "#8E93A8"; ctx.font = "bold 30px sans-serif";
+    ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px sans-serif";
     ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1050);
     
     document.getElementById('poster-page-title').innerText = "生成成功";
@@ -473,13 +498,13 @@
       else { alert("网络拥挤，请重试！"); btn.innerText = oldText; btn.disabled = false; }
     })
     .catch(error => {
-      // ⚠️ 如果你暂时没配好飞书，测试时可以打开下方注释强制跳转
+      // ⚠️ 测试阶段若无飞书接口，可取消注释直接跳转
       navTo('page-finish'); 
       // alert("提交失败，请检查网络！"); btn.innerText = oldText; btn.disabled = false;
     });
   }
 
-  /* 补齐低版本浏览器 Canvas roundRect 兼容 */
+  /* 低版本浏览器 Canvas roundRect 兼容 */
   if(!CanvasRenderingContext2D.prototype.roundRect) {
     CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
       if (w < 2 * r) r = w / 2; if (h < 2 * r) r = h / 2;
