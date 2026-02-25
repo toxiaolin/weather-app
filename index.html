@@ -106,7 +106,7 @@
     </div>
 
     <h1 class="neon-title">星沙萌娃<br>气质大赏</h1>
-    <p class="subtitle">寻觅全星沙最有范儿的开学锦鲤</p>
+    <p class="subtitle">寻找全星沙最美萌娃</p>
     <div style="text-align: center;"><span class="highlight-text">（完成任意 1 项挑战 ➔ 开学文具盲袋免费领）</span></div>
 
     <!-- 玩法卡片 1 -->
@@ -114,7 +114,7 @@
       <div class="menu-icon" style="background: var(--icon-purple);">🤍</div>
       <div class="menu-text">
         <h3>亲子默契挑战</h3>
-        <p>三个脑洞问题。测测和妈妈的默契指数</p>
+        <p>三个脑洞问题·测测和妈妈的默契指数</p>
       </div>
     </div>
 
@@ -123,7 +123,7 @@
       <div class="menu-icon" style="background: var(--icon-pink);">📸</div>
       <div class="menu-text">
         <h3>萌娃表情大赏</h3>
-        <p>萌娃模仿秀。抽签解锁显眼包挑战</p>
+        <p>萌娃模仿秀·抽签解锁显眼包挑战</p>
       </div>
     </div>
 
@@ -155,12 +155,12 @@
       <p style="color:var(--text-main); font-size: 14px; margin-bottom:10px;">Q1: 如果妈妈有魔法，第一件事想带你做什么?</p>
       <input type="text" id="g1a1" placeholder="比如：飞到云朵上">
 
-      <p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">Q2: 给妈妈画一张像，你会给她画几条腿?</p>
+      <p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">Q2: 如果让你给妈妈起一个超级英雄的名字，叫什么?</p>
       <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
-        <div class="quiz-option legs-option" onclick="selectLegs('很多', this)">很多</div>
-        <div class="quiz-option legs-option" onclick="selectLegs('2', this)">2 条</div>
-        <div class="quiz-option legs-option" onclick="selectLegs('4', this)">4 条</div>
-        <div class="quiz-option legs-option" onclick="selectLegs('8', this)">8 条</div>
+        <div class="quiz-option legs-option" onclick="selectLegs('家务侠', this)">家务侠</div>
+        <div class="quiz-option legs-option" onclick="selectLegs('做饭超人', this)">做饭超人</div>
+        <div class="quiz-option legs-option" onclick="selectLegs('抱抱侠', this)">抱抱侠</div>
+        <div class="quiz-option legs-option" onclick="selectLegs('唠叨侠', this)">唠叨侠</div>
       </div>
       <input type="hidden" id="g1a2">
 
@@ -331,7 +331,7 @@
       const q1 = document.getElementById('g1a1').value.trim() || "没想好";
       const q2 = document.getElementById('g1a2').value;
       const q3 = document.getElementById('g1a3').value.trim() || "秘密";
-      if (!q2) { alert("请给妈妈选几条腿～"); return; }
+      if (!q2) { alert("如果让你给妈妈起一个超级英雄的名字，叫什么?"); return; }
       
       // 1. 随机海报标题
       const titles = ["星沙最有创意萌娃", "我是金句小达人", "脑洞清奇小超人", "我是创意小马达"];
@@ -340,7 +340,7 @@
       // 2. 随机答案生成
       const answers = [
         `魔仙堡妈妈的打卡日常—${q1}`,
-        `我的妈妈是超级无敌宇宙最酷妈妈，因为她有${q2}条腿`,
+        `我的妈妈是超级无敌宇宙最酷妈妈，因为她是${q2}`,
         `星星呀星星，原来你是${q3}味的`
       ];
       quoteText = answers[Math.floor(Math.random() * answers.length)];
