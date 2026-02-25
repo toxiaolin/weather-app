@@ -398,22 +398,32 @@
     ctx.fillText("寻找全星沙最美萌娃", 400, 290);
 
     // 3. 用户照片 (Y: 340)
-    ctx.fillStyle = '#fff'; 
-    ctx.beginPath(); ctx.roundRect(50, 340, 700, 700, 20); ctx.fill();
+        // 3. 画用户照片 (放在底层，对准相框中间的透明窗)
+        // 🎯 这里的参数是根据你提供的相框比例计算的
+        const px = 145;  // 照片距离左边的距离 (往右挪避开左边框)
+        const py = 430;  // 照片距离顶部的距离 (往下挪避开顶边框和彩虹)
+        const pw = 510;  // 照片的宽度
+        const ph = 510;  // 照片的高度
+        
+        ctx.save();
+        // 裁切区域，只在内框中画照片
+        ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 8); ctx.clip();
+        // 居中裁剪 Cover 算法
+        let scale = Math.max(pw / userImg.width, ph / userImg.height);
+        let sw = pw / scale, sh = ph / scale;
+        let sx = (userImg.width - sw) / 2, sy = (userImg.height - sh) / 2;
+        ctx.drawImage(userImg, sx, sy, sw, sh, px, py, pw, ph);
+        ctx.restore();
 
-    const px = 60, py = 350, pw = 680, ph = 680;
-    ctx.save();
-    ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 10); ctx.clip();
-    let scale = Math.max(pw / userImg.width, ph / userImg.height);
-    let sw = pw / scale, sh = ph / scale;
-    let sx = (userImg.width - sw) / 2, sy = (userImg.height - sh) / 2;
-    ctx.drawImage(userImg, sx, sy, sw, sh, px, py, pw, ph);
-    ctx.restore();
-
-    // 4. 覆盖透明相框
-    if(frameImg) {
-        ctx.drawImage(frameImg, 50, 340, 700, 700);
-    }
+        // 4. 将抠好的透明相框 frame.png 覆盖在照片上面
+        if(frameImg) {
+            // 相框总体大小是 700x700，画在坐标 (50, 340)
+            ctx.drawImage(frameImg, 50, 340, 700, 700);
+        } else {
+            // 防错兜底：万一图片没加载出来画个白框
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 10;
+            ctx.strokeRect(px, py, pw, ph);
+        }
 
     // 5. 呆萌大字文案区域
     ctx.fillStyle = "rgba(255,255,255,0.08)";
