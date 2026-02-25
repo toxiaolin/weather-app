@@ -11,6 +11,8 @@
 		<title>星沙萌娃大赏</title>
 		<style>
 			/* ================= 核心暗黑主题 ================= */
+			@import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
 			:root {
 				--bg-dark: #13142B;
 				--bg-card: rgba(255, 255, 255, 0.06);
@@ -139,7 +141,26 @@
 				margin-top: 2vh;
 				margin-bottom: 15px;
 				line-height: 1.2;
-				text-shadow: 0 0 10px rgba(178, 88, 255, 0.8), 0 0 20px rgba(178, 88, 255, 0.5);
+				text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(168, 85, 247, 0.5);
+				font-family: 'ZCOOL KuaiLe', cursive;
+			}
+
+			@keyframes float {
+				0% {
+					transform: translateY(0px);
+				}
+
+				50% {
+					transform: translateY(-10px);
+				}
+
+				100% {
+					transform: translateY(0px);
+				}
+			}
+
+			.animate-float {
+				animation: float 3s ease-in-out infinite;
 			}
 
 			.highlight-text {
@@ -181,6 +202,32 @@
 				font-size: 30px;
 				margin-right: 18px;
 				color: #fff;
+			}
+
+			.menu-text {
+				flex: 1;
+			}
+
+			.menu-text h3 {
+				font-size: 20px;
+				font-weight: bold;
+				margin-bottom: 5px;
+				color: #fff;
+			}
+
+			.menu-text p {
+				font-size: 12px;
+				color: var(--text-sub);
+				line-height: 1.4;
+			}
+
+			.menu-arrow {
+				width: 24px;
+				height: 24px;
+				color: #5B607A;
+				display: flex;
+				justify-content: center;
+				align-items: center;
 			}
 
 			.inner-card {
@@ -356,11 +403,15 @@
 				<p style="color:var(--text-main); font-size: 14px; margin-bottom:10px;">Q1: 如果妈妈有魔法，第一件事想带你做什么?</p>
 				<input type="text" id="g1a1" placeholder="比如：飞到云朵上">
 				<p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">Q2: 如果让你给妈妈起一个超级英雄的名字，叫什么?</p>
-				<div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px;">
-					<div class="quiz-option legs-option" style="font-size: 14px;"onclick="selectLegs('家务侠', this)">家务侠</div>
-					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('做饭超人', this)">做饭超人</div>
-					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('抱抱侠', this)">抱抱侠</div>
-					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('唠叨侠', this)">唠叨侠</div>
+				<div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:5px;">
+					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('家务侠', this)">家务侠
+					</div>
+					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('做饭超人', this)">
+						做饭超人</div>
+					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('抱抱侠', this)">抱抱侠
+					</div>
+					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('唠叨侠', this)">唠叨侠
+					</div>
 				</div>
 				<input type="hidden" id="g1a2">
 				<p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">Q3: 如果星星可以吃，你觉得是什么味道?</p>
@@ -400,7 +451,8 @@
 			<h2 style="margin: 30px 0; font-size: 24px; text-align:center;">硬核家长评测</h2>
 			<div
 				style="width:100%; text-align:right; color:var(--neon-purple); font-size:14px; margin-bottom:10px; font-weight:bold;">
-				<span id="quiz-progress">1/3</span></div>
+				<span id="quiz-progress">1/3</span>
+			</div>
 			<div class="inner-card">
 				<h3 id="quiz-q" style="margin-bottom:25px; font-size:18px; line-height:1.5; color: #fff;">...</h3>
 				<div id="quiz-options"></div>
@@ -410,7 +462,7 @@
 
 		<!-- ================= 05 海报展示页 ================= -->
 		<div id="page-poster" class="page">
-<!-- 			<h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2> -->
+			<!-- 			<h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2> -->
 
 			<!-- 网页附言文字 (如果游戏一存在则显示) -->
 			<p id="result-bottom-highlight"
@@ -656,7 +708,7 @@
 					}
 					const answers = [`魔仙堡妈妈的打卡日常—${q1}`, `我的妈妈是宇宙最酷妈妈，因为她是${q2}`, `星星呀星星，原来你是${q3}味的`];
 					quoteText = answers[Math.floor(Math.random() * answers.length)];
-				// 	bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
+					// 	bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
 				} else if (gameType === 'game2') {
 					fileInput = document.getElementById('photo-input2').files[0];
 					if (!currentChallenge) {
@@ -779,7 +831,7 @@
 				// 底部认证与二维码引流文案
 				ctx.fillStyle = "#8E93A8";
 				ctx.font = "bold 28px sans-serif";
-				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1290);
+				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1270);
 				ctx.fillStyle = "#fff";
 				ctx.font = "bold 28px sans-serif";
 				ctx.fillText("点击加微信 领开学文具礼包 🎁", 400, 1390);
@@ -803,7 +855,7 @@
 						t: "随叫随走，主打一个随性",
 						s: "B"
 					}, {
-						t: "给娃报体验课，我在旁喝咖啡",
+						t: "给娃报兴趣班，我在旁喝咖啡",
 						s: "C"
 					}]
 				},
@@ -829,7 +881,7 @@
 						t: "鸡飞狗跳，随时爆发",
 						s: "B"
 					}, {
-						t: "直接交给爸爸/辅导班",
+						t: "直接交给专业辅导班",
 						s: "C"
 					}]
 				}
@@ -929,18 +981,19 @@
 				ctx.shadowBlur = 0;
 				ctx.fillStyle = "#8E93A8";
 				ctx.font = "bold 32px sans-serif";
-				ctx.fillText("寻找全星沙最美萌娃", 400, 290);
+				ctx.fillText("——硬核家长鉴定报告——", 400, 290);
+				// ctx.fillText("寻找全星沙最美萌娃", 400, 290);
 				// 奖状上的文字
-				ctx.fillStyle = '#FFD700';
-				ctx.font = "bold 45px sans-serif";
-				ctx.fillText("——硬核家长鉴定报告——", 400, 580);
+				// ctx.fillStyle = '#FFD700';
+				// ctx.font = "bold 45px sans-serif";
+				// ctx.fillText("——硬核家长鉴定报告——", 400, 580);
 				ctx.fillStyle = "#000";
 				ctx.font = "bold 50px sans-serif";
 				ctx.fillText(res, 400, 720);
 				// 底部认证与二维码引流文案
 				ctx.fillStyle = "#8E93A8";
 				ctx.font = "bold 28px sans-serif";
-				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1290);
+				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1250);
 				// ctx.fillStyle = "#fff";
 				// ctx.font = "bold 28px sans-serif";
 				// ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
