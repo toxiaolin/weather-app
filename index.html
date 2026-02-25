@@ -208,17 +208,16 @@
   <!-- ================= 结果海报展示页 ================= -->
   <div id="page-poster" class="page">
     <h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2>
+    
+    <!-- 这里是将 bottomHighlight 提取到页面上的位置 -->
+    <p id="result-bottom-highlight" style="color:#D8B4FE; font-size:15px; margin-bottom:15px; text-align:center; font-weight:bold; display:none;"></p>
+    
     <img id="posterPreview" src="" alt="长按保存海报">
     
     <p style="color:var(--neon-purple); font-size: 16px; margin-top: 20px; font-weight: bold; text-align: center; animation: pulse 1.5s infinite;">👆 请长按上方海报保存，分享至朋友圈</p>
     <style>@keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }</style>
     
-    <!-- 引导发朋友圈和扫码的辅助区块 -->
-    <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; margin-top: 20px; width: 100%; text-align: center; border: 1px dashed var(--border-glass);">
-      <p style="color: #fff; font-size: 14px; margin-bottom: 10px; font-weight:bold;">我也要参与游戏，领开学文具礼包 🎁</p>
-      <img src="qr.png" onerror="this.src='https://via.placeholder.com/100'" style="width: 90px; height: 90px; border-radius: 8px;">
-      <p style="color: var(--text-sub); font-size: 12px; margin-top: 5px;">截屏发朋友圈，长按可识别上方二维码</p>
-    </div>
+    <!-- 删除了原有的辅助区块，因为已经刻进了 Canvas 截屏图片里 -->
 
     <div style="width: 100%; margin-top: 20px;">
       <button class="btn" onclick="navTo('page-form')">我已分享朋友圈，去领奖 🎁</button>
@@ -266,7 +265,8 @@
     </div>
   </div>
 
-  <canvas id="posterCanvas" width="800" height="1200" style="display:none;"></canvas>
+  <!-- Canvas 高度增加至 1400，为标题和底部二维码留出空间 -->
+  <canvas id="posterCanvas" width="800" height="1400" style="display:none;"></canvas>
 
 <script>
   /* ================= 音乐控制 ================= */
@@ -278,7 +278,6 @@
     if (bgm.paused) { bgm.play(); musicBtn.classList.remove('paused'); musicPlayed = true; } 
     else { bgm.pause(); musicBtn.classList.add('paused'); }
   }
-  // 微信浏览器触摸自动播放 Hack
   document.addEventListener('touchstart', function() {
     if(!musicPlayed) { bgm.play(); musicBtn.classList.remove('paused'); musicPlayed = true; }
   }, {once:true});
@@ -291,14 +290,14 @@
     if(pageId === 'page-game3') startQuiz();
   }
 
-  /* ================= 玩法一：腿的数量选择 ================= */
+  /* ================= 玩法一：选项 ================= */
   function selectLegs(val, el) {
     document.getElementById('g1a2').value = val;
     document.querySelectorAll('.legs-option').forEach(opt => opt.classList.remove('selected'));
     el.classList.add('selected');
   }
 
-  /* ================= 玩法二：萌娃表情大赏抽签 ================= */
+  /* ================= 玩法二：抽签 ================= */
   const challenges = [
     { title: "大猩猩捶胸", desc: "一边捶胸一边发出'呜呜'声，越凶越好笑!", icon: "🦍" },
     { title: "小天鹅飞飞", desc: "踮起脚尖，双手做翅膀，优雅中带点搞笑", icon: "🦢" },
@@ -321,11 +320,10 @@
     }, 600);
   }
 
-  /* ================= 海报生成引擎 ================= */
+  /* ================= 海报生成引擎 (包含大标题与二维码模块) ================= */
   function generatePoster(gameType) {
     let fileInput, posterTitle = "", quoteText = "", bottomHighlight = "";
     
-    // ----------- 玩法一 逻辑 -----------
     if (gameType === 'game1') {
       fileInput = document.getElementById('photo-input1').files[0];
       const q1 = document.getElementById('g1a1').value.trim() || "没想好";
@@ -333,96 +331,118 @@
       const q3 = document.getElementById('g1a3').value.trim() || "秘密";
       if (!q2) { alert("如果让你给妈妈起一个超级英雄的名字，叫什么?"); return; }
       
-      // 1. 随机海报标题
-      const titles = ["星沙最有创意萌娃", "我是金句小达人", "脑洞清奇小超人", "我是创意小马达"];
-      posterTitle = titles[Math.floor(Math.random() * titles.length)];
-      
-      // 2. 随机答案生成
       const answers = [
         `魔仙堡妈妈的打卡日常—${q1}`,
         `我的妈妈是超级无敌宇宙最酷妈妈，因为她是${q2}`,
         `星星呀星星，原来你是${q3}味的`
       ];
       quoteText = answers[Math.floor(Math.random() * answers.length)];
-      
-      // 3. 底部小字
       bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
       document.getElementById('poster-page-title').innerText = "生成成功";
 
-    // ----------- 玩法二 逻辑 -----------
     } else if (gameType === 'game2') {
       fileInput = document.getElementById('photo-input2').files[0];
       if (!currentChallenge) { alert("请先点击抽签，抽取一个挑战吧！"); return; }
       
-      posterTitle = "萌娃演技派";
       quoteText = `恭喜宝贝成功挑战“${currentChallenge.title}”演技炸裂，笑翻全场。`;
-      bottomHighlight = ""; // 玩法二不需要额外高光字
+      bottomHighlight = ""; 
       document.getElementById('poster-page-title').innerText = "恭喜！挑战成功！";
     }
 
     if (!fileInput) { alert("请先上传一张照片哦！"); return; }
+
+    // 将 highlight 逻辑移至 HTML 显示
+    const hlElem = document.getElementById('result-bottom-highlight');
+    if(bottomHighlight) { hlElem.innerText = bottomHighlight; hlElem.style.display = "block"; } 
+    else { hlElem.style.display = "none"; }
 
     const reader = new FileReader();
     reader.onload = function(e) {
       const canvas = document.getElementById('posterCanvas');
       const ctx = canvas.getContext('2d');
       
-      // 暗黑渐变背景
-      const grad = ctx.createLinearGradient(0,0,0,1200);
+      // 1. 画背景
+      const grad = ctx.createLinearGradient(0,0,0,1400);
       grad.addColorStop(0, '#1A1C35'); grad.addColorStop(1, '#0C0E1F');
-      ctx.fillStyle = grad; ctx.fillRect(0,0,800,1200);
+      ctx.fillStyle = grad; ctx.fillRect(0,0,800,1400);
 
       const img = new Image();
       img.src = e.target.result;
       img.onload = () => {
-        // 相框外发光
+        // 2. 将大标题“星沙萌娃 气质大赏”画在最顶部
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 60px 'PingFang SC', sans-serif";
+        ctx.shadowColor = "rgba(178, 88, 255, 0.8)"; 
+        ctx.shadowBlur = 20;
+        ctx.fillText("星沙萌娃", 400, 90);
+        ctx.fillText("气质大赏", 400, 165);
+        ctx.shadowBlur = 0; // 重置阴影
+
+        // 3. 画照片 (坐标下移至 Y:220)
         ctx.shadowColor = gameType === 'game1' ? '#B258FF' : '#F43F5E'; ctx.shadowBlur = 30;
         ctx.fillStyle = '#fff'; 
-        ctx.beginPath(); ctx.roundRect(80, 180, 640, 640, 40); ctx.fill();
+        ctx.beginPath(); ctx.roundRect(80, 220, 640, 640, 40); ctx.fill();
         ctx.shadowBlur = 0;
 
-        // 居中裁剪绘制照片
         ctx.save();
-        ctx.beginPath(); ctx.roundRect(80, 180, 640, 640, 40); ctx.clip();
+        ctx.beginPath(); ctx.roundRect(80, 220, 640, 640, 40); ctx.clip();
         let scale = Math.max(640 / img.width, 640 / img.height);
         let sw = 640 / scale, sh = 640 / scale;
         let sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
-        ctx.drawImage(img, sx, sy, sw, sh, 80, 180, 640, 640);
+        ctx.drawImage(img, sx, sy, sw, sh, 80, 220, 640, 640);
         ctx.restore();
-
-        // 绘制顶部标题
-        ctx.fillStyle = "#fff"; ctx.font = "bold 56px 'PingFang SC', sans-serif"; ctx.textAlign = "center";
-        ctx.fillText(posterTitle, 400, 110);
         
-        // 绘制侧边 Emoji (点赞👍 / 奖杯🏆)
+        // Emoji
         ctx.font = "60px sans-serif";
-        if(gameType === 'game1') ctx.fillText("👍", 400, 770); 
-        else ctx.fillText("🏆", 680, 780); 
+        if(gameType === 'game1') ctx.fillText("👍", 400, 810); 
+        else ctx.fillText("🏆", 680, 820); 
 
-        // 底部文字背板
+        // 4. 呆萌大字答案区
         ctx.fillStyle = "rgba(255,255,255,0.1)";
-        ctx.beginPath(); ctx.roundRect(50, 860, 700, 160, 20); ctx.fill();
+        ctx.beginPath(); ctx.roundRect(50, 890, 700, 200, 20); ctx.fill(); // 增高区域
         
-        // 绘制随机答案 (自动换行处理)
+        // 使用更呆萌活泼的字体（降级兼容），字号加大到 38px
         ctx.fillStyle = gameType === 'game1' ? "#D8B4FE" : "#FDA4AF";
-        ctx.font = "bold 28px 'PingFang SC', sans-serif";
-        wrapText(ctx, quoteText, 400, 915, 650, 40);
+        ctx.font = "bold 38px 'Comic Sans MS', 'STHupo', 'Kaiti', 'PingFang SC', sans-serif";
+        wrapText(ctx, quoteText, 400, 970, 650, 50);
 
-        // 绘制额外小字 & 官方认证
-        ctx.fillStyle = "#fff"; ctx.font = "20px 'PingFang SC'";
-        if(bottomHighlight) ctx.fillText(bottomHighlight, 400, 1070);
+        // 5. 将引导关注的区块和二维码画在最底部 (Y: 1120)
+        ctx.fillStyle = "rgba(255,255,255,0.05)";
+        ctx.beginPath(); ctx.roundRect(50, 1120, 700, 250, 20); ctx.fill();
         
-        ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px 'PingFang SC'";
-        ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1130);
+        // 画虚线边框
+        ctx.strokeStyle = "rgba(255,255,255,0.15)";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([10, 10]);
+        ctx.stroke();
+        ctx.setLineDash([]); // 重置
 
-        document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg');
-        navTo('page-poster');
+        // 底部文本
+        ctx.fillStyle = "#fff"; 
+        ctx.font = "bold 26px 'PingFang SC', sans-serif";
+        ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1180);
+
+        // 加载二维码
+        const qrImg = new Image();
+        qrImg.src = 'qr.png';
+        qrImg.onload = () => {
+          // 在中心画二维码
+          ctx.drawImage(qrImg, 340, 1205, 120, 120);
+
+          ctx.fillStyle = "#8E93A8"; 
+          ctx.font = "22px 'PingFang SC', sans-serif";
+          ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1355);
+
+          // 生成图片并展示
+          document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg');
+          navTo('page-poster');
+        }
       }
     }
     reader.readAsDataURL(fileInput);
   }
 
-  // 辅助函数：Canvas 自动换行且垂直居中
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     let words = text.split(''), line = '', lines = [];
     for (let n = 0; n < words.length; n++) {
@@ -432,12 +452,11 @@
       else { line = testLine; }
     }
     lines.push(line);
-    // 调整 Y 轴使整体居中
     let startY = y - ((lines.length - 1) * lineHeight) / 2;
     for (let i = 0; i < lines.length; i++) { ctx.fillText(lines[i], x, startY + (i * lineHeight)); }
   }
 
-  /* ================= 玩法三：家长气质评测 ================= */
+  /* ================= 玩法三：家长气质评测 (同步更新Canvas) ================= */
   const quizData = [
     { q: "周末带孩子出去玩，你通常会？", options: [{t:"做详细攻略，按计划走", s:"A"}, {t:"随叫随走，主打一个随性", s:"B"}, {t:"给娃报个体验课，我在旁边喝咖啡", s:"C"}] },
     { q: "孩子弄脏了刚买的新衣服，你的反应？", options: [{t:"崩溃！马上脱下来洗", s:"A"}, {t:"赶紧拍照发朋友圈", s:"B"}, {t:"脏就脏吧，玩得开心最重要", s:"C"}] },
@@ -471,20 +490,41 @@
     if(scores.C > scores[max]) max = 'C';
     let res = max === 'A' ? "全能操心型老妈" : max === 'B' ? "快乐放养型硬核爸妈" : "佛系躺平型家长";
 
+    // 同步修改玩法三的海报生成尺寸和排版
     const canvas = document.getElementById('posterCanvas');
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#1A1C35'; ctx.fillRect(0,0,800,1200);
+    ctx.fillStyle = '#1A1C35'; ctx.fillRect(0,0,800,1400); // 增加高度
     
-    ctx.fillStyle = '#fff'; ctx.font = "bold 60px sans-serif"; ctx.textAlign = "center";
-    ctx.fillText("硬核家长鉴定报告", 400, 300);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#fff"; ctx.font = "bold 60px 'PingFang SC', sans-serif";
+    ctx.shadowColor = "rgba(178, 88, 255, 0.8)"; ctx.shadowBlur = 20;
+    ctx.fillText("星沙萌娃", 400, 90); ctx.fillText("气质大赏", 400, 165);
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = '#fff'; ctx.font = "bold 50px sans-serif"; 
+    ctx.fillText("硬核家长鉴定报告", 400, 450);
     ctx.fillStyle = "#B258FF"; ctx.font = "bold 70px sans-serif";
-    ctx.fillText(res, 400, 600);
-    ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px sans-serif";
-    ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1050);
-    
-    document.getElementById('poster-page-title').innerText = "生成成功";
-    document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg');
-    navTo('page-poster');
+    ctx.fillText(res, 400, 650);
+
+    // 加入底部二维码模块
+    ctx.fillStyle = "rgba(255,255,255,0.05)";
+    ctx.beginPath(); ctx.roundRect(50, 1120, 700, 250, 20); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.15)"; ctx.lineWidth = 2; ctx.setLineDash([10, 10]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = "#fff"; ctx.font = "bold 26px 'PingFang SC', sans-serif";
+    ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1180);
+
+    const qrImg = new Image();
+    qrImg.src = 'qr.png';
+    qrImg.onload = () => {
+      ctx.drawImage(qrImg, 340, 1205, 120, 120);
+      ctx.fillStyle = "#8E93A8"; ctx.font = "22px 'PingFang SC', sans-serif";
+      ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1355);
+
+      document.getElementById('result-bottom-highlight').style.display = "none";
+      document.getElementById('poster-page-title').innerText = "生成成功";
+      document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg');
+      navTo('page-poster');
+    }
   }
 
   /* ================= 提交表单 (飞书 Webhook) ================= */
@@ -511,13 +551,10 @@
       else { alert("网络拥挤，请重试！"); btn.innerText = oldText; btn.disabled = false; }
     })
     .catch(error => {
-      // ⚠️ 测试阶段若无飞书接口，可取消注释直接跳转
-      navTo('page-finish'); 
-      // alert("提交失败，请检查网络！"); btn.innerText = oldText; btn.disabled = false;
+      navTo('page-finish'); // 测试跳过
     });
   }
 
-  /* 低版本浏览器 Canvas roundRect 兼容 */
   if(!CanvasRenderingContext2D.prototype.roundRect) {
     CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
       if (w < 2 * r) r = w / 2; if (h < 2 * r) r = h / 2;
