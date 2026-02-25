@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<!-- 沉浸式全屏与防缩放 Meta 标签 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -86,7 +85,7 @@
 <body>
 
   <!-- ================= 欢快儿童音乐 ================= -->
-  <audio id="bgm" src="https://downsc.chinaz.net/Files/DownLoad/sound1/202003/12611.mp3" loop></audio>
+  <audio id="bgm" src="xx.mp3" loop></audio>
   <div id="music-btn" class="music-btn paused" onclick="toggleMusic()">🎵</div>
 
   <!-- ================= 页面 01：主菜单页 ================= -->
@@ -101,7 +100,6 @@
     <p class="subtitle">寻找全星沙最美萌娃</p>
     <div style="text-align: center;"><span class="highlight-text">（完成任意 1 项挑战 ➔ 开学文具盲袋免费领）</span></div>
 
-    <!-- 玩法卡片 1 -->
     <div class="menu-card" onclick="navTo('page-game1')">
       <div class="menu-icon" style="background: var(--icon-purple);">🤍</div>
       <div class="menu-text">
@@ -110,7 +108,6 @@
       </div>
     </div>
 
-    <!-- 玩法卡片 2 -->
     <div class="menu-card" onclick="navTo('page-game2')">
       <div class="menu-icon" style="background: var(--icon-pink);">📸</div>
       <div class="menu-text">
@@ -119,7 +116,6 @@
       </div>
     </div>
 
-    <!-- 玩法卡片 3 -->
     <div class="menu-card" onclick="navTo('page-game3')">
       <div class="menu-icon" style="background: var(--icon-blue);">🎖️</div>
       <div class="menu-text">
@@ -159,11 +155,12 @@
       <p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">Q3: 如果星星可以吃，你觉得是什么味道?</p>
       <input type="text" id="g1a3" placeholder="比如：草莓味跳跳糖">
 
-      <p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">上传宝贝靓照：</p>
-      <input type="file" id="photo-input1" accept="image/*" capture="environment">
+      <p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">上传宝贝靓照 (点击调用相机)：</p>
+      <!-- capture="user" 调用前置自拍人像模式 -->
+      <input type="file" id="photo-input1" accept="image/*" capture="user">
     </div>
     <button class="btn" onclick="generatePoster('game1')">生成默契写真海报</button>
-    <div class="back-btn" onclick="navTo('page-main')">返回主页</div>
+    <div class="back-btn" onclick="navTo('page-main')">返回主页重新选择</div>
   </div>
 
   <!-- ================= 玩法二：萌娃表情大赏 ================= -->
@@ -179,11 +176,12 @@
         <p style="color:#ccc; line-height: 120px; margin:0;">👈 抽一个试试手气～</p>
       </div>
 
-      <p style="color:var(--text-main); margin: 20px 0 10px; text-align: left; font-size: 14px;">抓拍宝贝挑战中的表情/动作：</p>
-      <input type="file" id="photo-input2" accept="image/*" capture="environment">
+      <p style="color:var(--text-main); margin: 20px 0 10px; text-align: left; font-size: 14px;">抓拍宝贝挑战中的表情 (点击调用相机)：</p>
+      <!-- capture="user" 调用前置自拍人像模式 -->
+      <input type="file" id="photo-input2" accept="image/*" capture="user">
     </div>
     <button class="btn" style="background: var(--icon-pink);" onclick="generatePoster('game2')">生成表情包海报</button>
-    <div class="back-btn" onclick="navTo('page-main')">返回主页</div>
+    <div class="back-btn" onclick="navTo('page-main')">返回主页重新选择</div>
   </div>
 
   <!-- ================= 玩法三：家长气质评测 ================= -->
@@ -201,17 +199,25 @@
   <div id="page-poster" class="page">
     <h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2>
     
-    <!-- 要求2：将 bottomHighlight 移至此处变成网页文字 -->
+    <!-- 附加的亮点短句作为网页文本显示 -->
     <p id="result-bottom-highlight" style="color:#D8B4FE; font-size:15px; margin-bottom:15px; text-align:center; font-weight:bold; display:none;"></p>
     
+    <!-- 展示生成的 Canvas 截屏图片 -->
     <img id="posterPreview" src="" alt="海报生成中...">
     
     <p style="color:var(--neon-purple); font-size: 16px; margin-top: 20px; font-weight: bold; text-align: center; animation: pulse 1.5s infinite;">👆 请长按上方海报保存，分享至朋友圈</p>
     <style>@keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }</style>
 
+    <!-- 底部 HTML 引导扫码区块 (恢复此处) -->
+    <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; margin-top: 20px; width: 100%; text-align: center; border: 1px dashed var(--border-glass);">
+      <p style="color: #fff; font-size: 14px; margin-bottom: 10px; font-weight:bold;">我也要参与游戏，领开学文具礼包 🎁</p>
+      <img src="qr.png" onerror="this.src='https://via.placeholder.com/100'" style="width: 90px; height: 90px; border-radius: 8px;">
+      <p style="color: var(--text-sub); font-size: 12px; margin-top: 5px;">截屏发朋友圈，长按可识别上方二维码</p>
+    </div>
+
     <div style="width: 100%; margin-top: 20px;">
       <button class="btn" onclick="navTo('page-form')">我已分享朋友圈，去领奖 🎁</button>
-      <button class="btn btn-outline" onclick="navTo('page-main')">返回首页</button>
+      <div class="back-btn" onclick="navTo('page-main')">返回主页重玩一次</div>
     </div>
   </div>
 
@@ -240,6 +246,7 @@
       <button class="btn" onclick="submitForm()">提交核销信息</button>
       <p style="color: #F87171; font-size: 12px; margin-top: 15px; text-align: center; line-height: 1.5;">⚠️ 提交后请务必保留朋友圈记录，<br>现场核销需出示手机截图哦！</p>
     </div>
+    <div class="back-btn" onclick="navTo('page-main')">返回主页重新选择</div>
   </div>
 
   <!-- ================= 最终导流页 ================= -->
@@ -253,10 +260,11 @@
       <p style="color:var(--neon-purple); font-size: 16px; font-weight:bold; margin-top: 20px;">长按识别添加老师</p>
       <p style="color:var(--text-sub); font-size:14px; margin-top:10px; line-height:1.6;">发送暗号 <span style="color:#fff;">【朋友圈截图】</span><br>即刻为您锁定大礼包！</p>
     </div>
+    <div class="back-btn" onclick="navTo('page-main')">返回主页重新开始</div>
   </div>
 
-  <!-- 高度设定为1550，预留大标题和底部二维码卡片空间 -->
-  <canvas id="posterCanvas" width="800" height="1550" style="display:none;"></canvas>
+  <!-- 高度设定为1350，预留大标题和答案区域，移除原Canvas内部的二维码 -->
+  <canvas id="posterCanvas" width="800" height="1350" style="display:none;"></canvas>
 
 <script>
   /* ================= 音乐控制 ================= */
@@ -272,6 +280,7 @@
     if(!musicPlayed) { bgm.play(); musicBtn.classList.remove('paused'); musicPlayed = true; }
   }, {once:true});
 
+  /* ================= 全局路由 ================= */
   function navTo(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
@@ -285,7 +294,7 @@
     el.classList.add('selected');
   }
 
-  /* ================= 抽签 ================= */
+  /* ================= 玩法二：抽签 ================= */
   const challenges = [
     { title: "大猩猩捶胸", desc: "一边捶胸一边发出'呜呜'声，越凶越好笑!", icon: "🦍" },
     { title: "小天鹅飞飞", desc: "踮起脚尖，双手做翅膀，优雅中带点搞笑", icon: "🦢" },
@@ -308,18 +317,18 @@
     }, 600);
   }
 
-  /* ================= 异步加载图片工具函数 ================= */
+  /* ================= 图片加载工具 ================= */
   function loadImage(src) {
     return new Promise((resolve) => {
       const img = new Image();
       img.crossOrigin = "Anonymous";
       img.onload = () => resolve(img);
-      img.onerror = () => resolve(null); // 加载失败返回null，不阻塞其他流程
+      img.onerror = () => resolve(null);
       img.src = src;
     });
   }
 
-  /* ================= 海报生成核心引擎 (包含大标题、模板与二维码模块) ================= */
+  /* ================= 海报生成核心引擎 ================= */
   async function generatePoster(gameType) {
     let fileInput, quoteText = "", bottomHighlight = "";
     
@@ -336,8 +345,6 @@
         `星星呀星星，原来你是${q3}味的`
       ];
       quoteText = answers[Math.floor(Math.random() * answers.length)];
-      
-      // 要求2：将提示文字移到网页上
       bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
       document.getElementById('poster-page-title').innerText = "生成成功";
 
@@ -352,56 +359,48 @@
 
     if (!fileInput) { alert("请先上传一张照片哦！"); return; }
 
-    // 更新网页上的提示文字
     const hlElem = document.getElementById('result-bottom-highlight');
     if(bottomHighlight) { hlElem.innerText = bottomHighlight; hlElem.style.display = "block"; } 
     else { hlElem.style.display = "none"; }
 
-    // 提示用户正在生成
-    document.getElementById('posterPreview').src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400'><text x='50%' y='50%' font-size='16' fill='%23B258FF' text-anchor='middle'>海报生成中，请稍候...</text></svg>";
+    document.getElementById('posterPreview').src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400'><text x='50%' y='50%' font-size='16' fill='%23B258FF' text-anchor='middle'>海报生成中...</text></svg>";
     navTo('page-poster');
 
-    // 读取用户上传的照片Base64
     const userPhotoBase64 = await new Promise(resolve => {
         const reader = new FileReader();
         reader.onload = e => resolve(e.target.result);
         reader.readAsDataURL(fileInput);
     });
 
-    // 并发加载所需的图片：用户照片、相框(frame.png)、二维码(qr.png)
-    const [userImg, frameImg, qrImg] = await Promise.all([
+    const [userImg, frameImg] = await Promise.all([
         loadImage(userPhotoBase64),
-        loadImage('frame.png'), 
-        loadImage('qr.png')
+        loadImage('frame.png')
     ]);
 
-    // 开始绘制
     const canvas = document.getElementById('posterCanvas');
     const ctx = canvas.getContext('2d');
     
-    // 1. 画深色霓虹渐变背景
-    const grad = ctx.createLinearGradient(0,0,0,1550);
+    // 1. 背景渐变
+    const grad = ctx.createLinearGradient(0,0,0,1350);
     grad.addColorStop(0, '#1A1C35'); grad.addColorStop(1, '#0C0E1F');
-    ctx.fillStyle = grad; ctx.fillRect(0,0,800,1550);
+    ctx.fillStyle = grad; ctx.fillRect(0,0,800,1350);
 
-    // 2. 要求3：将大标题“星沙萌娃 气质大赏”画在截屏最顶部
+    // 2. 顶部大标题
     ctx.textAlign = "center";
     ctx.fillStyle = "#fff";
     ctx.font = "bold 85px 'PingFang SC', sans-serif";
     ctx.shadowColor = "rgba(178, 88, 255, 0.8)"; ctx.shadowBlur = 20;
     ctx.fillText("星沙萌娃", 400, 120);
     ctx.fillText("气质大赏", 400, 220);
-    ctx.shadowBlur = 0; // 重置阴影
+    ctx.shadowBlur = 0; 
     ctx.fillStyle = "#8E93A8";
     ctx.font = "bold 32px 'PingFang SC', sans-serif";
     ctx.fillText("寻找全星沙最美萌娃", 400, 290);
 
-    // 3. 画照片底框与用户照片 (坐标 Y: 340)
-    // 为了防止frame.png缺失，先画一个白底兜底
+    // 3. 用户照片 (Y: 340)
     ctx.fillStyle = '#fff'; 
     ctx.beginPath(); ctx.roundRect(50, 340, 700, 700, 20); ctx.fill();
 
-    // 裁剪并居中绘制用户照片（稍微留一点内边距给相框）
     const px = 60, py = 350, pw = 680, ph = 680;
     ctx.save();
     ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 10); ctx.clip();
@@ -411,54 +410,25 @@
     ctx.drawImage(userImg, sx, sy, sw, sh, px, py, pw, ph);
     ctx.restore();
 
-    // 4. 将抠好的透明相框 (frame.png) 覆盖在照片上面
+    // 4. 覆盖透明相框
     if(frameImg) {
-        // 将相框严丝合缝地盖在照片区域
         ctx.drawImage(frameImg, 50, 340, 700, 700);
     }
 
-    // 5. 要求1：呆萌大字文案区域
+    // 5. 呆萌大字文案区域
     ctx.fillStyle = "rgba(255,255,255,0.08)";
-    ctx.beginPath(); ctx.roundRect(50, 1070, 700, 180, 20); ctx.fill(); 
+    ctx.beginPath(); ctx.roundRect(50, 1070, 700, 200, 20); ctx.fill(); 
     
-    // 使用更呆萌活泼的备用字库，字号放大至 42px，颜色高亮
     ctx.fillStyle = gameType === 'game1' ? "#E9D5FF" : "#FDA4AF";
     ctx.font = "bold 42px 'Comic Sans MS', 'STHupo', 'Kaiti', 'PingFang SC', sans-serif";
-    ctx.shadowColor = "rgba(0, 0, 0, 0.5)"; ctx.shadowBlur = 4; // 增加一点文字投影使其更醒目
+    ctx.shadowColor = "rgba(0, 0, 0, 0.5)"; ctx.shadowBlur = 4;
     wrapText(ctx, quoteText, 400, 1145, 650, 55);
-    ctx.shadowBlur = 0; // 重置阴影
+    ctx.shadowBlur = 0; 
 
-    // 6. 要求3：底部扫描二维码参与的区块 (Y: 1280)
-    ctx.fillStyle = "rgba(255,255,255,0.05)";
-    ctx.beginPath(); ctx.roundRect(40, 1280, 720, 240, 24); ctx.fill();
-    
-    ctx.strokeStyle = "rgba(255,255,255,0.15)";
-    ctx.lineWidth = 2; ctx.setLineDash([10, 10]);
-    ctx.stroke(); ctx.setLineDash([]); 
-
-    ctx.fillStyle = "#fff"; 
-    ctx.font = "bold 28px 'PingFang SC', sans-serif";
-    ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1340);
-
-    // 画二维码背景白框
-    ctx.fillStyle = "#fff";
-    ctx.beginPath(); ctx.roundRect(330, 1365, 140, 140, 16); ctx.fill();
-    
-    if(qrImg) {
-      ctx.drawImage(qrImg, 340, 1375, 120, 120);
-    } else {
-      ctx.fillStyle = "#999"; ctx.font = "16px sans-serif"; ctx.fillText("缺少qr.png", 400, 1445);
-    }
-
-    ctx.fillStyle = "#8E93A8"; 
-    ctx.font = "22px 'PingFang SC', sans-serif";
-    ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1550); // 最底下的提示
-
-    // 生成最终图片给用户长按保存
+    // 输出最终图片（无二维码部分，二维码已还原至HTML）
     document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
   }
 
-  // 辅助函数：Canvas 自动换行且垂直居中
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
     let words = text.split(''), line = '', lines = [];
     for (let n = 0; n < words.length; n++) {
@@ -472,7 +442,7 @@
     for (let i = 0; i < lines.length; i++) { ctx.fillText(lines[i], x, startY + (i * lineHeight)); }
   }
 
-  /* ================= 玩法三：家长气质评测 ================= */
+  /* ================= 玩法三：家长评测 ================= */
   const quizData = [
     { q: "周末带孩子出去玩，你通常会？", options: [{t:"做详细攻略，按计划走", s:"A"}, {t:"随叫随走，主打一个随性", s:"B"}, {t:"给娃报个体验课，我在旁边喝咖啡", s:"C"}] },
     { q: "孩子弄脏了刚买的新衣服，你的反应？", options: [{t:"崩溃！马上脱下来洗", s:"A"}, {t:"赶紧拍照发朋友圈", s:"B"}, {t:"脏就脏吧，玩得开心最重要", s:"C"}] },
@@ -510,12 +480,10 @@
     document.getElementById('result-bottom-highlight').style.display = "none";
     navTo('page-poster');
 
-    const qrImg = await loadImage('qr.png');
     const canvas = document.getElementById('posterCanvas');
     const ctx = canvas.getContext('2d');
     
-    // 背景与大标题
-    ctx.fillStyle = '#1A1C35'; ctx.fillRect(0,0,800,1550);
+    ctx.fillStyle = '#1A1C35'; ctx.fillRect(0,0,800,1350); 
     ctx.textAlign = "center";
     ctx.fillStyle = "#fff"; ctx.font = "bold 85px 'PingFang SC', sans-serif";
     ctx.shadowColor = "rgba(178, 88, 255, 0.8)"; ctx.shadowBlur = 20;
@@ -524,24 +492,15 @@
     ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px 'PingFang SC', sans-serif";
     ctx.fillText("寻找全星沙最美萌娃", 400, 290);
 
-    // 报告内容框
     ctx.fillStyle = "rgba(255,255,255,0.05)";
-    ctx.beginPath(); ctx.roundRect(50, 400, 700, 500, 30); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(50, 400, 700, 600, 30); ctx.fill();
     ctx.fillStyle = '#fff'; ctx.font = "bold 50px sans-serif"; 
     ctx.fillText("硬核家长鉴定报告", 400, 550);
     ctx.fillStyle = "#B258FF"; ctx.font = "bold 65px sans-serif";
-    ctx.fillText(res, 400, 720);
-
-    // 底部二维码引导区
-    ctx.fillStyle = "rgba(255,255,255,0.05)";
-    ctx.beginPath(); ctx.roundRect(40, 1280, 720, 240, 24); ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,0.15)"; ctx.lineWidth = 2; ctx.setLineDash([10, 10]); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = "#fff"; ctx.font = "bold 28px 'PingFang SC', sans-serif";
-    ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1340);
-    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.roundRect(330, 1365, 140, 140, 16); ctx.fill();
-    if(qrImg) ctx.drawImage(qrImg, 340, 1375, 120, 120);
-    ctx.fillStyle = "#8E93A8"; ctx.font = "22px 'PingFang SC', sans-serif";
-    ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1550);
+    ctx.fillText(res, 400, 750);
+    
+    ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px 'PingFang SC', sans-serif";
+    ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1200);
 
     document.getElementById('poster-page-title').innerText = "生成成功";
     document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
@@ -555,12 +514,26 @@
     const subject = document.getElementById('form-subject').value;
 
     if(!name || !age || phone.length < 11 || !subject) { alert("请正确完整地填写所有信息哦~"); return; }
-    
-    // 如果有飞书webhook请替换此处，否则默认跳下一步
-    navTo('page-finish');
+
+    const FEISHU_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/你的真实ID";
+    const btn = document.querySelector('#page-form .btn');
+    const oldText = btn.innerText;
+    btn.innerText = "数据写入中..."; btn.disabled = true;
+
+    fetch(FEISHU_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ "name": name, "age": age, "phone": phone, "subject": subject })
+    })
+    .then(response => {
+      if (response.ok) navTo('page-finish');
+      else { alert("网络拥挤，请重试！"); btn.innerText = oldText; btn.disabled = false; }
+    })
+    .catch(error => {
+      navTo('page-finish'); 
+    });
   }
 
-  /* 低版本浏览器 Canvas roundRect 兼容 */
   if(!CanvasRenderingContext2D.prototype.roundRect) {
     CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
       if (w < 2 * r) r = w / 2; if (h < 2 * r) r = h / 2;
