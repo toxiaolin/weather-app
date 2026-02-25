@@ -17,7 +17,7 @@
     --icon-pink: linear-gradient(135deg, #F43F5E 0%, #BE123C 100%);
     --icon-blue: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'PingFang SC', sans-serif; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
   
   html, body {
     overscroll-behavior-y: none; background: var(--bg-dark); color: var(--text-main); overflow-x: hidden;
@@ -63,7 +63,7 @@
 </head>
 <body>
 
-  <!-- 全屏 Loading -->
+  <!-- 全屏 Loading 遮罩 -->
   <div id="loading-overlay">
     <div class="spinner"></div>
     <p style="color:#D8B4FE; font-weight:bold; font-size: 18px; letter-spacing: 2px;">AI海报生成中...</p>
@@ -158,9 +158,21 @@
   <!-- ================= 05 海报展示页 ================= -->
   <div id="page-poster" class="page">
     <h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2>
+    
+    <!-- 网页附言文字 (如果游戏一存在则显示) -->
+    <p id="result-bottom-highlight" style="color:#D8B4FE; font-size:15px; margin-bottom:15px; text-align:center; font-weight:bold; display:none;"></p>
+    
     <img id="posterPreview" src="">
     <p style="color:var(--neon-purple); font-size: 16px; margin-top: 20px; font-weight: bold; text-align: center; animation: pulse 1.5s infinite;">👆 长按上方完整海报保存</p>
     <style>@keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }</style>
+    
+    <!-- 网页底部 HTML 引流区块 -->
+    <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; margin-top: 20px; width: 100%; text-align: center; border: 1px dashed var(--border-glass);">
+      <p style="color: #fff; font-size: 14px; margin-bottom: 10px; font-weight:bold;">我也要参与游戏，领开学文具礼包 🎁</p>
+      <img src="qr.png" onerror="this.src='https://via.placeholder.com/100'" style="width: 90px; height: 90px; border-radius: 8px;">
+      <p style="color: var(--text-sub); font-size: 12px; margin-top: 5px;">截屏发朋友圈，长按可识别上方二维码</p>
+    </div>
+
     <div style="width: 100%; margin-top: 20px;">
       <button class="btn" onclick="navTo('page-form')">我已分享朋友圈，去领奖 🎁</button>
       <div class="back-btn" onclick="navTo('page-main')">返回主页重玩一次</div>
@@ -226,7 +238,7 @@
     el.classList.add('selected');
   }
 
-  /* ================= 抽签动画 (跑马灯) ================= */
+  /* ================= 抽签动画 (老虎机跑马灯) ================= */
   const challenges = [
     { title: "大猩猩捶胸", desc: "一边捶胸一边发出'呜呜'声，越凶越好笑!", icon: "🦍" },
     { title: "小天鹅飞飞", desc: "踮起脚尖，双手做翅膀，优雅中带点搞笑", icon: "🦢" },
@@ -245,13 +257,11 @@
     btn.innerText = "🔮 正在抽取中...";
     
     let counter = 0;
-    // 老虎机快速切换动画
     let timer = setInterval(() => {
       let randomItem = challenges[Math.floor(Math.random() * challenges.length)];
       displayDiv.innerHTML = `<div style="font-size:50px;">${randomItem.icon}</div><p style="color:#fff; font-size:20px; font-weight:bold;">${randomItem.title}</p>`;
       counter++;
-      // 1.5秒后停止
-      if(counter > 15) {
+      if(counter > 15) { // 快速闪动 1.5 秒后停止
         clearInterval(timer);
         currentChallenge = challenges[Math.floor(Math.random() * challenges.length)];
         displayDiv.innerHTML = `
@@ -265,7 +275,7 @@
     }, 100);
   }
 
-  /* ================= 辅助函数 ================= */
+  /* ================= 图片加载辅助 ================= */
   function loadImage(src) {
     return new Promise((resolve) => {
       const img = new Image(); img.crossOrigin = "Anonymous";
@@ -283,9 +293,9 @@
     for (let i = 0; i < lines.length; i++) { ctx.fillText(lines[i], x, startY + (i * lineHeight)); }
   }
 
-  /* ================= 核心：生成海报并把引流画在底部 ================= */
+  /* ================= 核心：生成海报引擎 ================= */
   async function generatePoster(gameType) {
-    let fileInput, quoteText = "";
+    let fileInput, quoteText = "", bottomHighlight = "";
     
     if (gameType === 'game1') {
       fileInput = document.getElementById('photo-input1').files[0];
@@ -295,15 +305,22 @@
       if (!q2) { alert("如果让你给妈妈起一个超级英雄的名字，叫什么?"); return; }
       const answers = [`魔仙堡妈妈的打卡日常—${q1}`, `我的妈妈是宇宙最酷妈妈，因为她是${q2}`, `星星呀星星，原来你是${q3}味的`];
       quoteText = answers[Math.floor(Math.random() * answers.length)];
+      bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
     } else if (gameType === 'game2') {
       fileInput = document.getElementById('photo-input2').files[0];
       if (!currentChallenge) { alert("请先点击抽签！"); return; }
       quoteText = `恭喜宝贝挑战“${currentChallenge.title}”演技炸裂，笑翻全场。`;
     }
+
     if (!fileInput) { alert("请先上传一张照片哦！"); return; }
 
-    // 【优化】显示 Loading 遮罩
+    // 【1. 开启 Loading 动画】
     document.getElementById('loading-overlay').style.display = "flex";
+
+    // 网页提示文字设置
+    const hlElem = document.getElementById('result-bottom-highlight');
+    if(bottomHighlight) { hlElem.innerText = bottomHighlight; hlElem.style.display = "block"; } 
+    else { hlElem.style.display = "none"; }
 
     const userPhotoBase64 = await new Promise(resolve => {
         const reader = new FileReader(); reader.onload = e => resolve(e.target.result); reader.readAsDataURL(fileInput);
@@ -316,48 +333,50 @@
     const canvas = document.getElementById('posterCanvas');
     const ctx = canvas.getContext('2d');
     
-    ctx.fillStyle = '#1A1C35'; ctx.fillRect(0,0,800,1600); // 高度拉长至1600
+    // 【2. 确保绘图顺序，避免文字被遮挡】
+    // 第一层：背景
+    const grad = ctx.createLinearGradient(0,0,0,1600);
+    grad.addColorStop(0, '#1A1C35'); grad.addColorStop(1, '#0C0E1F');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,800,1600);
 
-    ctx.textAlign = "center"; ctx.fillStyle = "#fff"; ctx.font = "bold 85px 'PingFang SC', sans-serif";
-    ctx.shadowColor = "rgba(178, 88, 255, 0.8)"; ctx.shadowBlur = 20;
-    ctx.fillText("星沙萌娃", 400, 120); ctx.fillText("气质大赏", 400, 220);
-    ctx.shadowBlur = 0; ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px 'PingFang SC', sans-serif";
-    ctx.fillText("寻找全星沙最美萌娃", 400, 290);
-
-    // 【蓝框照片合成】
+    // 第二层：画用户照片
     const px = 145, py = 430, pw = 510, ph = 510;
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.roundRect(50, 340, 700, 700, 20); ctx.fill(); // 白底
     ctx.save(); ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 8); ctx.clip();
     let scale = Math.max(pw / userImg.width, ph / userImg.height);
     let sw = pw / scale, sh = ph / scale; let sx = (userImg.width - sw) / 2, sy = (userImg.height - sh) / 2;
     ctx.drawImage(userImg, sx, sy, sw, sh, px, py, pw, ph); ctx.restore();
+    
+    // 第三层：相框压在照片上
     if(frameImg) { ctx.drawImage(frameImg, 50, 340, 700, 700); } 
     else { ctx.strokeStyle = '#fff'; ctx.lineWidth = 10; ctx.strokeRect(px, py, pw, ph); }
 
-    // 呆萌大字文案
-    ctx.fillStyle = "rgba(255,255,255,0.08)"; ctx.beginPath(); ctx.roundRect(50, 1080, 700, 180, 20); ctx.fill(); 
-    ctx.fillStyle = gameType === 'game1' ? "#E9D5FF" : "#FDA4AF";
-    ctx.font = "bold 42px 'Comic Sans MS', 'STHupo', 'Kaiti', 'PingFang SC', sans-serif";
-    ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 4;
-    wrapText(ctx, quoteText, 400, 1170, 650, 55); ctx.shadowBlur = 0; 
-    
-    if(gameType === 'game1') {
-       ctx.fillStyle = "#fff"; ctx.font = "22px 'PingFang SC'";
-       ctx.fillText("孩子的想法跟妈妈一样吗，真是有创意呀。", 400, 1300);
-    }
-
-    // 【恢复底部二维码引流区】 Y:1330
+    // 第四层：画底部的黑色半透明框与二维码底图
+    ctx.fillStyle = "rgba(255,255,255,0.08)"; ctx.beginPath(); ctx.roundRect(50, 1060, 700, 160, 20); ctx.fill(); 
     ctx.fillStyle = "rgba(255,255,255,0.05)"; ctx.beginPath(); ctx.roundRect(40, 1330, 720, 240, 24); ctx.fill();
     ctx.strokeStyle = "rgba(255,255,255,0.15)"; ctx.lineWidth = 2; ctx.setLineDash([10, 10]); ctx.stroke(); ctx.setLineDash([]); 
-    ctx.fillStyle = "#fff"; ctx.font = "bold 28px 'PingFang SC', sans-serif";
-    ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
-
     ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.roundRect(330, 1415, 140, 140, 16); ctx.fill();
     if(qrImg) ctx.drawImage(qrImg, 340, 1425, 120, 120);
-    
-    ctx.fillStyle = "#8E93A8"; ctx.font = "22px 'PingFang SC', sans-serif";
-    ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
 
-    // 隐藏 Loading，显示结果
+    // 第五层：画所有的文字内容（放在最后画，绝对不会被覆盖）
+    ctx.textAlign = "center";
+    // 头部文字
+    ctx.fillStyle = "#fff"; ctx.font = "bold 85px sans-serif";
+    ctx.shadowColor = "rgba(178, 88, 255, 0.8)"; ctx.shadowBlur = 20;
+    ctx.fillText("星沙萌娃", 400, 120); ctx.fillText("气质大赏", 400, 220);
+    ctx.shadowBlur = 0; ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px sans-serif";
+    ctx.fillText("寻找全星沙最美萌娃", 400, 290);
+    // 呆萌文案
+    ctx.fillStyle = gameType === 'game1' ? "#E9D5FF" : "#FDA4AF";
+    ctx.font = "bold 42px 'Comic Sans MS', 'STHupo', 'Kaiti', sans-serif";
+    ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 4;
+    wrapText(ctx, quoteText, 400, 1145, 650, 55); ctx.shadowBlur = 0; 
+    // 底部认证与二维码引流文案
+    ctx.fillStyle = "#8E93A8"; ctx.font = "bold 28px sans-serif"; ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1290);
+    ctx.fillStyle = "#fff"; ctx.font = "bold 28px sans-serif"; ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
+    ctx.fillStyle = "#8E93A8"; ctx.font = "22px sans-serif"; ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
+
+    // 【3. 关闭 Loading 动画并展示】
     document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
     document.getElementById('loading-overlay').style.display = "none";
     navTo('page-poster');
@@ -386,6 +405,7 @@
     let max = 'A'; if(scores.B > scores[max]) max = 'B'; if(scores.C > scores[max]) max = 'C';
     let res = max === 'A' ? "全能操心型老妈" : max === 'B' ? "快乐放养型硬核爸妈" : "佛系躺平型家长";
 
+    // 开启 Loading
     document.getElementById('loading-overlay').style.display = "flex";
 
     const [certImg, qrImg] = await Promise.all([loadImage('cert.png'), loadImage('qr.png')]);
@@ -393,37 +413,38 @@
     const canvas = document.getElementById('posterCanvas');
     const ctx = canvas.getContext('2d');
     
+    // 图层一层层画，确保文字最后画
     ctx.fillStyle = '#1A1C35'; ctx.fillRect(0,0,800,1600); 
-    ctx.textAlign = "center"; ctx.fillStyle = "#fff"; ctx.font = "bold 85px 'PingFang SC', sans-serif";
-    ctx.shadowColor = "rgba(178, 88, 255, 0.8)"; ctx.shadowBlur = 20;
-    ctx.fillText("星沙萌娃", 400, 120); ctx.fillText("气质大赏", 400, 220); ctx.shadowBlur = 0;
-    ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px 'PingFang SC', sans-serif";
-    ctx.fillText("寻找全星沙最美萌娃", 400, 290);
 
-    // 【绘制皇冠奖状边框 cert.png】
-    if(certImg) {
-       ctx.drawImage(certImg, 50, 350, 700, 700);
-    } else {
-       ctx.fillStyle = "rgba(255,255,255,0.05)"; ctx.beginPath(); ctx.roundRect(50, 350, 700, 700, 30); ctx.fill();
-    }
+    // 画奖状底图
+    if(certImg) { ctx.drawImage(certImg, 50, 340, 700, 700); } 
+    else { ctx.fillStyle = "rgba(255,255,255,0.05)"; ctx.beginPath(); ctx.roundRect(50, 340, 700, 700, 30); ctx.fill(); }
     
-    // 在奖状中间写字
-    ctx.fillStyle = '#FFD700'; ctx.font = "bold 45px sans-serif"; 
-    ctx.fillText("—— 硬核家长鉴定报告 ——", 400, 600);
-    ctx.fillStyle = "#fff"; ctx.font = "bold 65px sans-serif";
-    ctx.fillText(res, 400, 750);
-    
-    // 底部二维码引流区 (高度统一为 Y:1330)
+    // 画底部的黑色半透明框与二维码底图
     ctx.fillStyle = "rgba(255,255,255,0.05)"; ctx.beginPath(); ctx.roundRect(40, 1330, 720, 240, 24); ctx.fill();
     ctx.strokeStyle = "rgba(255,255,255,0.15)"; ctx.lineWidth = 2; ctx.setLineDash([10, 10]); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = "#fff"; ctx.font = "bold 28px 'PingFang SC', sans-serif";
-    ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
     ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.roundRect(330, 1415, 140, 140, 16); ctx.fill();
     if(qrImg) ctx.drawImage(qrImg, 340, 1425, 120, 120);
-    ctx.fillStyle = "#8E93A8"; ctx.font = "22px 'PingFang SC', sans-serif";
-    ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
 
+    // 最后画文字
+    ctx.textAlign = "center"; 
+    // 头部文字
+    ctx.fillStyle = "#fff"; ctx.font = "bold 85px sans-serif"; ctx.shadowColor = "rgba(178, 88, 255, 0.8)"; ctx.shadowBlur = 20;
+    ctx.fillText("星沙萌娃", 400, 120); ctx.fillText("气质大赏", 400, 220); ctx.shadowBlur = 0;
+    ctx.fillStyle = "#8E93A8"; ctx.font = "bold 32px sans-serif"; ctx.fillText("寻找全星沙最美萌娃", 400, 290);
+    // 奖状上的文字
+    ctx.fillStyle = '#FFD700'; ctx.font = "bold 45px sans-serif"; ctx.fillText("—— 硬核家长鉴定报告 ——", 400, 580);
+    ctx.fillStyle = "#fff"; ctx.font = "bold 65px sans-serif"; ctx.fillText(res, 400, 720);
+    // 底部认证与二维码引流文案
+    ctx.fillStyle = "#8E93A8"; ctx.font = "bold 28px sans-serif"; ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1290);
+    ctx.fillStyle = "#fff"; ctx.font = "bold 28px sans-serif"; ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
+    ctx.fillStyle = "#8E93A8"; ctx.font = "22px sans-serif"; ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
+
+    document.getElementById('result-bottom-highlight').style.display = "none";
+    document.getElementById('poster-page-title').innerText = "生成成功";
     document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
+    
+    // 关闭 Loading
     document.getElementById('loading-overlay').style.display = "none";
     navTo('page-poster');
   }
