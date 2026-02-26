@@ -313,20 +313,15 @@
 			.quiz-option {
 				background: rgba(255, 255, 255, 0.05);
 				border: 1px solid var(--border-glass);
-				padding: 16px;
+				padding: 10px;
 				border-radius: 12px;
 				margin-bottom: 12px;
-				font-size: 14px;
+				font-size: 12px;
 				text-align: center;
 				cursor: pointer;
 				color: #ccc;
-				flex: 1 1 0;   
-				    min-width: 0;  
-					white-space: nowrap;
-					    text-overflow: ellipsis;
-					    overflow: hidden;
-						padding: 12px 5px;
-						    font-size: 14px;
+				flex: 1 1 0;
+				min-width: 0;
 				transition: 0.2s;
 			}
 
@@ -777,8 +772,8 @@
 				// 并行加载用户照片、相框、二维码
 				const [userImg, frameImg, qrImg] = await Promise.all([
 					loadImage(userPhotoBase64),
-					loadImage('frame.png'),  // 从缓存或网络
-					loadImage('qr.png')      // 二维码
+					loadImage('frame.png'), // 从缓存或网络
+					loadImage('qr.png') // 二维码
 				]);
 
 				const canvas = document.getElementById('posterCanvas');
