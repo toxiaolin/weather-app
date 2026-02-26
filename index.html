@@ -145,7 +145,7 @@
 				font-family: 'ZCOOL KuaiLe', cursive;
 			}
 
-			@keyframes float {
+			@keyframes neon-title {
 				0% {
 					transform: translateY(0px);
 				}
@@ -160,7 +160,7 @@
 			}
 
 			.animate-float {
-				animation: float 3s ease-in-out infinite;
+				animation: neon-title 3s ease-in-out infinite;
 			}
 
 			.highlight-text {
@@ -219,6 +219,24 @@
 				font-size: 12px;
 				color: var(--text-sub);
 				line-height: 1.4;
+			}
+
+			@keyframes neon-title {
+				0% {
+					transform: translateY(0px);
+				}
+
+				50% {
+					transform: translateY(-10px);
+				}
+
+				100% {
+					transform: translateY(0px);
+				}
+			}
+
+			.animate-float {
+				animation: neon-title 3s ease-in-out infinite;
 			}
 
 			.menu-arrow {
@@ -290,7 +308,7 @@
 				padding: 16px;
 				border-radius: 12px;
 				margin-bottom: 12px;
-				font-size: 16px;
+				font-size: 14px;
 				text-align: center;
 				cursor: pointer;
 				color: #ccc;
@@ -354,7 +372,7 @@
 				<div class="brand"><img src="logo.png" onerror="this.src='https://via.placeholder.com/150x50?text=Logo'"
 						style="height: 50px; border-radius: 8px; margin-right: 10px; object-fit: cover;"></div>
 			</div>
-			<h1 class="neon-title">星沙萌娃<br>气质大赏</h1>
+			<h1 class="neon-title animate-float">星沙萌娃<br>气质大赏</h1>
 			<p style="font-size: 14px; color: var(--text-sub); margin-bottom: 10px; text-align: center;">寻找全星沙最美萌娃</p>
 			<div style="text-align: center;"><span class="highlight-text">（完成任意 1 项挑战 ➔ 开学文具盲袋免费领）</span></div>
 
@@ -403,14 +421,15 @@
 				<p style="color:var(--text-main); font-size: 14px; margin-bottom:10px;">Q1: 如果妈妈有魔法，第一件事想带你做什么?</p>
 				<input type="text" id="g1a1" placeholder="比如：飞到云朵上">
 				<p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">Q2: 如果让你给妈妈起一个超级英雄的名字，叫什么?</p>
-				<div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:5px;">
-					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('家务侠', this)">家务侠
+				<div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:5px; padding: 10px 10px;
+">
+					<div class="quiz-option legs-option" onclick="selectLegs('家务侠', this)">家务侠
 					</div>
-					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('做饭超人', this)">
+					<div class="quiz-option legs-option" onclick="selectLegs('做饭超人', this)">
 						做饭超人</div>
-					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('抱抱侠', this)">抱抱侠
+					<div class="quiz-option legs-option" onclick="selectLegs('抱抱侠', this)">抱抱侠
 					</div>
-					<div class="quiz-option legs-option" style="font-size: 14px;" onclick="selectLegs('唠叨侠', this)">唠叨侠
+					<div class="quiz-option legs-option" onclick="selectLegs('唠叨侠', this)">唠叨侠
 					</div>
 				</div>
 				<input type="hidden" id="g1a2">
