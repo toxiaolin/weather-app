@@ -145,6 +145,14 @@
 				font-family: 'ZCOOL KuaiLe', cursive;
 			}
 
+			.text-transparent {
+				--tw-gradient-to: #f472b6 var(--tw-gradient-to-position);
+
+				--tw-gradient-from: #c084fc var(--tw-gradient-from-position);
+				--tw-gradient-to: rgb(192 132 252 / 0) var(--tw-gradient-to-position);
+				--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+			}
+
 			@keyframes neon-title {
 				0% {
 					transform: translateY(0px);
@@ -373,7 +381,7 @@
 				<div class="brand"><img src="logo.png" onerror="this.src='https://via.placeholder.com/150x50?text=Logo'"
 						style="height: 50px; border-radius: 8px; margin-right: 10px; object-fit: cover;"></div>
 			</div>
-			<h1 class="neon-title animate-float">星沙萌娃<br>气质大赏</h1>
+			<h1 class="neon-title animate-float">星沙萌娃<br><span class="text-transparent">气质大赏</span></h1>
 			<p style="font-size: 14px; color: var(--text-sub); margin-bottom: 10px; text-align: center;">寻找全星沙最美萌娃</p>
 			<div style="text-align: center;"><span class="highlight-text">（完成任意 1 项挑战 ➔ 开学文具盲袋免费领）</span></div>
 
@@ -481,8 +489,6 @@
 
 		<!-- ================= 05 海报展示页 ================= -->
 		<div id="page-poster" class="page">
-			<!-- 			<h2 id="poster-page-title" style="margin: 20px 0; font-size: 24px; text-align:center;">生成成功</h2> -->
-
 			<!-- 网页附言文字 (如果游戏一存在则显示) -->
 			<p id="result-bottom-highlight"
 				style="color:#D8B4FE; font-size:15px; margin-bottom:15px; text-align:center; font-weight:bold; display:none;">
@@ -508,14 +514,8 @@
 				}
 			</style>
 
-			<!-- 网页底部 HTML 引流区块 -->
-			<!-- <div
-				style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; margin-top: 20px; width: 100%; text-align: center; border: 1px dashed var(--border-glass);">
-				<p style="color: #fff; font-size: 14px; margin-bottom: 10px; font-weight:bold;">我也要参与游戏，领开学文具礼包 🎁</p>
-				<img src="qr.png" onerror="this.src='https://via.placeholder.com/100'"
-					style="width: 90px; height: 90px; border-radius: 8px;">
-				<p style="color: var(--text-sub); font-size: 12px; margin-top: 5px;">截屏发朋友圈，长按可识别上方二维码</p>
-			</div> -->
+			<!-- 网页底部 HTML 引流区块（已注销，仅保留占位） -->
+			<!-- <div ... </div> -->
 
 			<div style="width: 100%; margin-top: 20px;">
 				<button class="btn" onclick="navTo('page-form')">我已分享朋友圈，去领奖 🎁</button>
@@ -568,19 +568,19 @@
 			<div class="back-btn" onclick="navTo('page-main')">返回主页继续玩</div>
 		</div>
 
-		<!-- 高度设定为1600，保证所有元素都能装下 -->
-		<canvas id="posterCanvas" width="800" height="1300" style="display:none;"></canvas>
+		<!-- 画布高度为1600，确保所有元素完整显示 -->
+		<canvas id="posterCanvas" width="800" height="1600" style="display:none;"></canvas>
 
 		<script>
 			const posterBackground = {
-			    "全能操心型老妈": "CX.png",
-			    "快乐放养型硬核爸妈": "KL.png",
-			    "佛系躺平型家长": "FX.png"
+				"全能操心型老妈": "CX.png",
+				"快乐放养型硬核爸妈": "KL.png",
+				"佛系躺平型家长": "FX.png"
 			};
 			/* ================= 音乐与路由 ================= */
 			const bgm = document.getElementById('bgm');
 			// 把需要用到的远程图片提前放入浏览器缓存中
-			const preloadImages = ['CX.png', 'KL.png', 'FX.png','frame.png', 'cert.png', 'qr.png', 'logo.png'];
+			const preloadImages = ['CX.png', 'KL.png', 'FX.png', 'frame.png', 'qr.png', 'logo.png']; // 移除了 cert.png
 			const imageCache = {};
 
 			window.onload = () => {
@@ -716,7 +716,7 @@
 				}
 			}
 
-			/* ================= 核心：生成海报引擎 ================= */
+			/* ================= 核心：生成海报引擎（仅用于玩法一、二，不带二维码） ================= */
 			async function generatePoster(gameType) {
 				let fileInput, quoteText = "",
 					bottomHighlight = "";
@@ -732,7 +732,6 @@
 					}
 					const answers = [`魔仙堡妈妈的打卡日常—${q1}`, `我的妈妈是宇宙最酷妈妈，因为她是${q2}`, `星星呀星星，原来你是${q3}味的`];
 					quoteText = answers[Math.floor(Math.random() * answers.length)];
-					// 	bottomHighlight = "孩子的想法跟妈妈一样吗，真是有创意呀。";
 				} else if (gameType === 'game2') {
 					fileInput = document.getElementById('photo-input2').files[0];
 					if (!currentChallenge) {
@@ -766,16 +765,14 @@
 				});
 
 				// 极速读取代码：
-				const userImg = await loadImage(userPhotoBase64); // 用户的照片必须现转
-				const frameImg = imageCache['frame.png']; // 模版瞬间从内存读取
-				const qrImg = imageCache['qr.png']; // 二维码瞬间从内存读取
-				const certImg = imageCache['cert.png']; // 奖状瞬间从内存读取 (在评测那个函数里用)
+				const userImg = await loadImage(userPhotoBase64);
+				const frameImg = imageCache['frame.png'];
+				// 注意：玩法一、二不再需要二维码，故不加载qrImg
 
 				const canvas = document.getElementById('posterCanvas');
 				const ctx = canvas.getContext('2d');
 
-				// 【2. 确保绘图顺序，避免文字被遮挡】
-				// 第一层：背景
+				// 第一层：背景 (使用800x1600)
 				const grad = ctx.createLinearGradient(0, 0, 0, 1600);
 				grad.addColorStop(0, '#1A1C35');
 				grad.addColorStop(1, '#0C0E1F');
@@ -803,7 +800,7 @@
 				ctx.drawImage(userImg, sx, sy, sw, sh, px, py, pw, ph);
 				ctx.restore();
 
-				// 第三层：相框压在照片上
+				// 第三层：相框
 				if (frameImg) {
 					ctx.drawImage(frameImg, 50, 340, 700, 700);
 				} else {
@@ -812,27 +809,13 @@
 					ctx.strokeRect(px, py, pw, ph);
 				}
 
-				// 第四层：画底部的黑色半透明框与二维码底图
+				// 第四层：quoteText 背景（仅保留此装饰框，不包含二维码）
 				ctx.fillStyle = "rgba(255,255,255,0.08)";
 				ctx.beginPath();
 				ctx.roundRect(50, 1060, 700, 160, 20);
 				ctx.fill();
-				ctx.fillStyle = "rgba(255,255,255,0.05)";
-				ctx.beginPath();
-				ctx.roundRect(40, 1330, 720, 240, 24);
-				ctx.fill();
-				ctx.strokeStyle = "rgba(255,255,255,0.15)";
-				ctx.lineWidth = 2;
-				ctx.setLineDash([10, 10]);
-				ctx.stroke();
-				ctx.setLineDash([]);
-				ctx.fillStyle = "#fff";
-				ctx.beginPath();
-				ctx.roundRect(330, 1415, 140, 140, 16);
-				ctx.fill();
-				if (qrImg) ctx.drawImage(qrImg, 340, 1425, 120, 120);
 
-				// 第五层：画所有的文字内容（放在最后画，绝对不会被覆盖）
+				// 第五层：画所有的文字内容
 				ctx.textAlign = "center";
 				// 头部文字
 				ctx.fillStyle = "#fff";
@@ -852,16 +835,10 @@
 				ctx.shadowBlur = 4;
 				wrapText(ctx, quoteText, 400, 1145, 650, 55);
 				ctx.shadowBlur = 0;
-				// 底部认证与二维码引流文案
+				// 底部认证（无二维码相关文案）
 				ctx.fillStyle = "#8E93A8";
 				ctx.font = "bold 28px sans-serif";
 				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1270);
-				ctx.fillStyle = "#fff";
-				ctx.font = "bold 28px sans-serif";
-				ctx.fillText("点击加微信 领开学文具礼包 🎁", 400, 1390);
-				ctx.fillStyle = "#8E93A8";
-				ctx.font = "22px sans-serif";
-				// ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
 
 				// 【3. 关闭 Loading 动画并展示】
 				document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
@@ -869,7 +846,7 @@
 				navTo('page-poster');
 			}
 
-			/* ================= 玩法三：家长评测 (带奖状 cert.png) ================= */
+			/* ================= 玩法三：家长评测 (带二维码) ================= */
 			const quizData = [{
 					q: "周末带孩子出去玩，你通常会？",
 					options: [{
@@ -949,168 +926,115 @@
 				}, 200);
 			}
 
-			// async function generateQuizResult() {
-			// 	let max = 'A';
-			// 	if (scores.B > scores[max]) max = 'B';
-			// 	if (scores.C > scores[max]) max = 'C';
-			// 	let res = max === 'A' ? "全能操心型老妈" : max === 'B' ? "快乐放养型硬核爸妈" : "佛系躺平型家长";
-
-			// 	// 开启 Loading
-			// 	document.getElementById('loading-overlay').style.display = "flex";
-
-			// 	const [certImg, qrImg] = await Promise.all([loadImage('cert.png'), loadImage('qr.png')]);
-
-			// 	const canvas = document.getElementById('posterCanvas');
-			// 	const ctx = canvas.getContext('2d');
-
-			// 	// 图层一层层画，确保文字最后画
-			// 	ctx.fillStyle = '#1A1C35';
-			// 	ctx.fillRect(0, 0, 800, 1600);
-
-			// 	// 画奖状底图
-			// 	if (certImg) {
-			// 		ctx.drawImage(certImg, 50, 340, 700, 700);
-			// 	} else {
-			// 		ctx.fillStyle = "rgba(255,255,255,0.05)";
-			// 		ctx.beginPath();
-			// 		ctx.roundRect(50, 340, 700, 700, 30);
-			// 		ctx.fill();
-			// 	}
-
-			// 	// 画底部的黑色半透明框与二维码底图
-			// 	// ctx.fillStyle = "rgba(255,255,255,0.05)";
-			// 	// ctx.beginPath();
-			// 	// ctx.roundRect(40, 1330, 720, 240, 24);
-			// 	// ctx.fill();
-			// 	// ctx.strokeStyle = "rgba(255,255,255,0.15)";
-			// 	// ctx.lineWidth = 2;
-			// 	// ctx.setLineDash([10, 10]);
-			// 	// ctx.stroke();
-			// 	// ctx.setLineDash([]);
-			// 	// ctx.fillStyle = "#fff";
-			// 	// ctx.beginPath();
-			// 	// ctx.roundRect(330, 1415, 140, 140, 16);
-			// 	// ctx.fill();
-			// 	// if (qrImg) ctx.drawImage(qrImg, 340, 1425, 120, 120);
-
-			// 	// 最后画文字
-			// 	ctx.textAlign = "center";
-			// 	// 头部文字
-			// 	ctx.fillStyle = "#fff";
-			// 	ctx.font = "bold 85px sans-serif";
-			// 	ctx.shadowColor = "rgba(178, 88, 255, 0.8)";
-			// 	ctx.shadowBlur = 20;
-			// 	ctx.fillText("星沙萌娃", 400, 120);
-			// 	ctx.fillText("气质大赏", 400, 220);
-			// 	ctx.shadowBlur = 0;
-			// 	ctx.fillStyle = "#8E93A8";
-			// 	ctx.font = "bold 32px sans-serif";
-			// 	ctx.fillText("——硬核家长鉴定报告——", 400, 290);
-			// 	// ctx.fillText("寻找全星沙最美萌娃", 400, 290);
-			// 	// 奖状上的文字
-			// 	// ctx.fillStyle = '#FFD700';
-			// 	// ctx.font = "bold 45px sans-serif";
-			// 	// ctx.fillText("——硬核家长鉴定报告——", 400, 580);
-			// 	ctx.fillStyle = "#000";
-			// 	ctx.font = "bold 50px sans-serif";
-			// 	ctx.fillText(res, 400, 720);
-			// 	// 底部认证与二维码引流文案
-			// 	ctx.fillStyle = "#8E93A8";
-			// 	ctx.font = "bold 28px sans-serif";
-			// 	ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1250);
-			// 	// ctx.fillStyle = "#fff";
-			// 	// ctx.font = "bold 28px sans-serif";
-			// 	// ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
-			// 	// ctx.fillStyle = "#8E93A8";
-			// 	// ctx.font = "22px sans-serif";
-			// 	// ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
 			async function generateQuizResult() {
-			    // 1️⃣ 计算结果类型
-			    let max = 'A';
-			    if (scores.B > scores[max]) max = 'B';
-			    if (scores.C > scores[max]) max = 'C';
-			    let res = max === 'A' ? "全能操心型老妈" : max === 'B' ? "快乐放养型硬核爸妈" : "佛系躺平型家长";
-			
-			    // 2️⃣ 显示 Loading 遮罩
-			    document.getElementById('loading-overlay').style.display = "flex";
-			
-			    // 3️⃣ 定义不同类型的底图
-			    const posterBackground = {
-			        "全能操心型老妈": "CX.png",
-			        "快乐放养型硬核爸妈": "KL.png",
-			        "佛系躺平型家长": "FX.png"
-			    };
-			
-			    // 4️⃣ 获取 Canvas 上下文
-			    const canvas = document.getElementById('posterCanvas');
-			    const ctx = canvas.getContext('2d');
-			
-			    // 5️⃣ 并行加载底图和二维码
-			    const [certImg, qrImg] = await Promise.all([
-			        loadImage(posterBackground[res] || 'cert.png'),
-			        loadImage('qr.png')
-			    ]);
-			
-			    // 6️⃣ 绘制海报背景
-			    ctx.fillStyle = '#1A1C35';
-			    ctx.fillRect(0, 0, canvas.width, canvas.height);
-			
-			    // 绘制底图
-			    if (certImg) {
-			        ctx.drawImage(certImg, 50, 340, 700, 700);
-			    } else {
-			        // 如果图片加载失败，画一个占位底框
-			        ctx.fillStyle = "rgba(255,255,255,0.05)";
-			        ctx.beginPath();
-			        ctx.roundRect(50, 340, 700, 700, 30);
-			        ctx.fill();
-			    }
-			
-			    // 可选：绘制二维码底图（如果需要）
-			    if (qrImg) {
-			        ctx.fillStyle = "#fff";
-			        ctx.beginPath();
-			        ctx.roundRect(330, 1415, 140, 140, 16);
-			        ctx.fill();
-			        ctx.drawImage(qrImg, 340, 1425, 120, 120);
-			    }
-			
-			    // 7️⃣ 绘制文字（保持你原来的布局）
-			    ctx.textAlign = "center";
-			
-			    // 头部文字
-			    ctx.fillStyle = "#fff";
-			    ctx.font = "bold 85px sans-serif";
-			    ctx.shadowColor = "rgba(178, 88, 255, 0.8)";
-			    ctx.shadowBlur = 20;
-			    ctx.fillText("星沙萌娃", 400, 120);
-			    ctx.fillText("气质大赏", 400, 220);
-			    ctx.shadowBlur = 0;
-			
-			    // 副标题
-			    ctx.fillStyle = "#8E93A8";
-			    ctx.font = "bold 32px sans-serif";
-			    ctx.fillText("——硬核家长鉴定报告——", 400, 290);
-			
-			    // 家长类型结果文字
-			    ctx.fillStyle = "#000";
-			    ctx.font = "bold 50px sans-serif";
-			    ctx.fillText(res, 400, 720);
-			
-			    // 底部认证文字
-			    ctx.fillStyle = "#8E93A8";
-			    ctx.font = "bold 28px sans-serif";
-			    ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1250);
-			
-			    // 8️⃣ 更新海报预览
-			    document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
-			
-			    // 9️⃣ 隐藏 Loading 遮罩并跳转到海报页
-			    document.getElementById('loading-overlay').style.display = "none";
-			    navTo('page-poster');
-			}
+				// 1️⃣ 计算结果类型
+				let max = 'A';
+				if (scores.B > scores[max]) max = 'B';
+				if (scores.C > scores[max]) max = 'C';
+				let res = max === 'A' ? "全能操心型老妈" : max === 'B' ? "快乐放养型硬核爸妈" : "佛系躺平型家长";
 
-				
+				// 2️⃣ 显示 Loading 遮罩
+				document.getElementById('loading-overlay').style.display = "flex";
+
+				// 3️⃣ 获取对应的背景图（不再使用 cert.png）
+				const bgSrc = posterBackground[res]; // 例如 "CX.png"
+				// 4️⃣ 获取 Canvas 上下文
+				const canvas = document.getElementById('posterCanvas');
+				const ctx = canvas.getContext('2d');
+
+				// 5️⃣ 并行加载背景图和二维码
+				const [bgImg, qrImg] = await Promise.all([
+					loadImage(bgSrc),      // 如果 bgSrc 为 undefined 则返回 null
+					loadImage('qr.png')
+				]);
+
+				// 6️⃣ 绘制海报背景 (使用800x1600)
+				ctx.fillStyle = '#1A1C35';
+				ctx.fillRect(0, 0, 800, 1600);
+
+				// 绘制背景图（如果加载成功）
+				if (bgImg) {
+					ctx.drawImage(bgImg, 50, 340, 700, 700);
+				} else {
+					// 如果背景图缺失，绘制占位矩形
+					ctx.fillStyle = "rgba(255,255,255,0.05)";
+					ctx.beginPath();
+					ctx.roundRect(50, 340, 700, 700, 30);
+					ctx.fill();
+				}
+
+				// 7️⃣ 绘制头部文字
+				ctx.textAlign = "center";
+				ctx.fillStyle = "#fff";
+				ctx.font = "bold 85px sans-serif";
+				ctx.shadowColor = "rgba(178, 88, 255, 0.8)";
+				ctx.shadowBlur = 20;
+				ctx.fillText("星沙萌娃", 400, 120);
+				ctx.fillText("气质大赏", 400, 220);
+				ctx.shadowBlur = 0;
+
+				ctx.fillStyle = "#8E93A8";
+				ctx.font = "bold 32px sans-serif";
+				ctx.fillText("——硬核家长鉴定报告——", 400, 290);
+
+				// 家长类型注释
+				const annotations = {
+					"佛系躺平型家长": "你该放手时放手，该出手时出手，人间清醒！",
+					"快乐放养型硬核爸妈": "你要相信孩子自有节奏，偶尔推一把就好",
+					"全能操心型老妈": "你比孩子还着急，但别忘了等等他的脚步"
+				};
+				ctx.fillStyle = "#f76402";
+				ctx.font = "bold 36px sans-serif";
+				ctx.fillText(annotations[res] || "", 400, 1150);
+
+				// 底部认证文字
+				ctx.fillStyle = "#8E93A8";
+				ctx.font = "bold 28px sans-serif";
+				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1250);
+
+				// ✅ 底部引流二维码和文案
+				ctx.fillStyle = "rgba(255,255,255,0.05)";
+				ctx.beginPath();
+				ctx.roundRect(40, 1330, 720, 240, 24);
+				ctx.fill();
+				ctx.strokeStyle = "rgba(255,255,255,0.15)";
+				ctx.lineWidth = 2;
+				ctx.setLineDash([10, 10]);
+				ctx.stroke();
+				ctx.setLineDash([]);
+
+				// 二维码白底 + 二维码图片（若图片加载失败则绘制占位）
+				if (qrImg) {
+					ctx.fillStyle = "#fff";
+					ctx.beginPath();
+					ctx.roundRect(330, 1415, 140, 140, 16);
+					ctx.fill();
+					ctx.drawImage(qrImg, 340, 1425, 120, 120);
+				} else {
+					// 二维码图片加载失败时的占位提示
+					ctx.fillStyle = "#ccc";
+					ctx.beginPath();
+					ctx.roundRect(330, 1415, 140, 140, 16);
+					ctx.fill();
+					ctx.fillStyle = "#000";
+					ctx.font = "bold 22px sans-serif";
+					ctx.fillText("扫码", 400, 1500);
+				}
+
+				// 文案
+				ctx.fillStyle = "#fff";
+				ctx.font = "bold 28px sans-serif";
+				ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
+				ctx.font = "22px sans-serif";
+				ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
+
+				// 8️⃣ 更新海报预览
+				document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
+
+				// 9️⃣ 隐藏 Loading 遮罩并跳转到海报页
+				document.getElementById('loading-overlay').style.display = "none";
+				navTo('page-poster');
+			}
 
 			function submitForm() {
 				const name = document.getElementById('form-name').value.trim();
