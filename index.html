@@ -135,7 +135,7 @@
 			}
 
 			.neon-title {
-				font-size: 55px;
+				font-size: 44px;
 				font-weight: 900;
 				text-align: center;
 				margin-top: 2vh;
@@ -313,10 +313,10 @@
 			.quiz-option {
 				background: rgba(255, 255, 255, 0.05);
 				border: 1px solid var(--border-glass);
-				padding: 10px;
+				padding: 16px;
 				border-radius: 12px;
 				margin-bottom: 12px;
-				font-size: 16px;
+				font-size: 14px;
 				text-align: center;
 				cursor: pointer;
 				color: #ccc;
@@ -391,7 +391,7 @@
 				<div class="brand"><img src="logo.png" onerror="this.src='https://via.placeholder.com/150x50?text=Logo'"
 						style="height: 50px; border-radius: 8px; margin-right: 10px; object-fit: cover;"></div>
 			</div>
-			<h1 class="neon-title animate-float">星沙萌娃<br>气质大赏</h1>
+			<h1 class="neon-title animate-float">星沙萌娃<br><span class="text-transparent">气质大赏</span></h1>
 			<p style="font-size: 14px; color: var(--text-sub); margin-bottom: 10px; text-align: center;">寻找全星沙最美萌娃</p>
 			<div style="text-align: center;"><span class="highlight-text">（完成任意 1 项挑战 ➔ 开学文具盲袋免费领）</span></div>
 
@@ -421,7 +421,7 @@
 				<div style="display: flex; justify-content: center; gap: 10px;">
 					<div
 						style="border: 1px solid #32364B; color: #5B607A; padding: 4px 12px; border-radius: 6px; font-size: 12px;">
-						橘子艺术出品</div>
+						星沙街道授权</div>
 					<div
 						style="border: 1px solid #32364B; color: #5B607A; padding: 4px 12px; border-radius: 6px; font-size: 12px;">
 						品牌联动支持</div>
@@ -440,7 +440,7 @@
 				<p style="color:var(--text-main); font-size: 14px; margin-bottom:10px;">Q1: 如果妈妈有魔法，第一件事想带你做什么?</p>
 				<input type="text" id="g1a1" placeholder="比如：飞到云朵上">
 				<p style="color:var(--text-main); margin: 20px 0 10px; font-size: 14px;">Q2: 如果让你给妈妈起一个超级英雄的名字，叫什么?</p>
-				<div style="display:flex; flex-wrap:nowrap; gap:5px; margin-bottom:5px; ">
+				<div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:5px; ">
 					<div class="quiz-option legs-option" onclick="selectLegs('家务侠', this)">家务侠
 					</div>
 					<div class="quiz-option legs-option" onclick="selectLegs('做饭超人', this)">
@@ -590,7 +590,7 @@
 			/* ================= 音乐与路由 ================= */
 			const bgm = document.getElementById('bgm');
 			// 把需要用到的远程图片提前放入浏览器缓存中
-			const preloadImages = ['CX.png', 'KL.png', 'FX.png', 'frame.png', 'qr.png', 'logo.png'];
+			const preloadImages = ['CX.png', 'KL.png', 'FX.png', 'frame.png', 'LS.png', 'qr.png', 'logo.png']; 
 			const imageCache = {};
 
 			window.onload = () => {
@@ -726,7 +726,7 @@
 				}
 			}
 
-			/* ================= 核心：生成海报引擎（所有玩法均带二维码） ================= */
+			/* ================= 核心：生成海报引擎（玩法一、二带二维码） ================= */
 			async function generatePoster(gameType) {
 				let fileInput, quoteText = "",
 					bottomHighlight = "";
@@ -780,8 +780,8 @@
 				// 并行加载用户照片、相框、二维码
 				const [userImg, frameImg, qrImg] = await Promise.all([
 					loadImage(userPhotoBase64),
-					loadImage('frame.png'), // 从缓存或网络
-					loadImage('qr.png') // 二维码
+					loadImage('frame.png'),
+					loadImage('qr.png') // 玩法一、二仍使用 qr.png
 				]);
 
 				const canvas = document.getElementById('posterCanvas');
@@ -855,7 +855,7 @@
 				ctx.font = "bold 28px sans-serif";
 				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1270);
 
-				// ✅ 底部引流二维码和文案（与玩法三一致）
+				// ✅ 底部引流二维码和文案（使用 qr.png）
 				ctx.fillStyle = "rgba(255,255,255,0.05)";
 				ctx.beginPath();
 				ctx.roundRect(40, 1330, 720, 240, 24);
@@ -866,7 +866,6 @@
 				ctx.stroke();
 				ctx.setLineDash([]);
 
-				// 二维码白底 + 二维码图片
 				if (qrImg) {
 					ctx.fillStyle = "#fff";
 					ctx.beginPath();
@@ -897,7 +896,7 @@
 				navTo('page-poster');
 			}
 
-			/* ================= 玩法三：家长评测 (带二维码，独立函数) ================= */
+			/* ================= 玩法三：家长评测 (带二维码，使用 LS.png) ================= */
 			const quizData = [{
 					q: "周末带孩子出去玩，你通常会？",
 					options: [{
@@ -993,10 +992,10 @@
 				const canvas = document.getElementById('posterCanvas');
 				const ctx = canvas.getContext('2d');
 
-				// 5️⃣ 并行加载背景图和二维码
+				// 5️⃣ 并行加载背景图和二维码（注意：这里加载 LS.png）
 				const [bgImg, qrImg] = await Promise.all([
 					loadImage(bgSrc),
-					loadImage('qr.png')
+					loadImage('LS.png') // 玩法三使用 LS.png
 				]);
 
 				// 6️⃣ 绘制海报背景
