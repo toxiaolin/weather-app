@@ -580,7 +580,7 @@
 			/* ================= 音乐与路由 ================= */
 			const bgm = document.getElementById('bgm');
 			// 把需要用到的远程图片提前放入浏览器缓存中
-			const preloadImages = ['CX.png', 'KL.png', 'FX.png', 'frame.png', 'qr.png', 'logo.png']; // 移除了 cert.png
+			const preloadImages = ['CX.png', 'KL.png', 'FX.png', 'frame.png', 'qr.png', 'logo.png'];
 			const imageCache = {};
 
 			window.onload = () => {
@@ -716,7 +716,7 @@
 				}
 			}
 
-			/* ================= 核心：生成海报引擎（仅用于玩法一、二，不带二维码） ================= */
+			/* ================= 核心：生成海报引擎（所有玩法均带二维码） ================= */
 			async function generatePoster(gameType) {
 				let fileInput, quoteText = "",
 					bottomHighlight = "";
@@ -739,6 +739,9 @@
 						return;
 					}
 					quoteText = `恭喜宝贝挑战“${currentChallenge.title}”演技炸裂，笑翻全场。`;
+				} else if (gameType === 'game3') {
+					// 玩法三已单独处理，此处不会执行
+					return;
 				}
 
 				if (!fileInput) {
@@ -764,10 +767,12 @@
 					reader.readAsDataURL(fileInput);
 				});
 
-				// 极速读取代码：
-				const userImg = await loadImage(userPhotoBase64);
-				const frameImg = imageCache['frame.png'];
-				// 注意：玩法一、二不再需要二维码，故不加载qrImg
+				// 并行加载用户照片、相框、二维码
+				const [userImg, frameImg, qrImg] = await Promise.all([
+					loadImage(userPhotoBase64),
+					loadImage('frame.png'),  // 从缓存或网络
+					loadImage('qr.png')      // 二维码
+				]);
 
 				const canvas = document.getElementById('posterCanvas');
 				const ctx = canvas.getContext('2d');
@@ -809,7 +814,7 @@
 					ctx.strokeRect(px, py, pw, ph);
 				}
 
-				// 第四层：quoteText 背景（仅保留此装饰框，不包含二维码）
+				// 第四层：quoteText 背景（装饰框）
 				ctx.fillStyle = "rgba(255,255,255,0.08)";
 				ctx.beginPath();
 				ctx.roundRect(50, 1060, 700, 160, 20);
@@ -835,10 +840,46 @@
 				ctx.shadowBlur = 4;
 				wrapText(ctx, quoteText, 400, 1145, 650, 55);
 				ctx.shadowBlur = 0;
-				// 底部认证（无二维码相关文案）
+				// 底部认证（一行）
 				ctx.fillStyle = "#8E93A8";
 				ctx.font = "bold 28px sans-serif";
 				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1270);
+
+				// ✅ 底部引流二维码和文案（与玩法三一致）
+				ctx.fillStyle = "rgba(255,255,255,0.05)";
+				ctx.beginPath();
+				ctx.roundRect(40, 1330, 720, 240, 24);
+				ctx.fill();
+				ctx.strokeStyle = "rgba(255,255,255,0.15)";
+				ctx.lineWidth = 2;
+				ctx.setLineDash([10, 10]);
+				ctx.stroke();
+				ctx.setLineDash([]);
+
+				// 二维码白底 + 二维码图片
+				if (qrImg) {
+					ctx.fillStyle = "#fff";
+					ctx.beginPath();
+					ctx.roundRect(330, 1415, 140, 140, 16);
+					ctx.fill();
+					ctx.drawImage(qrImg, 340, 1425, 120, 120);
+				} else {
+					// 二维码图片加载失败时的占位提示
+					ctx.fillStyle = "#ccc";
+					ctx.beginPath();
+					ctx.roundRect(330, 1415, 140, 140, 16);
+					ctx.fill();
+					ctx.fillStyle = "#000";
+					ctx.font = "bold 22px sans-serif";
+					ctx.fillText("扫码", 400, 1500);
+				}
+
+				// 文案
+				ctx.fillStyle = "#fff";
+				ctx.font = "bold 28px sans-serif";
+				ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
+				ctx.font = "22px sans-serif";
+				ctx.fillText("截屏发朋友圈，长按可识别上方二维码", 400, 1590);
 
 				// 【3. 关闭 Loading 动画并展示】
 				document.getElementById('posterPreview').src = canvas.toDataURL('image/jpeg', 0.9);
@@ -846,7 +887,7 @@
 				navTo('page-poster');
 			}
 
-			/* ================= 玩法三：家长评测 (带二维码) ================= */
+			/* ================= 玩法三：家长评测 (带二维码，独立函数) ================= */
 			const quizData = [{
 					q: "周末带孩子出去玩，你通常会？",
 					options: [{
@@ -936,19 +977,19 @@
 				// 2️⃣ 显示 Loading 遮罩
 				document.getElementById('loading-overlay').style.display = "flex";
 
-				// 3️⃣ 获取对应的背景图（不再使用 cert.png）
-				const bgSrc = posterBackground[res]; // 例如 "CX.png"
+				// 3️⃣ 获取对应的背景图
+				const bgSrc = posterBackground[res];
 				// 4️⃣ 获取 Canvas 上下文
 				const canvas = document.getElementById('posterCanvas');
 				const ctx = canvas.getContext('2d');
 
 				// 5️⃣ 并行加载背景图和二维码
 				const [bgImg, qrImg] = await Promise.all([
-					loadImage(bgSrc),      // 如果 bgSrc 为 undefined 则返回 null
+					loadImage(bgSrc),
 					loadImage('qr.png')
 				]);
 
-				// 6️⃣ 绘制海报背景 (使用800x1600)
+				// 6️⃣ 绘制海报背景
 				ctx.fillStyle = '#1A1C35';
 				ctx.fillRect(0, 0, 800, 1600);
 
@@ -956,7 +997,6 @@
 				if (bgImg) {
 					ctx.drawImage(bgImg, 50, 340, 700, 700);
 				} else {
-					// 如果背景图缺失，绘制占位矩形
 					ctx.fillStyle = "rgba(255,255,255,0.05)";
 					ctx.beginPath();
 					ctx.roundRect(50, 340, 700, 700, 30);
@@ -1003,7 +1043,6 @@
 				ctx.stroke();
 				ctx.setLineDash([]);
 
-				// 二维码白底 + 二维码图片（若图片加载失败则绘制占位）
 				if (qrImg) {
 					ctx.fillStyle = "#fff";
 					ctx.beginPath();
@@ -1011,7 +1050,6 @@
 					ctx.fill();
 					ctx.drawImage(qrImg, 340, 1425, 120, 120);
 				} else {
-					// 二维码图片加载失败时的占位提示
 					ctx.fillStyle = "#ccc";
 					ctx.beginPath();
 					ctx.roundRect(330, 1415, 140, 140, 16);
@@ -1021,7 +1059,6 @@
 					ctx.fillText("扫码", 400, 1500);
 				}
 
-				// 文案
 				ctx.fillStyle = "#fff";
 				ctx.font = "bold 28px sans-serif";
 				ctx.fillText("我也要参与游戏，领开学文具礼包 🎁", 400, 1390);
