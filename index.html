@@ -35,12 +35,26 @@
 
 			html,
 			body {
-				overscroll-behavior-y: none;
+				/* overscroll-behavior-y: none;
 				background: var(--bg-dark);
 				color: var(--text-main);
 				overflow-x: hidden;
 				background-image: radial-gradient(circle at 50% -20%, #2A2155 0%, var(--bg-dark) 60%);
-				min-height: 100vh;
+				min-height: 100vh; */
+				overscroll-behavior-y: none;
+				    background: var(--bg-dark);
+				    color: var(--text-main);
+				    overflow-x: hidden;
+				    min-height: 100vh;
+				
+				    background-image:
+				        linear-gradient(
+				            to bottom,
+				            rgba(178,88,255,0.45) 0%,
+				            rgba(178,88,255,0.25) 18%,
+				            rgba(19,20,43,0) 45%
+				        ),
+				        radial-gradient(circle at 50% -20%, #2A2155 0%, var(--bg-dark) 60%);
 			}
 
 			.page {
@@ -135,7 +149,7 @@
 			}
 
 			.neon-title {
-				font-size: 55px;
+				font-size: 44px;
 				font-weight: 900;
 				text-align: center;
 				margin-top: 2vh;
@@ -327,7 +341,7 @@
 				height: 65px;
 				border-radius: 50%;
 				border: 2px solid #D8B4FE;
-				margin: 0 auto 6px;
+				margin: 0 auto 10px;
 				display: block;
 				background: #fff;
 				object-fit: cover;
@@ -943,13 +957,29 @@
 					}
 				}, 200);
 			}
-
+			/* ===== 家长评测结果图片 ===== */
+			const parentResultImages = {
+				"全能操心型老妈": "CX.png",
+				"快乐放养型硬核爸妈": "KL.png",
+				"佛系躺平型家长": "FX.png"
+			};
 			async function generateQuizResult() {
 				let max = 'A';
 				if (scores.B > scores[max]) max = 'B';
 				if (scores.C > scores[max]) max = 'C';
 				let res = max === 'A' ? "全能操心型老妈" : max === 'B' ? "快乐放养型硬核爸妈" : "佛系躺平型家长";
+				/* ===== 直接显示结果图（跳过Canvas生成）===== */
+				const resultImg = parentResultImages[res];
+				if (resultImg) {
 
+					document.getElementById('loading-overlay').style.display = "none";
+
+					document.getElementById('posterPreview').src = resultImg;
+
+					navTo('page-poster');
+
+					return; // ⭐⭐⭐ 关键：终止后面的Canvas代码
+				}
 				// 开启 Loading
 				document.getElementById('loading-overlay').style.display = "flex";
 
