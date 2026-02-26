@@ -135,7 +135,7 @@
 			}
 
 			.neon-title {
-				font-size: 44px;
+				font-size: 55px;
 				font-weight: 900;
 				text-align: center;
 				margin-top: 2vh;
@@ -391,7 +391,7 @@
 				<div class="brand"><img src="logo.png" onerror="this.src='https://via.placeholder.com/150x50?text=Logo'"
 						style="height: 50px; border-radius: 8px; margin-right: 10px; object-fit: cover;"></div>
 			</div>
-			<h1 class="neon-title animate-float">星沙萌娃<br><span class="text-transparent">气质大赏</span></h1>
+			<h1 class="neon-title animate-float">星沙萌娃<br>气质大赏</h1>
 			<p style="font-size: 14px; color: var(--text-sub); margin-bottom: 10px; text-align: center;">寻找全星沙最美萌娃</p>
 			<div style="text-align: center;"><span class="highlight-text">（完成任意 1 项挑战 ➔ 开学文具盲袋免费领）</span></div>
 
@@ -568,7 +568,8 @@
 				<p style="font-size:16px; font-weight:bold; color:#fff; margin-bottom:20px;">最后一步：添加老师微信发截图</p>
 				<div
 					style="width:180px; height:180px; background:#fff; margin:0 auto; border-radius:16px; padding:10px;">
-					<img src="qr.png" onerror="this.src='https://via.placeholder.com/160'"
+					<!-- 将二维码图片源改为 LS.png -->
+					<img src="LS.png" onerror="this.src='https://via.placeholder.com/160'"
 						style="width:100%; height:100%; object-fit: contain;">
 				</div>
 				<p style="color:var(--neon-purple); font-size: 16px; font-weight:bold; margin-top: 20px;">长按识别添加老师</p>
@@ -590,7 +591,8 @@
 			/* ================= 音乐与路由 ================= */
 			const bgm = document.getElementById('bgm');
 			// 把需要用到的远程图片提前放入浏览器缓存中
-			const preloadImages = ['CX.png', 'KL.png', 'FX.png', 'frame.png', 'LS.png', 'qr.png', 'logo.png']; 
+			const preloadImages = ['CX.png', 'KL.png', 'FX.png', 'frame.png', 'qr.png','LS.png',
+			'logo.png']; 
 			const imageCache = {};
 
 			window.onload = () => {
@@ -896,7 +898,7 @@
 				navTo('page-poster');
 			}
 
-			/* ================= 玩法三：家长评测 (带二维码，使用 LS.png) ================= */
+			/* ================= 玩法三：家长评测 (带二维码，使用 qr.png) ================= */
 			const quizData = [{
 					q: "周末带孩子出去玩，你通常会？",
 					options: [{
@@ -992,10 +994,10 @@
 				const canvas = document.getElementById('posterCanvas');
 				const ctx = canvas.getContext('2d');
 
-				// 5️⃣ 并行加载背景图和二维码（注意：这里加载 LS.png）
+				// 5️⃣ 并行加载背景图和二维码（使用 qr.png）
 				const [bgImg, qrImg] = await Promise.all([
 					loadImage(bgSrc),
-					loadImage('LS.png') // 玩法三使用 LS.png
+					loadImage('qr.png')
 				]);
 
 				// 6️⃣ 绘制海报背景
@@ -1041,7 +1043,7 @@
 				ctx.font = "bold 28px sans-serif";
 				ctx.fillText("—— 橘子艺术官方认证 ——", 400, 1250);
 
-				// ✅ 底部引流二维码和文案
+				// ✅ 底部引流二维码和文案（使用 qr.png）
 				ctx.fillStyle = "rgba(255,255,255,0.05)";
 				ctx.beginPath();
 				ctx.roundRect(40, 1330, 720, 240, 24);
